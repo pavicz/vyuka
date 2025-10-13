@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dělitelnost - Procvičování</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2196F3;
+            --primary-dark: #1976D2;
+            --success: #4CAF50;
+            --error: #f44336;
+            --warning: #ff9800;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .exercise-area {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.8em;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .question-number {
+            display: block;
+            font-size: 0.5em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .option-btn {
+            padding: 25px;
+            font-size: 1.3em;
+            font-weight: 600;
+            border: 3px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .option-btn:active {
+            transform: translateY(0);
+        }
+
+        .option-btn.correct {
+            background: var(--success);
+            color: var(--white);
+            border-color: var(--success);
+            animation: pulse 0.5s;
+        }
+
+        .option-btn.incorrect {
+            background: var(--error);
+            color: var(--white);
+            border-color: var(--error);
+            animation: shake 0.5s;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .next-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .rules-section {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .rules-section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .rules-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .rule-item {
+            background: var(--white);
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+
+        .rule-number {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .toggle-rules {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            padding: 10px;
+            text-decoration: underline;
+        }
+
+        .rules-content {
+            margin-top: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .question {
+                font-size: 1.4em;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .option-btn {
+                font-size: 1.1em;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="index.html">Matematika</a>
+            <span>›</span>
+            <strong>Dělitelnost</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1>🎯 Dělitelnost čísel</h1>
+                <p class="subtitle">Rozpoznej, zda je číslo dělitelné vybraným dělitelem</p>
+            </header>
+
+            <div class="stats-bar">
+                <div class="stat-box">
+                    <div class="stat-value" id="correct">0</div>
+                    <div class="stat-label">✓ Správně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="incorrect">0</div>
+                    <div class="stat-label">✗ Chybně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="percentage">0%</div>
+                    <div class="stat-label">📊 Úspěšnost</div>
+                </div>
+            </div>
+
+            <div class="exercise-area">
+                <div class="question">
+                    <span class="question-number" id="questionNum">Otázka 1</span>
+                    <span id="question">Je číslo X dělitelné Y?</span>
+                </div>
+
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(true)">
+                        ✓ ANO
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(false)">
+                        ✗ NE
+                    </button>
+                </div>
+
+                <div id="feedback" class="feedback hidden"></div>
+                <button id="nextBtn" class="next-btn hidden" onclick="nextQuestion()">
+                    Další otázka →
+                </button>
+            </div>
+
+            <div class="rules-section">
+                <button class="toggle-rules" onclick="toggleRules()">
+                    <span id="rulesToggle">📖 Zobrazit pravidla dělitelnosti</span>
+                </button>
+                <div id="rulesContent" class="rules-content hidden">
+                    <h3>Pravidla dělitelnosti:</h3>
+                    <div class="rules-list">
+                        <div class="rule-item">
+                            <span class="rule-number">2:</span> Poslední cifra je 0, 2, 4, 6 nebo 8
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-number">3:</span> Ciferný součet je dělitelný 3
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-number">4:</span> Poslední dvojčíslí je dělitelné 4
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-number">5:</span> Poslední cifra je 0 nebo 5
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-number">6:</span> Číslo je dělitelné 2 a zároveň 3
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-number">9:</span> Ciferný součet je dělitelný 9
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-number">10:</span> Poslední cifra je 0
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let stats = {
+            correct: 0,
+            incorrect: 0,
+            total: 0,
+            current: 1
+        };
+
+        let currentQuestion = {};
+        const divisors = [2, 3, 4, 5, 6, 9, 10];
+
+        function isDivisible(number, divisor) {
+            return number % divisor === 0;
+        }
+
+        function generateQuestion() {
+            const divisor = divisors[Math.floor(Math.random() * divisors.length)];
+            const shouldBeDivisible = Math.random() > 0.5;
+            
+            let number;
+            if (shouldBeDivisible) {
+                const multiplier = Math.floor(Math.random() * 50) + 1;
+                number = divisor * multiplier;
+            } else {
+                do {
+                    number = Math.floor(Math.random() * 500) + 1;
+                } while (isDivisible(number, divisor));
+            }
+
+            currentQuestion = {
+                number: number,
+                divisor: divisor,
+                correctAnswer: isDivisible(number, divisor)
+            };
+
+            document.getElementById('questionNum').textContent = `Otázka ${stats.current}`;
+            document.getElementById('question').textContent = 
+                `Je číslo ${number} dělitelné ${divisor}?`;
+            
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('correct', 'incorrect');
+            });
+
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+        }
+
+        function checkAnswer(userAnswer) {
+            const isCorrect = userAnswer === currentQuestion.correctAnswer;
+            
+            stats.total++;
+            if (isCorrect) {
+                stats.correct++;
+            } else {
+                stats.incorrect++;
+            }
+
+            updateStats();
+
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(btn => btn.disabled = true);
+
+            const clickedBtn = userAnswer ? buttons[0] : buttons[1];
+            clickedBtn.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden', 'correct', 'incorrect');
+            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            if (isCorrect) {
+                const messages = [
+                    '🎉 Výborně! To je správná odpověď!',
+                    '✨ Skvělá práce! Máš to správně!',
+                    '🌟 Perfektní! Pokračuj dál!',
+                    '🎯 Přesně tak! Jsi šikovný/á!'
+                ];
+                feedback.textContent = messages[Math.floor(Math.random() * messages.length)];
+            } else {
+                const result = currentQuestion.correctAnswer ? 'ANO' : 'NE';
+                feedback.textContent = `❌ Bohužel ne. Správná odpověď je: ${result}`;
+            }
+
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            stats.current++;
+            generateQuestion();
+        }
+
+        function updateStats() {
+            document.getElementById('correct').textContent = stats.correct;
+            document.getElementById('incorrect').textContent = stats.incorrect;
+            
+            const percentage = stats.total > 0 
+                ? Math.round((stats.correct / stats.total) * 100) 
+                : 0;
+            document.getElementById('percentage').textContent = percentage + '%';
+        }
+
+        function toggleRules() {
+            const content = document.getElementById('rulesContent');
+            const toggle = document.getElementById('rulesToggle');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                toggle.textContent = '📖 Skrýt pravidla dělitelnosti';
+            } else {
+                content.classList.add('hidden');
+                toggle.textContent = '📖 Zobrazit pravidla dělitelnosti';
+            }
+        }
+
+        generateQuestion();
+    </script>
+</body>
+</html>
