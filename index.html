@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vzdělávací platforma - Učíme se hravě</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #2196F3;
+            --primary-red: #FF5722;
+            --primary-green: #4CAF50;
+            --primary-yellow: #FFC107;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--white);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .subject-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: var(--text-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            transition: height 0.3s ease;
+        }
+
+        .subject-card.matematika::before {
+            background: var(--primary-blue);
+        }
+
+        .subject-card.anglictina::before {
+            background: var(--primary-red);
+        }
+
+        .subject-card.cestina::before {
+            background: var(--primary-green);
+        }
+
+        .subject-card.prirodopis::before {
+            background: var(--primary-yellow);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .subject-card:hover::before {
+            height: 100%;
+            opacity: 0.05;
+        }
+
+        .subject-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .subject-card h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .subject-card.matematika h2 {
+            color: var(--primary-blue);
+        }
+
+        .subject-card.anglictina h2 {
+            color: var(--primary-red);
+        }
+
+        .subject-card.cestina h2 {
+            color: var(--primary-green);
+        }
+
+        .subject-card.prirodopis h2 {
+            color: var(--primary-yellow);
+        }
+
+        .subject-description {
+            color: var(--text-light);
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .topic-count {
+            display: inline-block;
+            background: var(--bg-light);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: var(--white);
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Vzdělávací platforma</h1>
+            <p class="subtitle">Učíme se hravě a efektivně</p>
+        </header>
+
+        <main>
+            <div class="subjects-grid">
+                <a href="matematika/index.html" class="subject-card matematika">
+                    <span class="subject-icon">🔢</span>
+                    <h2>Matematika</h2>
+                    <p class="subject-description">
+                        Procvičuj počítání, dělitelnost, zlomky a geometrii pomocí interaktivních úloh.
+                    </p>
+                    <span class="topic-count">6 témat</span>
+                </a>
+
+                <a href="anglictina/index.html" class="subject-card anglictina">
+                    <span class="subject-icon">🇬🇧</span>
+                    <h2>Angličtina</h2>
+                    <p class="subject-description">
+                        Uč se slovíčka, nepravidelná slovesa a procvičuj anglickou gramatiku.
+                    </p>
+                    <span class="topic-count">5 témat</span>
+                </a>
+
+                <a href="cestina/index.html" class="subject-card cestina">
+                    <span class="subject-icon">📖</span>
+                    <h2>Čeština</h2>
+                    <p class="subject-description">
+                        Zdokonaluj pravopis, slovní druhy a gramatiku českého jazyka.
+                    </p>
+                    <span class="topic-count">3 témata</span>
+                </a>
+
+                <a href="prirodopis/index.html" class="subject-card prirodopis">
+                    <span class="subject-icon">🌿</span>
+                    <h2>Přírodopis</h2>
+                    <p class="subject-description">
+                        Poznávej zvířata, rostliny a lidské tělo zajímavou formou.
+                    </p>
+                    <span class="topic-count">3 témata</span>
+                </a>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Vzdělávací platforma | Vytvořeno s ❤️</p>
+        </footer>
+    </div>
+</body>
+</html>
