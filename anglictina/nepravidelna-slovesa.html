@@ -312,8 +312,6 @@
             background: #fff3e0;
             padding: 25px;
             border-radius: 15px;
-            margin-top: 30px;
-            border-left: 5px solid var(--primary);
         }
 
         .verb-table-section h3 {
@@ -347,23 +345,6 @@
             background: var(--bg-light);
         }
 
-        .toggle-table {
-            background: none;
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1em;
-            padding: 10px;
-            text-decoration: underline;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .hidden {
-            display: none;
-        }
-
         .search-box {
             margin: 20px 0;
             text-align: center;
@@ -376,6 +357,10 @@
             border-radius: 25px;
             width: 100%;
             max-width: 400px;
+        }
+
+        .hidden {
+            display: none;
         }
 
         @media (max-width: 768px) {
@@ -455,13 +440,11 @@
             <div id="completeMode" class="exercise-area">
                 <div class="question-header">
                     <div class="question-number" id="questionNum">Otázka 1</div>
-                    <div>Doplň chybějící tvary slovesa:</div>
-                    <div class="given-form" id="givenForm">take</div>
+                    <div>Doplň chybějící tvar slovesa:</div>
+                    <div class="given-form" id="givenForm">take - taken</div>
                 </div>
 
-                <div class="form-inputs" id="completeInputs">
-                    <!-- Dynamicky generováno JavaScriptem -->
-                </div>
+                <div class="form-inputs" id="completeInputs"></div>
 
                 <button class="check-btn" onclick="checkComplete()">Zkontrolovat</button>
                 <div id="completeFeedback" class="feedback hidden"></div>
@@ -507,7 +490,7 @@
                     <input type="text" class="search-input" id="searchInput" placeholder="🔍 Vyhledat sloveso..." onkeyup="filterVerbs()">
                 </div>
                 <div style="overflow-x: auto;">
-                    <table class="verb-table" id="verbTable">
+                    <table class="verb-table">
                         <thead>
                             <tr>
                                 <th>Infinitive</th>
@@ -516,9 +499,7 @@
                                 <th>Český překlad</th>
                             </tr>
                         </thead>
-                        <tbody id="verbTableBody">
-                            <!-- Dynamicky generováno JavaScriptem -->
-                        </tbody>
+                        <tbody id="verbTableBody"></tbody>
                     </table>
                 </div>
             </div>
@@ -590,4 +571,210 @@
             {inf: 'wear', past: 'wore', part: 'worn', cz: 'nosit (oblečení)'},
             {inf: 'win', past: 'won', part: 'won', cz: 'vyhrát'},
             {inf: 'write', past: 'wrote', part: 'written', cz: 'psát'}
-            {inf: '
+        ];
+
+        let stats = {correct: 0, incorrect: 0, total: 0, current: 1};
+        let currentMode = 'complete';
+        let currentVerb = {};
+        let hiddenForm = '';
+
+        function normalizeAnswer(answer) {
+            return answer.toLowerCase().trim().replace(/\s+/g, ' ');
+        }
+
+        function checkAnswer(userAnswer, correctAnswer) {
+            const normalized = normalizeAnswer(userAnswer);
+            const correct = normalizeAnswer(correctAnswer);
+            if (correct.includes('/')) {
+                return correct.split('/').some(v => normalized === v.trim());
+            }
+            return normalized === correct;
+        }
+
+        function generateCompleteQuestion() {
+            currentVerb = verbs[Math.floor(Math.random() * verbs.length)];
+            const forms = ['inf', 'past', 'part'];
+            hiddenForm = forms[Math.floor(Math.random() * forms.length)];
+            const formNames = {inf: 'Infinitive', past: 'Past Simple', part: 'Past Participle'};
+            const givenForms = forms.filter(f => f !== hiddenForm);
+            
+            document.getElementById('questionNum').textContent = `Otázka ${stats.current}`;
+            document.getElementById('givenForm').textContent = 
+                `${currentVerb[givenForms[0]]} - ${currentVerb[givenForms[1]]}`;
+            
+            document.getElementById('completeInputs').innerHTML = `
+                <div class="input-row">
+                    <div class="input-label">${formNames[hiddenForm]}:</div>
+                    <input type="text" class="verb-input" id="completeAnswer" 
+                           onkeypress="if(event.key==='Enter') checkComplete()">
+                </div>`;
+            
+            document.getElementById('completeFeedback').classList.add('hidden');
+            document.getElementById('completeCorrect').classList.add('hidden');
+            document.getElementById('nextCompleteBtn').classList.add('hidden');
+            document.getElementById('completeAnswer').focus();
+        }
+
+        function checkComplete() {
+            const input = document.getElementById('completeAnswer');
+            const isCorrect = checkAnswer(input.value, currentVerb[hiddenForm]);
+            
+            stats.total++;
+            isCorrect ? stats.correct++ : stats.incorrect++;
+            updateStats();
+            
+            input.disabled = true;
+            input.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            const feedback = document.getElementById('completeFeedback');
+            feedback.classList.remove('hidden', 'correct', 'incorrect');
+            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+            feedback.textContent = isCorrect ? '🎉 Výborně! To je správně!' : '❌ Bohužel ne. Správná odpověď:';
+            
+            if (!isCorrect) {
+                document.getElementById('completeCorrect').classList.remove('hidden');
+                document.getElementById('completeCorrect').innerHTML = `
+                    <div class="answer-forms">
+                        <div class="answer-form"><strong>Infinitive:</strong> ${currentVerb.inf}</div>
+                        <div class="answer-form"><strong>Past Simple:</strong> ${currentVerb.past}</div>
+                        <div class="answer-form"><strong>Past Participle:</strong> ${currentVerb.part}</div>
+                        <div class="answer-form"><strong>Překlad:</strong> ${currentVerb.cz}</div>
+                    </div>`;
+            }
+            
+            document.getElementById('nextCompleteBtn').classList.remove('hidden');
+        }
+
+        function generateCzechQuestion() {
+            currentVerb = verbs[Math.floor(Math.random() * verbs.length)];
+            document.getElementById('czechQuestionNum').textContent = `Otázka ${stats.current}`;
+            document.getElementById('czechWord').textContent = currentVerb.cz;
+            
+            ['czechInf', 'czechPast', 'czechPart'].forEach(id => {
+                const el = document.getElementById(id);
+                el.value = '';
+                el.disabled = false;
+                el.classList.remove('correct', 'incorrect');
+            });
+            
+            document.getElementById('czechFeedback').classList.add('hidden');
+            document.getElementById('czechCorrect').classList.add('hidden');
+            document.getElementById('nextCzechBtn').classList.add('hidden');
+            document.getElementById('czechInf').focus();
+        }
+
+        function checkCzech() {
+            const infInput = document.getElementById('czechInf');
+            const pastInput = document.getElementById('czechPast');
+            const partInput = document.getElementById('czechPart');
+            
+            const infCorrect = checkAnswer(infInput.value, currentVerb.inf);
+            const pastCorrect = checkAnswer(pastInput.value, currentVerb.past);
+            const partCorrect = checkAnswer(partInput.value, currentVerb.part);
+            const isCorrect = infCorrect && pastCorrect && partCorrect;
+            
+            stats.total++;
+            isCorrect ? stats.correct++ : stats.incorrect++;
+            updateStats();
+            
+            [infInput, pastInput, partInput].forEach(input => input.disabled = true);
+            infInput.classList.add(infCorrect ? 'correct' : 'incorrect');
+            pastInput.classList.add(pastCorrect ? 'correct' : 'incorrect');
+            partInput.classList.add(partCorrect ? 'correct' : 'incorrect');
+            
+            const feedback = document.getElementById('czechFeedback');
+            feedback.classList.remove('hidden', 'correct', 'incorrect');
+            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            if (isCorrect) {
+                feedback.textContent = '🎉 Perfektní! Všechny tvary jsou správně!';
+            } else {
+                const wrongCount = [infCorrect, pastCorrect, partCorrect].filter(x => !x).length;
+                feedback.textContent = `❌ ${wrongCount} ${wrongCount === 1 ? 'tvar je' : 'tvary jsou'} špatně. Správné odpovědi:`;
+                document.getElementById('czechCorrect').classList.remove('hidden');
+                document.getElementById('czechCorrect').innerHTML = `
+                    <div class="answer-forms">
+                        <div class="answer-form"><strong>Infinitive:</strong> ${currentVerb.inf}</div>
+                        <div class="answer-form"><strong>Past Simple:</strong> ${currentVerb.past}</div>
+                        <div class="answer-form"><strong>Past Participle:</strong> ${currentVerb.part}</div>
+                    </div>`;
+            }
+            
+            document.getElementById('nextCzechBtn').classList.remove('hidden');
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') checkCzech();
+        }
+
+        function nextQuestion() {
+            stats.current++;
+            generateCompleteQuestion();
+        }
+
+        function nextCzechQuestion() {
+            stats.current++;
+            generateCzechQuestion();
+        }
+
+        function updateStats() {
+            document.getElementById('correct').textContent = stats.correct;
+            document.getElementById('incorrect').textContent = stats.incorrect;
+            const percentage = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+            document.getElementById('percentage').textContent = percentage + '%';
+        }
+
+        function changeMode(mode) {
+            currentMode = mode;
+            stats.current = 1;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.mode-btn').classList.add('active');
+            
+            if (mode === 'complete') {
+                document.getElementById('statsBar').classList.remove('hidden');
+                document.getElementById('completeMode').classList.remove('hidden');
+                document.getElementById('czechMode').classList.add('hidden');
+                document.getElementById('tableMode').classList.add('hidden');
+                generateCompleteQuestion();
+            } else if (mode === 'czech') {
+                document.getElementById('statsBar').classList.remove('hidden');
+                document.getElementById('completeMode').classList.add('hidden');
+                document.getElementById('czechMode').classList.remove('hidden');
+                document.getElementById('tableMode').classList.add('hidden');
+                generateCzechQuestion();
+            } else if (mode === 'table') {
+                document.getElementById('statsBar').classList.add('hidden');
+                document.getElementById('completeMode').classList.add('hidden');
+                document.getElementById('czechMode').classList.add('hidden');
+                document.getElementById('tableMode').classList.remove('hidden');
+                generateTable();
+            }
+        }
+
+        function generateTable() {
+            const tbody = document.getElementById('verbTableBody');
+            tbody.innerHTML = '';
+            verbs.forEach(verb => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${verb.inf}</td>
+                    <td>${verb.past}</td>
+                    <td>${verb.part}</td>
+                    <td>${verb.cz}</td>`;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterVerbs() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#verbTableBody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        generateCompleteQuestion();
+    </script>
+</body>
+</html>
