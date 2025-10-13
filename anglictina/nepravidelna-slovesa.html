@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nepravidelná slovesa - Procvičování</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF5722;
+            --primary-dark: #E64A19;
+            --success: #4CAF50;
+            --error: #f44336;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .mode-btn {
+            padding: 20px;
+            background: var(--bg-light);
+            border: 3px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .mode-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .mode-icon {
+            font-size: 2em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .exercise-area {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .question-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .czech-word {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .given-form {
+            font-size: 1.5em;
+            color: var(--primary);
+            font-weight: 600;
+            margin: 20px 0;
+        }
+
+        .form-inputs {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .input-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            text-align: right;
+        }
+
+        .verb-input {
+            padding: 15px;
+            font-size: 1.2em;
+            border: 3px solid var(--primary);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .verb-input:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 10px rgba(255, 87, 34, 0.3);
+        }
+
+        .verb-input.correct {
+            border-color: var(--success);
+            background: #e8f5e9;
+        }
+
+        .verb-input.incorrect {
+            border-color: var(--error);
+            background: #ffebee;
+        }
+
+        .verb-input:disabled {
+            background: var(--bg-light);
+            cursor: not-allowed;
+        }
+
+        .check-btn {
+            display: block;
+            width: 200px;
+            margin: 25px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .correct-answer {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--white);
+            border-radius: 10px;
+            border-left: 4px solid var(--success);
+        }
+
+        .answer-forms {
+            display: grid;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .answer-form {
+            font-size: 1.1em;
+        }
+
+        .answer-form strong {
+            color: var(--primary);
+            display: inline-block;
+            width: 150px;
+        }
+
+        .next-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .verb-table-section {
+            background: #fff3e0;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .verb-table-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .verb-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .verb-table th {
+            background: var(--primary);
+            color: var(--white);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .verb-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--bg-light);
+        }
+
+        .verb-table tr:hover {
+            background: var(--bg-light);
+        }
+
+        .toggle-table {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            padding: 10px;
+            text-decoration: underline;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .search-box {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .search-input {
+            padding: 12px 20px;
+            font-size: 1em;
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+
+            .input-label {
+                text-align: left;
+            }
+
+            .verb-table {
+                font-size: 0.9em;
+            }
+
+            .verb-table th,
+            .verb-table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="index.html">Angličtina</a>
+            <span>›</span>
+            <strong>Nepravidelná slovesa</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1>📚 Nepravidelná slovesa</h1>
+                <p class="subtitle">Nauč se tvary nejpoužívanějších nepravidelných sloves</p>
+            </header>
+
+            <div class="mode-selector">
+                <button class="mode-btn active" onclick="changeMode('complete')">
+                    <span class="mode-icon">✏️</span>
+                    Doplň chybějící
+                </button>
+                <button class="mode-btn" onclick="changeMode('czech')">
+                    <span class="mode-icon">🇨🇿</span>
+                    Z češtiny
+                </button>
+                <button class="mode-btn" onclick="changeMode('table')">
+                    <span class="mode-icon">📋</span>
+                    Tabulka sloves
+                </button>
+            </div>
+
+            <div class="stats-bar" id="statsBar">
+                <div class="stat-box">
+                    <div class="stat-value" id="correct">0</div>
+                    <div class="stat-label">✓ Správně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="incorrect">0</div>
+                    <div class="stat-label">✗ Chybně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="percentage">0%</div>
+                    <div class="stat-label">📊 Úspěšnost</div>
+                </div>
+            </div>
+
+            <div id="completeMode" class="exercise-area">
+                <div class="question-header">
+                    <div class="question-number" id="questionNum">Otázka 1</div>
+                    <div>Doplň chybějící tvary slovesa:</div>
+                    <div class="given-form" id="givenForm">take</div>
+                </div>
+
+                <div class="form-inputs" id="completeInputs">
+                    <!-- Dynamicky generováno JavaScriptem -->
+                </div>
+
+                <button class="check-btn" onclick="checkComplete()">Zkontrolovat</button>
+                <div id="completeFeedback" class="feedback hidden"></div>
+                <div id="completeCorrect" class="correct-answer hidden"></div>
+                <button id="nextCompleteBtn" class="next-btn hidden" onclick="nextQuestion()">
+                    Další sloveso →
+                </button>
+            </div>
+
+            <div id="czechMode" class="exercise-area hidden">
+                <div class="question-header">
+                    <div class="question-number" id="czechQuestionNum">Otázka 1</div>
+                    <div>Napiš všechny tři tvary slovesa:</div>
+                    <div class="czech-word" id="czechWord">brát</div>
+                </div>
+
+                <div class="form-inputs">
+                    <div class="input-row">
+                        <div class="input-label">Infinitive:</div>
+                        <input type="text" class="verb-input" id="czechInf" onkeypress="handleEnter(event)">
+                    </div>
+                    <div class="input-row">
+                        <div class="input-label">Past Simple:</div>
+                        <input type="text" class="verb-input" id="czechPast" onkeypress="handleEnter(event)">
+                    </div>
+                    <div class="input-row">
+                        <div class="input-label">Past Participle:</div>
+                        <input type="text" class="verb-input" id="czechPart" onkeypress="handleEnter(event)">
+                    </div>
+                </div>
+
+                <button class="check-btn" onclick="checkCzech()">Zkontrolovat</button>
+                <div id="czechFeedback" class="feedback hidden"></div>
+                <div id="czechCorrect" class="correct-answer hidden"></div>
+                <button id="nextCzechBtn" class="next-btn hidden" onclick="nextCzechQuestion()">
+                    Další sloveso →
+                </button>
+            </div>
+
+            <div id="tableMode" class="verb-table-section hidden">
+                <h3>📋 Přehled nepravidelných sloves</h3>
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Vyhledat sloveso..." onkeyup="filterVerbs()">
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="verb-table" id="verbTable">
+                        <thead>
+                            <tr>
+                                <th>Infinitive</th>
+                                <th>Past Simple</th>
+                                <th>Past Participle</th>
+                                <th>Český překlad</th>
+                            </tr>
+                        </thead>
+                        <tbody id="verbTableBody">
+                            <!-- Dynamicky generováno JavaScriptem -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const verbs = [
+            {inf: 'be', past: 'was/were', part: 'been', cz: 'být'},
+            {inf: 'become', past: 'became', part: 'become', cz: 'stát se'},
+            {inf: 'begin', past: 'began', part: 'begun', cz: 'začít'},
+            {inf: 'break', past: 'broke', part: 'broken', cz: 'zlomit'},
+            {inf: 'bring', past: 'brought', part: 'brought', cz: 'přinést'},
+            {inf: 'build', past: 'built', part: 'built', cz: 'stavět'},
+            {inf: 'buy', past: 'bought', part: 'bought', cz: 'koupit'},
+            {inf: 'catch', past: 'caught', part: 'caught', cz: 'chytit'},
+            {inf: 'choose', past: 'chose', part: 'chosen', cz: 'vybrat'},
+            {inf: 'come', past: 'came', part: 'come', cz: 'přijít'},
+            {inf: 'do', past: 'did', part: 'done', cz: 'dělat'},
+            {inf: 'drink', past: 'drank', part: 'drunk', cz: 'pít'},
+            {inf: 'drive', past: 'drove', part: 'driven', cz: 'řídit'},
+            {inf: 'eat', past: 'ate', part: 'eaten', cz: 'jíst'},
+            {inf: 'fall', past: 'fell', part: 'fallen', cz: 'padat'},
+            {inf: 'feel', past: 'felt', part: 'felt', cz: 'cítit'},
+            {inf: 'find', past: 'found', part: 'found', cz: 'najít'},
+            {inf: 'fly', past: 'flew', part: 'flown', cz: 'letět'},
+            {inf: 'forget', past: 'forgot', part: 'forgotten', cz: 'zapomenout'},
+            {inf: 'get', past: 'got', part: 'got/gotten', cz: 'dostat'},
+            {inf: 'give', past: 'gave', part: 'given', cz: 'dát'},
+            {inf: 'go', past: 'went', part: 'gone', cz: 'jít'},
+            {inf: 'have', past: 'had', part: 'had', cz: 'mít'},
+            {inf: 'hear', past: 'heard', part: 'heard', cz: 'slyšet'},
+            {inf: 'hide', past: 'hid', part: 'hidden', cz: 'skrýt'},
+            {inf: 'hit', past: 'hit', part: 'hit', cz: 'udeřit'},
+            {inf: 'hold', past: 'held', part: 'held', cz: 'držet'},
+            {inf: 'keep', past: 'kept', part: 'kept', cz: 'udržet'},
+            {inf: 'know', past: 'knew', part: 'known', cz: 'znát'},
+            {inf: 'leave', past: 'left', part: 'left', cz: 'opustit'},
+            {inf: 'lend', past: 'lent', part: 'lent', cz: 'půjčit'},
+            {inf: 'let', past: 'let', part: 'let', cz: 'nechat'},
+            {inf: 'lose', past: 'lost', part: 'lost', cz: 'ztratit'},
+            {inf: 'make', past: 'made', part: 'made', cz: 'vyrobit'},
+            {inf: 'mean', past: 'meant', part: 'meant', cz: 'znamenat'},
+            {inf: 'meet', past: 'met', part: 'met', cz: 'potkat'},
+            {inf: 'pay', past: 'paid', part: 'paid', cz: 'platit'},
+            {inf: 'put', past: 'put', part: 'put', cz: 'položit'},
+            {inf: 'read', past: 'read', part: 'read', cz: 'číst'},
+            {inf: 'ride', past: 'rode', part: 'ridden', cz: 'jet (na kole)'},
+            {inf: 'ring', past: 'rang', part: 'rung', cz: 'zvonit'},
+            {inf: 'run', past: 'ran', part: 'run', cz: 'běžet'},
+            {inf: 'say', past: 'said', part: 'said', cz: 'říct'},
+            {inf: 'see', past: 'saw', part: 'seen', cz: 'vidět'},
+            {inf: 'sell', past: 'sold', part: 'sold', cz: 'prodat'},
+            {inf: 'send', past: 'sent', part: 'sent', cz: 'poslat'},
+            {inf: 'show', past: 'showed', part: 'shown', cz: 'ukázat'},
+            {inf: 'sing', past: 'sang', part: 'sung', cz: 'zpívat'},
+            {inf: 'sit', past: 'sat', part: 'sat', cz: 'sedět'},
+            {inf: 'sleep', past: 'slept', part: 'slept', cz: 'spát'},
+            {inf: 'speak', past: 'spoke', part: 'spoken', cz: 'mluvit'},
+            {inf: 'spend', past: 'spent', part: 'spent', cz: 'utrácet'},
+            {inf: 'stand', past: 'stood', part: 'stood', cz: 'stát'},
+            {inf: 'swim', past: 'swam', part: 'swum', cz: 'plavat'},
+            {inf: 'take', past: 'took', part: 'taken', cz: 'brát'},
+            {inf: 'teach', past: 'taught', part: 'taught', cz: 'učit'},
+            {inf: 'tell', past: 'told', part: 'told', cz: 'povídat'},
+            {inf: 'think', past: 'thought', part: 'thought', cz: 'myslet'},
+            {inf: 'understand', past: 'understood', part: 'understood', cz: 'rozumět'},
+            {inf: 'wake', past: 'woke', part: 'woken', cz: 'budit'},
+            {inf: 'wear', past: 'wore', part: 'worn', cz: 'nosit (oblečení)'},
+            {inf: 'win', past: 'won', part: 'won', cz: 'vyhrát'},
+            {inf: 'write', past: 'wrote', part: 'written', cz: 'psát'}
+            {inf: '
