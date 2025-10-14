@@ -132,3 +132,158 @@ let allWordsRelated = [
 ];
 
 let allWordsAll = [...allWordsBasic, ...allWordsRelated];
+
+
+// po m 
+const wordsMBasicY = [
+            {word: 'my', gap: 'm_'},
+            {word: 'mýt', gap: 'm_t'},
+            {word: 'myslit', gap: 'm_slit'},
+            {word: 'mýlit se', gap: 'm_lit se'},
+            {word: 'hmyz', gap: 'hm_z'},
+            {word: 'myš', gap: 'm_š'},
+            {word: 'hlemýžď', gap: 'hlem_žď'},
+            {word: 'mýtit', gap: 'm_tit'},
+            {word: 'zamykat', gap: 'zam_kat'},
+            {word: 'smýkat', gap: 'sm_kat'},
+            {word: 'dmýchat', gap: 'dm_chat'},
+            {word: 'chmýří', gap: 'chm_ří'},
+            {word: 'nachomýtnout se', gap: 'nachom_tnout se'},
+            {word: 'Litomyšl', gap: 'Litom_šl'},
+            {word: 'mýto', gap: 'm_to'}
+        ];
+
+
+// Slova s Y - příbuzná
+const wordsMRelatedY = [
+    {word: 'umyvadlo', gap: 'um_vadlo'},
+    {word: 'mýdlo', gap: 'm_dlo'},
+    {word: 'umyvadlo', gap: 'um_vadlo'},
+    {word: 'myčka', gap: 'm_čka'},
+    {word: 'umývat', gap: 'um_vat'},
+    {word: 'myšlenka', gap: 'm_šlenka'},
+    {word: 'smysl', gap: 'sm_sl'},
+    {word: 'přemýšlet', gap: 'přem_šlet'},
+    {word: 'výmysl', gap: 'vým_sl'},
+    {word: 'průmysl', gap: 'prům_sl'},
+    {word: 'myslivec', gap: 'm_slivec'},
+    {word: 'pomýlit se', gap: 'pom_lit se'},
+    {word: 'omyl', gap: 'om_l (chyba)'},
+    {word: 'mylný', gap: 'm_lný'},
+    {word: 'mýlka', gap: 'm_lka'},
+    {word: 'hmyzožravec', gap: 'hm_zožravec'},
+    {word: 'hmyzí', gap: 'hm_zí'},
+    {word: 'myška', gap: 'm_ška'},
+    {word: 'myší', gap: 'm_ší'},
+    {word: 'hlemýždí', gap: 'hlem_ždí'},
+    {word: 'mýtina', gap: 'm_tina'},
+    {word: 'vymýtit', gap: 'vym_tit'},
+    {word: 'odemykat', gap: 'odem_kat'},
+    {word: 'smyk', gap: 'sm_k'},
+    {word: 'průsmyk', gap: 'průsm_k'},
+    {word: 'přesmyčka', gap: 'přesm_čka'},
+    {word: 'dmýchadlo', gap: 'dm_chadlo'},
+    {word: 'rozdmýchat', gap: 'rozdm_chat'},
+    {word: 'ochomýtat se', gap: 'ochom_tat se'},
+    {word: 'mýval', gap: 'm_val (zvíře)'},
+    {word: 'namydlit', gap: 'nam_dlit'},
+    {word: 'mydliny', gap: 'm_dliny'},
+    {word: 'umývarna', gap: 'um_várna'},
+    {word: 'pomyslet', gap: 'pom_slet'},
+    {word: 'rozmyslet', gap: 'rozm_slet'},
+    {word: 'úmysl', gap: 'úm_sl'},
+    {word: 'usmyslet si', gap: 'usm_slet si'},
+    {word: 'neomylný', gap: 'neom_lný'},
+    {word: 'zmýlená', gap: 'zm_lená'},
+    {word: 'mýtné', gap: 'm_tné'},
+    {word: 'vymýcený', gap: 'vym_cený'},
+    {word: 'zamykání', gap: 'zam_kání'},
+    {word: 'odmykání', gap: 'om_kání'},
+    {word: 'smyčec', gap: 'sm_čec'},
+    {word: 'smyčka', gap: 'sm_čka'},
+    {word: 'vysmýčit', gap: 'vysm_čit'},
+    {word: 'smýknout', gap: 'sm_knout'},
+    {word: 'rozdmýchávání', gap: 'rozdm_chávání'},
+    {word: 'chmýříčko', gap: 'chm_říčko'},
+    {word: 'ochmýřený', gap: 'ochm_řený'},
+    {word: 'mydlář', gap: 'm_dlář'},
+    
+
+
+
+
+    // ...
+];
+
+// Slova s I - základní
+const wordsMBasicI = [
+            {word: 'mít', gap: 'm_t - vlastnit'},
+            {word: 'míval', gap: 'm_val'},
+            {word: 'míle', gap: 'm_le'},
+            {word: 'milý', gap: 'm_lý'},
+            {word: 'mikina', gap: 'm_kina'},
+            {word: 'míjet', gap: 'm_jet'},
+            {word: 'mír', gap: 'm_r'},
+            {word: 'mísa', gap: 'm_sa'},
+            {word: 'miska', gap: 'm_ska'},
+            {word: 'miminko', gap: 'mim_nko'},
+            {word: 'minuta', gap: 'm_nuta'},
+            {word: 'mistr', gap: 'm_str'},
+            {word: 'míč', gap: 'm_č'},
+            {word: 'milion', gap: 'm_lion'}
+        ];
+
+// Slova s I - příbuzná (pokud chceš)
+const wordsMRelatedI = [
+    {word: 'mikrofon', gap: 'm_krofon'},
+    {word: 'kominík', gap: 'kom_ník'},
+    {word: 'mířit', gap: 'm_řit'},
+    {word: 'milimetr', gap: 'm_limetr'},
+    {word: 'minomet', gap: 'm_nomet'},
+    {word: 'mimochodem', gap: 'm_mochodem'},
+    {word: 'míchat', gap: 'm_chat'},
+    {word: 'limit', gap: 'lim_t'},
+    {word: 'komisař', gap: 'kom_sař'},
+    {word: 'mimo', gap: 'm_mo'},
+    {word: 'minulý', gap: 'm_nulý'},
+    {word: 'milenec', gap: 'm_lenec'},
+    {word: 'milovat', gap: 'm_lovat'},
+    {word: 'rozmíchat', gap: 'rozm_chat'},
+    {word: 'pominout', gap: 'pom_nout'},
+    {word: 'pomíjivý', gap: 'pom_jivý'},
+    {word: 'umím', gap: 'um_m'},
+    {word: 'míra', gap: 'm_ra'},
+    {word: 'migrace', gap: 'm_grace'},
+    {word: 'mikroskop', gap: 'm_kroskop'},
+    {word: 'mimikry', gap: 'mim_kry'},
+    {word: 'emisní', gap: 'em_sní'},
+    {word: 'imitovat', gap: 'im_tovat'},
+    {word: 'milión', gap: 'm_lión'},
+    {word: 'komín', gap: 'kom_n'},
+    {word: 'minout', gap: 'm_nout'},
+    {word: 'milost', gap: 'm_lost'},
+    {word: 'mikrob', gap: 'm_krob'},
+    {word: 'minimální', gap: 'm_nimální'},
+    {word: 'komik', gap: 'kom_k'},
+    {word: 'mihnout se', gap: 'm_hnout se'},
+    {word: 'Mikuláš', gap: 'M_kuláš'},
+    {word: 'místo', gap: 'm_sto'},
+    {word: 'dýmit', gap: 'dým_t'},
+    {word: 'mizet', gap: 'm_zet'},
+    {word: 'umíněný', gap: 'um_něný'},
+
+    // ...
+];
+
+// Pak složíš podle úrovně:
+let allWordsBasic = [
+    ...wordsMBasicY.map(w => ({...w, correct: 'y'})), 
+    ...wordsMBasicI.map(w => ({...w, correct: 'i'}))
+];
+
+let allWordsRelated = [
+    ...wordsMRelatedY.map(w => ({...w, correct: 'y'})),
+    ...wordsMRelatedI.map(w => ({...w, correct: 'i'}))
+];
+
+let allWordsAll = [...allWordsBasic, ...allWordsRelated];
