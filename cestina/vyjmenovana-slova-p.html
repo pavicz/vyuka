@@ -1,4 +1,503 @@
-const wordsMBasicY = [
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vyjmenovaná slova po P - Procvičování</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --success: #4CAF50;
+            --error: #f44336;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .mode-btn {
+            padding: 20px;
+            background: var(--bg-light);
+            border: 3px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .mode-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .mode-icon {
+            font-size: 2em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .exercise-area {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .question-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .word-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+            letter-spacing: 0.1em;
+        }
+
+        .gap {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border-bottom: 4px solid var(--primary);
+            margin: 0 5px;
+            vertical-align: baseline;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 500px;
+            margin: 30px auto;
+        }
+
+        .option-btn {
+            padding: 30px;
+            font-size: 2em;
+            font-weight: 600;
+            border: 3px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .option-btn.correct {
+            background: var(--success);
+            color: var(--white);
+            border-color: var(--success);
+            animation: pulse 0.5s;
+        }
+
+        .option-btn.incorrect {
+            background: var(--error);
+            color: var(--white);
+            border-color: var(--error);
+            animation: shake 0.5s;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .next-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .word-list-section {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .word-list-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .word-columns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .word-column {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .word-column h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .word-list {
+            list-style: none;
+        }
+
+        .word-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--bg-light);
+            font-size: 1.05em;
+        }
+
+        .word-list li:last-child {
+            border-bottom: none;
+        }
+
+        .word-y {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .word-i {
+            color: #2196F3;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .variant-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .variant-btn {
+            padding: 20px;
+            font-size: 1.5em;
+            font-weight: 600;
+            border: 3px solid var(--primary);
+            background: var(--white);
+            color: var(--text-dark);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .variant-btn:hover:not(:disabled) {
+            background: var(--bg-light);
+            transform: translateX(5px);
+        }
+
+        .variant-btn.correct {
+            background: var(--success);
+            color: var(--white);
+            border-color: var(--success);
+            animation: pulse 0.5s;
+        }
+
+        .variant-btn.incorrect {
+            background: var(--error);
+            color: var(--white);
+            border-color: var(--error);
+            animation: shake 0.5s;
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .word-display {
+                font-size: 2em;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .option-btn {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="index.html">Čeština</a>
+            <span>›</span>
+            <a href="vyjmenovana-slova.html">Vyjmenovaná slova</a>
+   <span>›</span>
+   <strong>Písmeno M</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1>📝 Vyjmenovaná slova po P</h1>
+                <p class="subtitle">Procvič si psaní Y/I po písmenu P</p>
+            </header>
+
+            <div class="mode-selector">
+                <button class="mode-btn active" onclick="changeMode('fillGap')">
+                    <span class="mode-icon">✏️</span>
+                    Doplň Y/I
+                </button>
+                <button class="mode-btn" onclick="changeMode('chooseVariant')">
+                    <span class="mode-icon">🎯</span>
+                    Vyber správný tvar
+                </button>
+                <button class="mode-btn" onclick="changeMode('theory')">
+                    <span class="mode-icon">📚</span>
+                    Teorie
+                </button>
+            </div>
+
+            <div class="stats-bar" id="statsBar">
+                <div class="stat-box">
+                    <div class="stat-value" id="correct">0</div>
+                    <div class="stat-label">✓ Správně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="incorrect">0</div>
+                    <div class="stat-label">✗ Chybně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="percentage">0%</div>
+                    <div class="stat-label">📊 Úspěšnost</div>
+                </div>
+            </div>
+
+            <div id="fillGapMode" class="exercise-area">
+                <div class="question-header">
+                    <div class="question-number" id="questionNum">Otázka 1</div>
+                    <div>Doplň správné písmeno:</div>
+                    <div class="word-display" id="wordDisplay">m_t</div>
+                </div>
+
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer('y')">Y/Ý</button>
+                    <button class="option-btn" onclick="checkAnswer('i')">I/Í</button>
+                </div>
+
+                <div id="feedback" class="feedback hidden"></div>
+                <button id="nextBtn" class="next-btn hidden" onclick="nextQuestion()">
+                    Další slovo →
+                </button>
+            </div>
+
+            <div id="chooseVariantMode" class="exercise-area hidden">
+                <div class="question-header">
+                    <div class="question-number" id="variantQuestionNum">Otázka 1</div>
+                    <div>Vyber správný tvar slova:</div>
+                </div>
+
+                <div class="variant-options" id="variantOptions">
+                    <!-- Dynamicky generováno -->
+                </div>
+
+                <div id="variantFeedback" class="feedback hidden"></div>
+                <button id="nextVariantBtn" class="next-btn hidden" onclick="nextVariantQuestion()">
+                    Další slovo →
+                </button>
+            </div>
+
+            <div id="theoryMode" class="word-list-section hidden">
+                <h3>📚 Přehled vyjmenovaných slov po M</h3>
+                <div class="word-columns">
+                    <div class="word-column">
+                        <h4>Slova s <span class="word-y">Y</span></h4>
+                        <ul class="word-list" id="wordsWithY"></ul>
+                    </div>
+                    <div class="word-column">
+                        <h4>Slova s <span class="word-i">I</span> (pro porovnání)</h4>
+                        <ul class="word-list" id="wordsWithI"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const wordsY =  [
             {word: 'pýcha', gap: 'p_cha'},
             {word: 'pytel', gap: 'p_tel'},
             {word: 'pysk', gap: 'p_sk'},
@@ -17,58 +516,7 @@ const wordsMBasicY = [
         ];
 
 
-// Slova s Y - příbuzná
-const wordsMRelatedY = [
-    {word: 'pyšný', gap: 'p_šný'},
-{word: 'pýchavka', gap: 'p_chavka'},
-{word: 'přepych', gap: 'přep_ch'},
-{word: 'pytlovina', gap: 'p_tlovina'},
-{word: 'pytlák', gap: 'p_tlák'},
-{word: 'pytlačit', gap: 'p_tlačit'},
-{word: 'strašpytel', gap: 'strašp_tel'},
-{word: 'pytlíček', gap: 'p_tlíček'},
-{word: 'pyskatý', gap: 'p_skatý'},
-{word: 'ptakopysk', gap: 'ptakop_sk'},
-{word: 'netopýří', gap: 'netop_ří'},
-{word: 'slepýší', gap: 'slep_ší'},
-{word: 'pylový', gap: 'p_lový'},
-{word: 'opylovat', gap: 'op_lovat'},
-{word: 'kopýtko', gap: 'kop_tko'},
-{word: 'lichokopytník', gap: 'lichokop_tník'},
-{word: 'sudokopytník', gap: 'sudokop_tník'},
-{word: 'klopýtnout', gap: 'klop_tnout'},
-{word: 'klopýtání', gap: 'klop_tání'},
-{word: 'třpyt', gap: 'třp_t'},
-{word: 'třpytivý', gap: 'třp_tivý'},
-{word: 'třpytka', gap: 'třp_tka'},
-{word: 'zatřpytit', gap: 'zatřp_tit'},
-{word: 'zpytování', gap: 'zp_tování'},
-{word: 'nevyzpytatelný', gap: 'nevyzp_tatelný'},
-{word: 'odpykat', gap: 'odp_kat'},
-{word: 'odpykání', gap: 'odp_kání'},
-{word: 'pýřivý', gap: 'p_řivý'},
-{word: 'čepýření', gap: 'čep_ření'},
-{word: 'rozčepýřený', gap: 'rozčep_řený'},
-{word: 'načepýřený', gap: 'načep_řený'},
-{word: 'zpychnout', gap: 'zp_chnout'},
-{word: 'pytláctví', gap: 'p_tláctví'},
-{word: 'pylovat', gap: 'p_lovat'},
-{word: 'opylovač', gap: 'op_lovač'},
-{word: 'pykající', gap: 'p_kající'},
-{word: 'pylový', gap: 'p_lový'},
-{word: 'pytlácký', gap: 'p_tlácký'},
-{word: 'přepychový', gap: 'přep_chový'},
-{word: 'klopýtavý', gap: 'klop_tavý'},
-{word: 'rozčepýřit', gap: 'rozčep_řit'},
-{word: 'opylování', gap: 'op_lování'},
-
-
-
-    // ...
-];
-
-// Slova s I - základní
-const wordsMBasicI = [
+        const wordsI =  [
             {word: 'pila', gap: 'p_la'},
             {word: 'písmo', gap: 'p_smo'},
             {word: 'piják', gap: 'p_ják'},
@@ -86,204 +534,174 @@ const wordsMBasicI = [
             {word: 'časopis', gap: 'časop_s'},
         ];
 
-// Slova s I - příbuzná (pokud chceš)
-const wordsMRelatedI = [
-    {word: 'pichlavý', gap: 'p_chlavý'},
-{word: 'píchnout', gap: 'p_chnout'},
-{word: 'pilník', gap: 'p_lník'},
-{word: 'písečný', gap: 'p_sečný'},
-{word: 'písčitý', gap: 'p_sčitý'},
-{word: 'pískoviště', gap: 'p_skoviště'},
-{word: 'písnička', gap: 'p_snička'},
-{word: 'písař', gap: 'p_sař'},
-{word: 'písmenko', gap: 'p_smenko'},
-{word: 'popisovat', gap: 'pop_sovat'},
-{word: 'písanka', gap: 'p_sanka'},
-{word: 'spisovatel', gap: 'sp_sovatel'},
-{word: 'pitný režim', gap: 'p_tný režim'},
-{word: 'popíjet', gap: 'pop_jet'},
-{word: 'pípání', gap: 'p_pání'},
-{word: 'pískot', gap: 'p_skot'},
-{word: 'milostivý', gap: 'm_lostivý'},
-{word: 'pivovar', gap: 'p_vovar'},
-{word: 'pivnice', gap: 'p_vnice'},
-{word: 'spiknutí', gap: 'sp_knutí'},
-{word: 'pilně', gap: 'p_lně'},
-{word: 'předpis', gap: 'předp_s'},
-{word: 'přepis', gap: 'přep_s'},
-{word: 'lepidlo', gap: 'lep_dlo'},
-{word: 'píšťalka', gap: 'p_šťalka'},
-{word: 'připínáček', gap: 'přip_náček'},
 
+        const allWords = [...wordsY.map(w => ({...w, correct: 'y'})), ...wordsI.map(w => ({...w, correct: 'i'}))];
 
+        let stats = {correct: 0, incorrect: 0, total: 0, current: 1};
+        let currentMode = 'fillGap';
+        let currentWord = {};
 
-    // ...
-];
+        function generateFillGapQuestion() {
+            currentWord = allWords[Math.floor(Math.random() * allWords.length)];
+            
+            document.getElementById('questionNum').textContent = `Otázka ${stats.current}`;
+            document.getElementById('wordDisplay').textContent = currentWord.gap;
+            
+            document.querySelectorAll('#fillGapMode .option-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('correct', 'incorrect');
+            });
 
-// Pak složíš podle úrovně:
-let allWordsBasic = [
-    ...wordsMBasicY.map(w => ({...w, correct: 'y'})), 
-    ...wordsMBasicI.map(w => ({...w, correct: 'i'}))
-];
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+        }
 
-let allWordsRelated = [
-    ...wordsMRelatedY.map(w => ({...w, correct: 'y'})),
-    ...wordsMRelatedI.map(w => ({...w, correct: 'i'}))
-];
+        function checkAnswer(answer) {
+            const isCorrect = answer === currentWord.correct;
+            
+            stats.total++;
+            isCorrect ? stats.correct++ : stats.incorrect++;
+            updateStats();
 
-let allWordsAll = [...allWordsBasic, ...allWordsRelated];
+            const buttons = document.querySelectorAll('#fillGapMode .option-btn');
+            buttons.forEach(btn => btn.disabled = true);
 
+            const clickedBtn = answer === 'y' ? buttons[0] : buttons[1];
+            clickedBtn.classList.add(isCorrect ? 'correct' : 'incorrect');
 
-// po m 
-const wordsMBasicY = [
-            {word: 'my', gap: 'm_'},
-            {word: 'mýt', gap: 'm_t'},
-            {word: 'myslit', gap: 'm_slit'},
-            {word: 'mýlit se', gap: 'm_lit se'},
-            {word: 'hmyz', gap: 'hm_z'},
-            {word: 'myš', gap: 'm_š'},
-            {word: 'hlemýžď', gap: 'hlem_žď'},
-            {word: 'mýtit', gap: 'm_tit'},
-            {word: 'zamykat', gap: 'zam_kat'},
-            {word: 'smýkat', gap: 'sm_kat'},
-            {word: 'dmýchat', gap: 'dm_chat'},
-            {word: 'chmýří', gap: 'chm_ří'},
-            {word: 'nachomýtnout se', gap: 'nachom_tnout se'},
-            {word: 'Litomyšl', gap: 'Litom_šl'},
-            {word: 'mýto', gap: 'm_to'}
-        ];
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden', 'correct', 'incorrect');
+            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            if (isCorrect) {
+                const messages = ['🎉 Výborně!', '✨ Skvělá práce!', '🌟 Perfektní!', '👏 Správně!'];
+                feedback.textContent = messages[Math.floor(Math.random() * messages.length)];
+            } else {
+                feedback.textContent = `❌ Správná odpověď: ${currentWord.word}`;
+            }
 
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
 
-// Slova s Y - příbuzná
-const wordsMRelatedY = [
-    {word: 'umyvadlo', gap: 'um_vadlo'},
-    {word: 'mýdlo', gap: 'm_dlo'},
-    {word: 'umyvadlo', gap: 'um_vadlo'},
-    {word: 'myčka', gap: 'm_čka'},
-    {word: 'umývat', gap: 'um_vat'},
-    {word: 'myšlenka', gap: 'm_šlenka'},
-    {word: 'smysl', gap: 'sm_sl'},
-    {word: 'přemýšlet', gap: 'přem_šlet'},
-    {word: 'výmysl', gap: 'vým_sl'},
-    {word: 'průmysl', gap: 'prům_sl'},
-    {word: 'myslivec', gap: 'm_slivec'},
-    {word: 'pomýlit se', gap: 'pom_lit se'},
-    {word: 'omyl', gap: 'om_l (chyba)'},
-    {word: 'mylný', gap: 'm_lný'},
-    {word: 'mýlka', gap: 'm_lka'},
-    {word: 'hmyzožravec', gap: 'hm_zožravec'},
-    {word: 'hmyzí', gap: 'hm_zí'},
-    {word: 'myška', gap: 'm_ška'},
-    {word: 'myší', gap: 'm_ší'},
-    {word: 'hlemýždí', gap: 'hlem_ždí'},
-    {word: 'mýtina', gap: 'm_tina'},
-    {word: 'vymýtit', gap: 'vym_tit'},
-    {word: 'odemykat', gap: 'odem_kat'},
-    {word: 'smyk', gap: 'sm_k'},
-    {word: 'průsmyk', gap: 'průsm_k'},
-    {word: 'přesmyčka', gap: 'přesm_čka'},
-    {word: 'dmýchadlo', gap: 'dm_chadlo'},
-    {word: 'rozdmýchat', gap: 'rozdm_chat'},
-    {word: 'ochomýtat se', gap: 'ochom_tat se'},
-    {word: 'mýval', gap: 'm_val (zvíře)'},
-    {word: 'namydlit', gap: 'nam_dlit'},
-    {word: 'mydliny', gap: 'm_dliny'},
-    {word: 'umývarna', gap: 'um_várna'},
-    {word: 'pomyslet', gap: 'pom_slet'},
-    {word: 'rozmyslet', gap: 'rozm_slet'},
-    {word: 'úmysl', gap: 'úm_sl'},
-    {word: 'usmyslet si', gap: 'usm_slet si'},
-    {word: 'neomylný', gap: 'neom_lný'},
-    {word: 'zmýlená', gap: 'zm_lená'},
-    {word: 'mýtné', gap: 'm_tné'},
-    {word: 'vymýcený', gap: 'vym_cený'},
-    {word: 'zamykání', gap: 'zam_kání'},
-    {word: 'odmykání', gap: 'om_kání'},
-    {word: 'smyčec', gap: 'sm_čec'},
-    {word: 'smyčka', gap: 'sm_čka'},
-    {word: 'vysmýčit', gap: 'vysm_čit'},
-    {word: 'smýknout', gap: 'sm_knout'},
-    {word: 'rozdmýchávání', gap: 'rozdm_chávání'},
-    {word: 'chmýříčko', gap: 'chm_říčko'},
-    {word: 'ochmýřený', gap: 'ochm_řený'},
-    {word: 'mydlář', gap: 'm_dlář'},
-    
+        function generateVariantQuestion() {
+            currentWord = allWords[Math.floor(Math.random() * allWords.length)];
+            
+            // Najdi slovo s opačným písmenem (Y/I) se stejným základem pokud existuje
+            const wrongVariant = currentWord.correct === 'y' 
+                ? currentWord.word.replace(/y/gi, 'i').replace(/Y/g, 'I')
+                : currentWord.word.replace(/i/gi, 'y').replace(/I/g, 'Y');
+            
+            const variants = [currentWord.word, wrongVariant];
+            variants.sort(() => Math.random() - 0.5);
+            
+            document.getElementById('variantQuestionNum').textContent = `Otázka ${stats.current}`;
+            
+            const container = document.getElementById('variantOptions');
+            container.innerHTML = '';
+            
+            variants.forEach(variant => {
+                const btn = document.createElement('button');
+                btn.className = 'variant-btn';
+                btn.textContent = variant;
+                btn.onclick = () => checkVariant(variant);
+                container.appendChild(btn);
+            });
+            
+            document.getElementById('variantFeedback').classList.add('hidden');
+            document.getElementById('nextVariantBtn').classList.add('hidden');
+        }
 
+        function checkVariant(selected) {
+            const isCorrect = selected === currentWord.word;
+            
+            stats.total++;
+            isCorrect ? stats.correct++ : stats.incorrect++;
+            updateStats();
 
+            const buttons = document.querySelectorAll('.variant-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === currentWord.word) {
+                    btn.classList.add('correct');
+                } else if (btn.textContent === selected && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
 
+            const feedback = document.getElementById('variantFeedback');
+            feedback.classList.remove('hidden', 'correct', 'incorrect');
+            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+            feedback.textContent = isCorrect ? '🎉 Správně!' : `❌ Správná odpověď: ${currentWord.word}`;
 
-    // ...
-];
+            document.getElementById('nextVariantBtn').classList.remove('hidden');
+        }
 
-// Slova s I - základní
-const wordsMBasicI = [
-            {word: 'mít', gap: 'm_t - vlastnit'},
-            {word: 'míval', gap: 'm_val'},
-            {word: 'míle', gap: 'm_le'},
-            {word: 'milý', gap: 'm_lý'},
-            {word: 'mikina', gap: 'm_kina'},
-            {word: 'míjet', gap: 'm_jet'},
-            {word: 'mír', gap: 'm_r'},
-            {word: 'mísa', gap: 'm_sa'},
-            {word: 'miska', gap: 'm_ska'},
-            {word: 'miminko', gap: 'mim_nko'},
-            {word: 'minuta', gap: 'm_nuta'},
-            {word: 'mistr', gap: 'm_str'},
-            {word: 'míč', gap: 'm_č'},
-            {word: 'milion', gap: 'm_lion'}
-        ];
+        function nextQuestion() {
+            stats.current++;
+            generateFillGapQuestion();
+        }
 
-// Slova s I - příbuzná (pokud chceš)
-const wordsMRelatedI = [
-    {word: 'mikrofon', gap: 'm_krofon'},
-    {word: 'kominík', gap: 'kom_ník'},
-    {word: 'mířit', gap: 'm_řit'},
-    {word: 'milimetr', gap: 'm_limetr'},
-    {word: 'minomet', gap: 'm_nomet'},
-    {word: 'mimochodem', gap: 'm_mochodem'},
-    {word: 'míchat', gap: 'm_chat'},
-    {word: 'limit', gap: 'lim_t'},
-    {word: 'komisař', gap: 'kom_sař'},
-    {word: 'mimo', gap: 'm_mo'},
-    {word: 'minulý', gap: 'm_nulý'},
-    {word: 'milenec', gap: 'm_lenec'},
-    {word: 'milovat', gap: 'm_lovat'},
-    {word: 'rozmíchat', gap: 'rozm_chat'},
-    {word: 'pominout', gap: 'pom_nout'},
-    {word: 'pomíjivý', gap: 'pom_jivý'},
-    {word: 'umím', gap: 'um_m'},
-    {word: 'míra', gap: 'm_ra'},
-    {word: 'migrace', gap: 'm_grace'},
-    {word: 'mikroskop', gap: 'm_kroskop'},
-    {word: 'mimikry', gap: 'mim_kry'},
-    {word: 'emisní', gap: 'em_sní'},
-    {word: 'imitovat', gap: 'im_tovat'},
-    {word: 'milión', gap: 'm_lión'},
-    {word: 'komín', gap: 'kom_n'},
-    {word: 'minout', gap: 'm_nout'},
-    {word: 'milost', gap: 'm_lost'},
-    {word: 'mikrob', gap: 'm_krob'},
-    {word: 'minimální', gap: 'm_nimální'},
-    {word: 'komik', gap: 'kom_k'},
-    {word: 'mihnout se', gap: 'm_hnout se'},
-    {word: 'Mikuláš', gap: 'M_kuláš'},
-    {word: 'místo', gap: 'm_sto'},
-    {word: 'dýmit', gap: 'dým_t'},
-    {word: 'mizet', gap: 'm_zet'},
-    {word: 'umíněný', gap: 'um_něný'},
+        function nextVariantQuestion() {
+            stats.current++;
+            generateVariantQuestion();
+        }
 
-    // ...
-];
+        function updateStats() {
+            document.getElementById('correct').textContent = stats.correct;
+            document.getElementById('incorrect').textContent = stats.incorrect;
+            const percentage = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+            document.getElementById('percentage').textContent = percentage + '%';
+        }
 
-// Pak složíš podle úrovně:
-let allWordsBasic = [
-    ...wordsMBasicY.map(w => ({...w, correct: 'y'})), 
-    ...wordsMBasicI.map(w => ({...w, correct: 'i'}))
-];
+        function changeMode(mode) {
+            currentMode = mode;
+            stats.current = 1;
+            
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.mode-btn').classList.add('active');
+            
+            if (mode === 'fillGap') {
+                document.getElementById('statsBar').classList.remove('hidden');
+                document.getElementById('fillGapMode').classList.remove('hidden');
+                document.getElementById('chooseVariantMode').classList.add('hidden');
+                document.getElementById('theoryMode').classList.add('hidden');
+                generateFillGapQuestion();
+            } else if (mode === 'chooseVariant') {
+                document.getElementById('statsBar').classList.remove('hidden');
+                document.getElementById('fillGapMode').classList.add('hidden');
+                document.getElementById('chooseVariantMode').classList.remove('hidden');
+                document.getElementById('theoryMode').classList.add('hidden');
+                generateVariantQuestion();
+            } else if (mode === 'theory') {
+                document.getElementById('statsBar').classList.add('hidden');
+                document.getElementById('fillGapMode').classList.add('hidden');
+                document.getElementById('chooseVariantMode').classList.add('hidden');
+                document.getElementById('theoryMode').classList.remove('hidden');
+                generateTheory();
+            }
+        }
 
-let allWordsRelated = [
-    ...wordsMRelatedY.map(w => ({...w, correct: 'y'})),
-    ...wordsMRelatedI.map(w => ({...w, correct: 'i'}))
-];
+        function generateTheory() {
+            const yList = document.getElementById('wordsWithY');
+            const iList = document.getElementById('wordsWithI');
+            
+            yList.innerHTML = '';
+            iList.innerHTML = '';
+            
+            wordsY.forEach(w => {
+                const li = document.createElement('li');
+                li.textContent = w.word;
+                yList.appendChild(li);
+            });
+            
+            wordsI.forEach(w => {
+                const li = document.createElement('li');
+                li.textContent = w.word;
+                iList.appendChild(li);
+            });
+        }
 
-let allWordsAll = [...allWordsBasic, ...allWordsRelated];
+        generateFillGapQuestion();
+    </script>
+</body>
+</html>
