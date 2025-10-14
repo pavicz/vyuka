@@ -1,0 +1,134 @@
+const wordsMBasicY = [
+            {word: 'pýcha', gap: 'p_cha'},
+            {word: 'pytel', gap: 'p_tel'},
+            {word: 'pysk', gap: 'p_sk'},
+            {word: 'netopýr', gap: 'netop_r'},
+            {word: 'slepýš', gap: 'slep_š'},
+            {word: 'pyl', gap: 'p_l'},
+            {word: 'kopyto', gap: 'kop_to'},
+            {word: 'klopýtat', gap: 'klop_tat'},
+            {word: 'třpytit se', gap: 'třp_tit se'},
+            {word: 'zpytovat', gap: 'zpytovat'},
+            {word: 'pykat', gap: 'pykat'},
+            {word: 'pýr', gap: 'pýr'},
+            {word: 'pýří', gap: 'pýří'},
+            {word: 'pýřit se', gap: 'pýřit se'},
+            {word: 'čepýřit se', gap: 'čepýřit se'}
+        ];
+
+
+// Slova s Y - příbuzná
+const wordsMRelatedY = [
+    {word: 'pyšný', gap: 'p_šný'},
+{word: 'pýchavka', gap: 'p_chavka'},
+{word: 'přepych', gap: 'přep_ch'},
+{word: 'pytlovina', gap: 'p_tlovina'},
+{word: 'pytlák', gap: 'p_tlák'},
+{word: 'pytlačit', gap: 'p_tlačit'},
+{word: 'strašpytel', gap: 'strašp_tel'},
+{word: 'pytlíček', gap: 'p_tlíček'},
+{word: 'pyskatý', gap: 'p_skatý'},
+{word: 'ptakopysk', gap: 'ptakop_sk'},
+{word: 'netopýří', gap: 'netop_ří'},
+{word: 'slepýší', gap: 'slep_ší'},
+{word: 'pylový', gap: 'p_lový'},
+{word: 'opylovat', gap: 'op_lovat'},
+{word: 'kopýtko', gap: 'kop_tko'},
+{word: 'lichokopytník', gap: 'lichokop_tník'},
+{word: 'sudokopytník', gap: 'sudokop_tník'},
+{word: 'klopýtnout', gap: 'klop_tnout'},
+{word: 'klopýtání', gap: 'klop_tání'},
+{word: 'třpyt', gap: 'třp_t'},
+{word: 'třpytivý', gap: 'třp_tivý'},
+{word: 'třpytka', gap: 'třp_tka'},
+{word: 'zatřpytit', gap: 'zatřp_tit'},
+{word: 'zpytování', gap: 'zp_tování'},
+{word: 'nevyzpytatelný', gap: 'nevyzp_tatelný'},
+{word: 'odpykat', gap: 'odp_kat'},
+{word: 'odpykání', gap: 'odp_kání'},
+{word: 'pýřivý', gap: 'p_řivý'},
+{word: 'čepýření', gap: 'čep_ření'},
+{word: 'rozčepýřený', gap: 'rozčep_řený'},
+{word: 'načepýřený', gap: 'načep_řený'},
+{word: 'zpychnout', gap: 'zp_chnout'},
+{word: 'pytláctví', gap: 'p_tláctví'},
+{word: 'pylovat', gap: 'p_lovat'},
+{word: 'opylovač', gap: 'op_lovač'},
+{word: 'pykající', gap: 'p_kající'},
+{word: 'pylový', gap: 'p_lový'},
+{word: 'pytlácký', gap: 'p_tlácký'},
+{word: 'přepychový', gap: 'přep_chový'},
+{word: 'klopýtavý', gap: 'klop_tavý'},
+{word: 'rozčepýřit', gap: 'rozčep_řit'},
+{word: 'opylování', gap: 'op_lování'},
+
+
+
+    // ...
+];
+
+// Slova s I - základní
+const wordsMBasicI = [
+            {word: 'pila', gap: 'p_la'},
+            {word: 'písmo', gap: 'p_smo'},
+            {word: 'piják', gap: 'p_ják'},
+            {word: 'pískat', gap: 'p_skat'},
+            {word: 'pivo', gap: 'p_vo'},
+            {word: 'píchat', gap: 'p_chat'},
+            {word: 'připínat', gap: 'přip_nat'},
+            {word: 'případ', gap: 'př_pad'},
+            {word: 'písčitý', gap: 'p_ščitý'},
+            {word: 'pitvat', gap: 'p_tvat'},
+            {word: 'pilník', gap: 'p_lník'},
+            {word: 'píseň', gap: 'p_seň'},
+            {word: 'papír', gap: 'pap_r'},
+            {word: 'lepidlo', gap: 'lep_dlo'},
+            {word: 'časopis', gap: 'časop_s'},
+        ];
+
+// Slova s I - příbuzná (pokud chceš)
+const wordsMRelatedI = [
+    {word: 'pichlavý', gap: 'p_chlavý'},
+{word: 'píchnout', gap: 'p_chnout'},
+{word: 'pilník', gap: 'p_lník'},
+{word: 'písečný', gap: 'p_sečný'},
+{word: 'písčitý', gap: 'p_sčitý'},
+{word: 'pískoviště', gap: 'p_skoviště'},
+{word: 'písnička', gap: 'p_snička'},
+{word: 'písař', gap: 'p_sař'},
+{word: 'písmenko', gap: 'p_smenko'},
+{word: 'popisovat', gap: 'pop_sovat'},
+{word: 'písanka', gap: 'p_sanka'},
+{word: 'spisovatel', gap: 'sp_sovatel'},
+{word: 'pitný režim', gap: 'p_tný režim'},
+{word: 'popíjet', gap: 'pop_jet'},
+{word: 'pípání', gap: 'p_pání'},
+{word: 'pískot', gap: 'p_skot'},
+{word: 'milostivý', gap: 'm_lostivý'},
+{word: 'pivovar', gap: 'p_vovar'},
+{word: 'pivnice', gap: 'p_vnice'},
+{word: 'spiknutí', gap: 'sp_knutí'},
+{word: 'pilně', gap: 'p_lně'},
+{word: 'předpis', gap: 'předp_s'},
+{word: 'přepis', gap: 'přep_s'},
+{word: 'lepidlo', gap: 'lep_dlo'},
+{word: 'píšťalka', gap: 'p_šťalka'},
+{word: 'připínáček', gap: 'přip_náček'},
+
+
+
+    // ...
+];
+
+// Pak složíš podle úrovně:
+let allWordsBasic = [
+    ...wordsMBasicY.map(w => ({...w, correct: 'y'})), 
+    ...wordsMBasicI.map(w => ({...w, correct: 'i'}))
+];
+
+let allWordsRelated = [
+    ...wordsMRelatedY.map(w => ({...w, correct: 'y'})),
+    ...wordsMRelatedI.map(w => ({...w, correct: 'i'}))
+];
+
+let allWordsAll = [...allWordsBasic, ...allWordsRelated];
