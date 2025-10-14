@@ -171,15 +171,6 @@
             letter-spacing: 0.1em;
         }
 
-        .gap {
-            display: inline-block;
-            width: 60px;
-            height: 60px;
-            border-bottom: 4px solid var(--primary);
-            margin: 0 5px;
-            vertical-align: baseline;
-        }
-
         .options {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -406,8 +397,8 @@
             <a href="index.html">Čeština</a>
             <span>›</span>
             <a href="vyjmenovana-slova.html">Vyjmenovaná slova</a>
-   <span>›</span>
-   <strong>Písmeno M</strong>
+            <span>›</span>
+            <strong>Písmeno P</strong>
         </div>
 
         <div class="main-card">
@@ -415,6 +406,21 @@
                 <h1>📝 Vyjmenovaná slova po P</h1>
                 <p class="subtitle">Procvič si psaní Y/I po písmenu P</p>
             </header>
+
+            <div class="mode-selector" style="margin-bottom: 15px;">
+                <button class="mode-btn active" onclick="changeLevel('basic')">
+                    <span class="mode-icon">⭐</span>
+                    Lehká (základní)
+                </button>
+                <button class="mode-btn" onclick="changeLevel('related')">
+                    <span class="mode-icon">⭐⭐</span>
+                    Střední (+ příbuzná)
+                </button>
+                <button class="mode-btn" onclick="changeLevel('all')">
+                    <span class="mode-icon">⭐⭐⭐</span>
+                    Těžká (všechna)
+                </button>
+            </div>
 
             <div class="mode-selector">
                 <button class="mode-btn active" onclick="changeMode('fillGap')">
@@ -487,7 +493,7 @@
                         <h4>Slova s <span class="word-y">Y</span></h4>
                         <ul class="word-list" id="wordsWithY"></ul>
                     </div>
-                   <div class="word-column">
+                    <div class="word-column">
                         <h4>Slova s <span class="word-i">I</span> (pro porovnání)</h4>
                         <ul class="word-list" id="wordsWithI"></ul>
                     </div>
@@ -497,7 +503,8 @@
     </div>
 
     <script>
-        const wordsY =  [
+        // ZÁKLADNÍ SLOVA
+        const wordsMBasicY =  [
             {word: 'pýcha', gap: 'p_cha'},
             {word: 'pytel', gap: 'p_tel'},
             {word: 'pysk', gap: 'p_sk'},
@@ -516,8 +523,8 @@
         ];
 
 
-        const wordsI =  [
-            {word: 'pila', gap: 'p_la'},
+        const wordsMBasicI = [
+            {word: 'pila (nástroj)', gap: 'p_la (nástroj)'},
             {word: 'písmo', gap: 'p_smo'},
             {word: 'piják', gap: 'p_ják'},
             {word: 'pískat', gap: 'p_skat'},
@@ -535,12 +542,160 @@
         ];
 
 
-        const allWords = [...wordsY.map(w => ({...w, correct: 'y'})), ...wordsI.map(w => ({...w, correct: 'i'}))];
+        // PŘÍBUZNÁ SLOVA
+        const wordsMRelatedY = [
+            {word: 'pyšný', gap: 'p_šný'},
+            {word: 'pýchavka', gap: 'p_chavka'},
+            {word: 'přepych', gap: 'přep_ch'},
+            {word: 'pytlovina', gap: 'p_tlovina'},
+            {word: 'pytlák', gap: 'p_tlák'},
+            {word: 'pytlačit', gap: 'p_tlačit'},
+            {word: 'strašpytel', gap: 'strašp_tel'},
+            {word: 'pytlíček', gap: 'p_tlíček'},
+            {word: 'pyskatý', gap: 'p_skatý'},
+            {word: 'ptakopysk', gap: 'ptakop_sk'},
+            {word: 'netopýří', gap: 'netop_ří'},
+            {word: 'slepýší', gap: 'slep_ší'},
+            {word: 'pylový', gap: 'p_lový'},
+            {word: 'opylovat', gap: 'op_lovat'},
+            {word: 'kopýtko', gap: 'kop_tko'},
+            {word: 'lichokopytník', gap: 'lichokop_tník'},
+            {word: 'sudokopytník', gap: 'sudokop_tník'},
+            {word: 'klopýtnout', gap: 'klop_tnout'},
+            {word: 'klopýtání', gap: 'klop_tání'},
+            {word: 'třpyt', gap: 'třp_t'},
+            {word: 'třpytivý', gap: 'třp_tivý'},
+            {word: 'třpytka', gap: 'třp_tka'},
+            {word: 'zatřpytit', gap: 'zatřp_tit'},
+            {word: 'zpytování', gap: 'zp_tování'},
+            {word: 'nevyzpytatelný', gap: 'nevyzp_tatelný'},
+            {word: 'odpykat', gap: 'odp_kat'},
+            {word: 'odpykání', gap: 'odp_kání'},
+            {word: 'pýřivý', gap: 'p_řivý'},
+            {word: 'čepýření', gap: 'čep_ření'},
+            {word: 'rozčepýřený', gap: 'rozčep_řený'},
+            {word: 'načepýřený', gap: 'načep_řený'},
+            {word: 'zpychnout', gap: 'zp_chnout'},
+            {word: 'pytláctví', gap: 'p_tláctví'},
+            {word: 'pylovat', gap: 'p_lovat'},
+            {word: 'opylovač', gap: 'op_lovač'},
+            {word: 'pykající', gap: 'p_kající'},
+            {word: 'pylový', gap: 'p_lový'},
+            {word: 'pytlácký', gap: 'p_tlácký'},
+            {word: 'přepychový', gap: 'přep_chový'},
+            {word: 'klopýtavý', gap: 'klop_tavý'},
+            {word: 'rozčepýřit', gap: 'rozčep_řit'},
+            {word: 'opylování', gap: 'op_lování'},
 
+        ];
+
+        const wordsMRelatedI = [
+            {word: 'pichlavý', gap: 'p_chlavý'},
+            {word: 'píchnout', gap: 'p_chnout'},
+            {word: 'pilník', gap: 'p_lník'},
+            {word: 'písečný', gap: 'p_sečný'},
+            {word: 'písčitý', gap: 'p_sčitý'},
+            {word: 'pískoviště', gap: 'p_skoviště'},
+            {word: 'písnička', gap: 'p_snička'},
+            {word: 'písař', gap: 'p_sař'},
+            {word: 'písmenko', gap: 'p_smenko'},
+            {word: 'popisovat', gap: 'pop_sovat'},
+            {word: 'písanka', gap: 'p_sanka'},
+            {word: 'spisovatel', gap: 'sp_sovatel'},
+            {word: 'pitný režim', gap: 'p_tný režim'},
+            {word: 'popíjet', gap: 'pop_jet'},
+            {word: 'pípání', gap: 'p_pání'},
+            {word: 'pískot', gap: 'p_skot'},
+            {word: 'milostivý', gap: 'm_lostivý'},
+            {word: 'pivovar', gap: 'p_vovar'},
+            {word: 'pivnice', gap: 'p_vnice'},
+            {word: 'spiknutí', gap: 'sp_knutí'},
+            {word: 'pilně', gap: 'p_lně'},
+            {word: 'předpis', gap: 'předp_s'},
+            {word: 'přepis', gap: 'přep_s'},
+            {word: 'lepidlo', gap: 'lep_dlo'},
+            {word: 'píšťalka', gap: 'p_šťalka'},
+            {word: 'připínáček', gap: 'přip_náček'},
+
+        ];
+
+        // SLOŽENÍ VŠECH SLOV
+        const allWordsBasic = [
+            ...wordsMBasicY.map(w => ({...w, correct: 'y'})), 
+            ...wordsMBasicI.map(w => ({...w, correct: 'i'}))
+        ];
+
+        const allWordsRelated = [
+            ...wordsMRelatedY.map(w => ({...w, correct: 'y'})),
+            ...wordsMRelatedI.map(w => ({...w, correct: 'i'}))
+        ];
+
+        const allWordsAll = [...allWordsBasic, ...allWordsRelated];
+
+        // PROMĚNNÉ
+        let currentLevel = 'basic';
+        let allWords = allWordsBasic;
         let stats = {correct: 0, incorrect: 0, total: 0, current: 1};
         let currentMode = 'fillGap';
         let currentWord = {};
 
+        // FUNKCE PRO VÝBĚR ÚROVNĚ
+        function changeLevel(level) {
+            currentLevel = level;
+            
+            const levelBtns = document.querySelectorAll('.mode-selector')[0].querySelectorAll('.mode-btn');
+            levelBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (level === 'basic') {
+                allWords = allWordsBasic;
+            } else if (level === 'related') {
+                allWords = [...allWordsBasic, ...allWordsRelated];
+            } else if (level === 'all') {
+                allWords = allWordsAll;
+            }
+            
+            stats = {correct: 0, incorrect: 0, total: 0, current: 1};
+            updateStats();
+            
+            if (currentMode === 'fillGap') {
+                generateFillGapQuestion();
+            } else if (currentMode === 'chooseVariant') {
+                generateVariantQuestion();
+            }
+        }
+
+        // FUNKCE PRO VÝBĚR REŽIMU
+        function changeMode(mode) {
+            currentMode = mode;
+            stats.current = 1;
+            
+            const modeBtns = document.querySelectorAll('.mode-selector')[1].querySelectorAll('.mode-btn');
+            modeBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (mode === 'fillGap') {
+                document.getElementById('statsBar').classList.remove('hidden');
+                document.getElementById('fillGapMode').classList.remove('hidden');
+                document.getElementById('chooseVariantMode').classList.add('hidden');
+                document.getElementById('theoryMode').classList.add('hidden');
+                generateFillGapQuestion();
+            } else if (mode === 'chooseVariant') {
+                document.getElementById('statsBar').classList.remove('hidden');
+                document.getElementById('fillGapMode').classList.add('hidden');
+                document.getElementById('chooseVariantMode').classList.remove('hidden');
+                document.getElementById('theoryMode').classList.add('hidden');
+                generateVariantQuestion();
+            } else if (mode === 'theory') {
+                document.getElementById('statsBar').classList.add('hidden');
+                document.getElementById('fillGapMode').classList.add('hidden');
+                document.getElementById('chooseVariantMode').classList.add('hidden');
+                document.getElementById('theoryMode').classList.remove('hidden');
+                generateTheory();
+            }
+        }
+
+        // GENEROVÁNÍ OTÁZKY - DOPLŇ Y/I
         function generateFillGapQuestion() {
             currentWord = allWords[Math.floor(Math.random() * allWords.length)];
             
@@ -556,6 +711,7 @@
             document.getElementById('nextBtn').classList.add('hidden');
         }
 
+        // KONTROLA ODPOVĚDI - DOPLŇ Y/I
         function checkAnswer(answer) {
             const isCorrect = answer === currentWord.correct;
             
@@ -583,13 +739,37 @@
             document.getElementById('nextBtn').classList.remove('hidden');
         }
 
+        // DALŠÍ OTÁZKA - DOPLŇ Y/I
+        function nextQuestion() {
+            stats.current++;
+            generateFillGapQuestion();
+        }
+
+        // GENEROVÁNÍ OTÁZKY - VYBER SPRÁVNÝ TVAR
         function generateVariantQuestion() {
             currentWord = allWords[Math.floor(Math.random() * allWords.length)];
             
-            // Najdi slovo s opačným písmenem (Y/I) se stejným základem pokud existuje
-            const wrongVariant = currentWord.correct === 'y' 
-                ? currentWord.word.replace(/y/gi, 'i').replace(/Y/g, 'I')
-                : currentWord.word.replace(/i/gi, 'y').replace(/I/g, 'Y');
+            let wrongVariant;
+            if (currentWord.correct === 'y') {
+                wrongVariant = currentWord.word.replace(/[yýYÝ]/, match => {
+                    if (match === 'y') return 'i';
+                    if (match === 'ý') return 'í';
+                    if (match === 'Y') return 'I';
+                    if (match === 'Ý') return 'Í';
+                });
+            } else {
+                wrongVariant = currentWord.word.replace(/[iíIÍ]/, match => {
+                    if (match === 'i') return 'y';
+                    if (match === 'í') return 'ý';
+                    if (match === 'I') return 'Y';
+                    if (match === 'Í') return 'Ý';
+                });
+            }
+            
+            if (wrongVariant === currentWord.word) {
+                generateVariantQuestion();
+                return;
+            }
             
             const variants = [currentWord.word, wrongVariant];
             variants.sort(() => Math.random() - 0.5);
@@ -611,6 +791,7 @@
             document.getElementById('nextVariantBtn').classList.add('hidden');
         }
 
+        // KONTROLA ODPOVĚDI - VYBER SPRÁVNÝ TVAR
         function checkVariant(selected) {
             const isCorrect = selected === currentWord.word;
             
@@ -636,16 +817,13 @@
             document.getElementById('nextVariantBtn').classList.remove('hidden');
         }
 
-        function nextQuestion() {
-            stats.current++;
-            generateFillGapQuestion();
-        }
-
+        // DALŠÍ OTÁZKA - VYBER SPRÁVNÝ TVAR
         function nextVariantQuestion() {
             stats.current++;
             generateVariantQuestion();
         }
 
+        // AKTUALIZACE STATISTIK
         function updateStats() {
             document.getElementById('correct').textContent = stats.correct;
             document.getElementById('incorrect').textContent = stats.incorrect;
@@ -653,34 +831,7 @@
             document.getElementById('percentage').textContent = percentage + '%';
         }
 
-        function changeMode(mode) {
-            currentMode = mode;
-            stats.current = 1;
-            
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.closest('.mode-btn').classList.add('active');
-            
-            if (mode === 'fillGap') {
-                document.getElementById('statsBar').classList.remove('hidden');
-                document.getElementById('fillGapMode').classList.remove('hidden');
-                document.getElementById('chooseVariantMode').classList.add('hidden');
-                document.getElementById('theoryMode').classList.add('hidden');
-                generateFillGapQuestion();
-            } else if (mode === 'chooseVariant') {
-                document.getElementById('statsBar').classList.remove('hidden');
-                document.getElementById('fillGapMode').classList.add('hidden');
-                document.getElementById('chooseVariantMode').classList.remove('hidden');
-                document.getElementById('theoryMode').classList.add('hidden');
-                generateVariantQuestion();
-            } else if (mode === 'theory') {
-                document.getElementById('statsBar').classList.add('hidden');
-                document.getElementById('fillGapMode').classList.add('hidden');
-                document.getElementById('chooseVariantMode').classList.add('hidden');
-                document.getElementById('theoryMode').classList.remove('hidden');
-                generateTheory();
-            }
-        }
-
+        // GENEROVÁNÍ TEORIE
         function generateTheory() {
             const yList = document.getElementById('wordsWithY');
             const iList = document.getElementById('wordsWithI');
@@ -688,19 +839,29 @@
             yList.innerHTML = '';
             iList.innerHTML = '';
             
-            wordsY.forEach(w => {
+            // Zobraz slova podle aktuální úrovně
+            let wordsToShowY = wordsMBasicY;
+            let wordsToShowI = wordsMBasicI;
+            
+            if (currentLevel === 'related' || currentLevel === 'all') {
+                wordsToShowY = [...wordsMBasicY, ...wordsMRelatedY];
+                wordsToShowI = [...wordsMBasicI, ...wordsMRelatedI];
+            }
+            
+            wordsToShowY.forEach(w => {
                 const li = document.createElement('li');
                 li.textContent = w.word;
                 yList.appendChild(li);
             });
             
-            wordsI.forEach(w => {
+            wordsToShowI.forEach(w => {
                 const li = document.createElement('li');
                 li.textContent = w.word;
                 iList.appendChild(li);
             });
         }
 
+        // INICIALIZACE
         generateFillGapQuestion();
     </script>
 </body>
