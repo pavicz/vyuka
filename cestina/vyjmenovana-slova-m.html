@@ -493,10 +493,7 @@
                         <h4>Slova s <span class="word-y">Y</span></h4>
                         <ul class="word-list" id="wordsWithY"></ul>
                     </div>
-                    <div class="word-column">
-                        <h4>Slova s <span class="word-i">I</span> (pro porovnání)</h4>
-                        <ul class="word-list" id="wordsWithI"></ul>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -827,33 +824,24 @@
 
         // GENEROVÁNÍ TEORIE
         function generateTheory() {
-            const yList = document.getElementById('wordsWithY');
-            const iList = document.getElementById('wordsWithI');
-            
-            yList.innerHTML = '';
-            iList.innerHTML = '';
-            
-            // Zobraz slova podle aktuální úrovně
-            let wordsToShowY = wordsMBasicY;
-            let wordsToShowI = wordsMBasicI;
-            
-            if (currentLevel === 'related' || currentLevel === 'all') {
-                wordsToShowY = [...wordsMBasicY, ...wordsMRelatedY];
-                wordsToShowI = [...wordsMBasicI, ...wordsMRelatedI];
-            }
-            
-            wordsToShowY.forEach(w => {
-                const li = document.createElement('li');
-                li.textContent = w.word;
-                yList.appendChild(li);
-            });
-            
-            wordsToShowI.forEach(w => {
-                const li = document.createElement('li');
-                li.textContent = w.word;
-                iList.appendChild(li);
-            });
-        }
+    const yList = document.getElementById('wordsWithY');
+    
+    yList.innerHTML = '';
+    
+    // Zobraz jen slova s Y podle aktuální úrovně
+    let wordsToShowY = wordsMBasicY;
+    
+    if (currentLevel === 'related' || currentLevel === 'all') {
+        wordsToShowY = [...wordsMBasicY, ...wordsMRelatedY];
+    }
+    
+    wordsToShowY.forEach(w => {
+        const li = document.createElement('li');
+        li.textContent = w.word;
+        yList.appendChild(li);
+    });
+}
+
 
         // INICIALIZACE
         generateFillGapQuestion();
