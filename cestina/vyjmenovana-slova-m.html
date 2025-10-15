@@ -613,32 +613,35 @@
         let stats = {correct: 0, incorrect: 0, total: 0, current: 1};
         let currentMode = 'fillGap';
         let currentWord = {};
+        let usedWords = [];
 
         // FUNKCE PRO VÝBĚR ÚROVNĚ
-        function changeLevel(level) {
-            currentLevel = level;
-            
-            const levelBtns = document.querySelectorAll('.mode-selector')[0].querySelectorAll('.mode-btn');
-            levelBtns.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            if (level === 'basic') {
-                allWords = allWordsBasic;
-            } else if (level === 'related') {
-                allWords = [...allWordsBasic, ...allWordsRelated];
-            } else if (level === 'all') {
-                allWords = allWordsAll;
-            }
-            
-            stats = {correct: 0, incorrect: 0, total: 0, current: 1};
-            updateStats();
-            
-            if (currentMode === 'fillGap') {
-                generateFillGapQuestion();
-            } else if (currentMode === 'chooseVariant') {
-                generateVariantQuestion();
-            }
-        }
+       function changeLevel(level) {
+    currentLevel = level;
+    
+    const levelBtns = document.querySelectorAll('.mode-selector')[0].querySelectorAll('.mode-btn');
+    levelBtns.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    if (level === 'basic') {
+        allWords = allWordsBasic;
+    } else if (level === 'related') {
+        allWords = [...allWordsBasic, ...allWordsRelated];
+    } else if (level === 'all') {
+        allWords = allWordsAll;
+    }
+    
+    stats = {correct: 0, incorrect: 0, total: 0, current: 1};
+    updateStats();
+    
+    usedWords = []; // Reset použitých slov při změně úrovně
+    
+    if (currentMode === 'fillGap') {
+        generateFillGapQuestion();
+    } else if (currentMode === 'chooseVariant') {
+        generateVariantQuestion();
+    }
+}
 
         // FUNKCE PRO VÝBĚR REŽIMU
         function changeMode(mode) {
@@ -672,19 +675,27 @@
 
         // GENEROVÁNÍ OTÁZKY - DOPLŇ Y/I
         function generateFillGapQuestion() {
-            currentWord = allWords[Math.floor(Math.random() * allWords.length)];
-            
-            document.getElementById('questionNum').textContent = `Otázka ${stats.current}`;
-            document.getElementById('wordDisplay').textContent = currentWord.gap;
-            
-            document.querySelectorAll('#fillGapMode .option-btn').forEach(btn => {
-                btn.disabled = false;
-                btn.classList.remove('correct', 'incorrect');
-            });
+    // Pokud byly použity všechny, resetuj
+    if (usedWords.length >= allWords.length) {
+        usedWords = [];
+    }
+    
+    // Najdi slovo, které ještě nebylo použito
+    let availableWords = allWords.filter(w => !usedWords.includes(w));
+    currentWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+    usedWords.push(currentWord);
+    
+    document.getElementById('questionNum').textContent = `Otázka ${stats.current}`;
+    document.getElementById('wordDisplay').textContent = currentWord.gap;
+    
+    document.querySelectorAll('#fillGapMode .option-btn').forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('correct', 'incorrect');
+    });
 
-            document.getElementById('feedback').classList.add('hidden');
-            document.getElementById('nextBtn').classList.add('hidden');
-        }
+    document.getElementById('feedback').classList.add('hidden');
+    document.getElementById('nextBtn').classList.add('hidden');
+}
 
         // KONTROLA ODPOVĚDI - DOPLŇ Y/I
         function checkAnswer(answer) {
@@ -722,49 +733,57 @@
 
         // GENEROVÁNÍ OTÁZKY - VYBER SPRÁVNÝ TVAR
         function generateVariantQuestion() {
-            currentWord = allWords[Math.floor(Math.random() * allWords.length)];
-            
-            let wrongVariant;
-            if (currentWord.correct === 'y') {
-                wrongVariant = currentWord.word.replace(/[yýYÝ]/, match => {
-                    if (match === 'y') return 'i';
-                    if (match === 'ý') return 'í';
-                    if (match === 'Y') return 'I';
-                    if (match === 'Ý') return 'Í';
-                });
-            } else {
-                wrongVariant = currentWord.word.replace(/[iíIÍ]/, match => {
-                    if (match === 'i') return 'y';
-                    if (match === 'í') return 'ý';
-                    if (match === 'I') return 'Y';
-                    if (match === 'Í') return 'Ý';
-                });
-            }
-            
-            if (wrongVariant === currentWord.word) {
-                generateVariantQuestion();
-                return;
-            }
-            
-            const variants = [currentWord.word, wrongVariant];
-            variants.sort(() => Math.random() - 0.5);
-            
-            document.getElementById('variantQuestionNum').textContent = `Otázka ${stats.current}`;
-            
-            const container = document.getElementById('variantOptions');
-            container.innerHTML = '';
-            
-            variants.forEach(variant => {
-                const btn = document.createElement('button');
-                btn.className = 'variant-btn';
-                btn.textContent = variant;
-                btn.onclick = () => checkVariant(variant);
-                container.appendChild(btn);
-            });
-            
-            document.getElementById('variantFeedback').classList.add('hidden');
-            document.getElementById('nextVariantBtn').classList.add('hidden');
-        }
+    // Pokud byly použity všechny, resetuj
+    if (usedWords.length >= allWords.length) {
+        usedWords = [];
+    }
+    
+    // Najdi slovo, které ještě nebylo použito
+    let availableWords = allWords.filter(w => !usedWords.includes(w));
+    currentWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+    usedWords.push(currentWord);
+    
+    let wrongVariant;
+    if (currentWord.correct === 'y') {
+        wrongVariant = currentWord.word.replace(/[yýYÝ]/, match => {
+            if (match === 'y') return 'i';
+            if (match === 'ý') return 'í';
+            if (match === 'Y') return 'I';
+            if (match === 'Ý') return 'Í';
+        });
+    } else {
+        wrongVariant = currentWord.word.replace(/[iíIÍ]/, match => {
+            if (match === 'i') return 'y';
+            if (match === 'í') return 'ý';
+            if (match === 'I') return 'Y';
+            if (match === 'Í') return 'Ý';
+        });
+    }
+    
+    if (wrongVariant === currentWord.word) {
+        generateVariantQuestion();
+        return;
+    }
+    
+    const variants = [currentWord.word, wrongVariant];
+    variants.sort(() => Math.random() - 0.5);
+    
+    document.getElementById('variantQuestionNum').textContent = `Otázka ${stats.current}`;
+    
+    const container = document.getElementById('variantOptions');
+    container.innerHTML = '';
+    
+    variants.forEach(variant => {
+        const btn = document.createElement('button');
+        btn.className = 'variant-btn';
+        btn.textContent = variant;
+        btn.onclick = () => checkVariant(variant);
+        container.appendChild(btn);
+    });
+    
+    document.getElementById('variantFeedback').classList.add('hidden');
+    document.getElementById('nextVariantBtn').classList.add('hidden');
+}
 
         // KONTROLA ODPOVĚDI - VYBER SPRÁVNÝ TVAR
         function checkVariant(selected) {
