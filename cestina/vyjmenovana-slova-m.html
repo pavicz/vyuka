@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -5,60 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vyjmenovaná slova po M - Procvičování</title>
     <style>
-        * 
-        .dictation-gap {
-    display: inline-block;
-    min-width: 30px;
-    padding: 2px 8px;
-    border-bottom: 3px solid var(--primary);
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    margin: 0 2px;
-}
-
-.dictation-gap:hover {
-    background: var(--bg-light);
-    border-bottom-width: 4px;
-}
-
-.dictation-gap.filled {
-    background: #e3f2fd;
-    color: var(--primary);
-}
-
-.dictation-gap.correct {
-    background: #e8f5e9;
-    color: var(--success);
-    border-bottom-color: var(--success);
-}
-
-.dictation-gap.incorrect {
-    background: #ffebee;
-    color: var(--error);
-    border-bottom-color: var(--error);
-}
-
-.check-btn {
-    display: block;
-    width: 250px;
-    margin: 30px auto;
-    padding: 15px;
-    font-size: 1.1em;
-    font-weight: 600;
-    background: var(--primary);
-    color: var(--white);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.check-btn:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
-}
-        {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -484,10 +432,6 @@
                     <span class="mode-icon">🎯</span>
                     Vyber správný tvar
                 </button>
-                <button class="mode-btn" onclick="changeMode('dictation')">
-                <span class="mode-icon">📖</span>
-                    Diktát
-                </button>
                 <button class="mode-btn" onclick="changeMode('theory')">
                     <span class="mode-icon">📚</span>
                     Teorie
@@ -544,39 +488,6 @@
             </div>
 
             <div id="theoryMode" class="word-list-section hidden">
-                <div id="dictationMode" class="exercise-area hidden">
-    <div class="question-header">
-        <div class="question-number">Diktát - doplň Y/I</div>
-        <div style="color: var(--text-light); font-size: 0.9em; margin-top: 10px;">
-            Klikni na podtržítka a vyber správné písmeno
-        </div>
-    </div>
-
-    <div id="dictationText" style="font-size: 1.3em; line-height: 2; text-align: justify; margin: 30px 0;">
-        <!-- Dynamicky generováno -->
-    </div>
-
-    <div id="dictationPopup" class="hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 1000;">
-        <div style="font-size: 1.2em; margin-bottom: 20px; text-align: center; color: var(--text-dark);">
-            Vyber správné písmeno:
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <button class="option-btn" onclick="selectDictationAnswer('y')" style="padding: 20px;">Y/Ý</button>
-            <button class="option-btn" onclick="selectDictationAnswer('i')" style="padding: 20px;">I/Í</button>
-        </div>
-    </div>
-
-    <div id="dictationOverlay" class="hidden" onclick="closeDictationPopup()" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999;"></div>
-
-    <button id="checkDictationBtn" class="check-btn hidden" onclick="checkDictation()">
-        Zkontrolovat vše
-    </button>
-
-    <div id="dictationFeedback" class="feedback hidden"></div>
-    <button id="nextDictationBtn" class="next-btn hidden" onclick="nextDictation()">
-        Nový diktát →
-    </button>
-</div>
                 <h3>📚 Přehled vyjmenovaných slov po M</h3>
                 <div class="word-columns">
                     <div class="word-column">
@@ -680,14 +591,6 @@
             {word: 'místo', gap: 'm_sto'},
             {word: 'mizet', gap: 'm_zet'}
         ];
-        // DATA PRO DIKTÁT 
-const dictationTexts = [
-    {
-        text: "Musíme si m_t ruce m_dlem po každé práci. Zkusme m_slet na to, jaký velký úm_sl má náš prům_sl s ochranou přírody. Věřte m_, že m_t takovou zkušenost je cenné.",
-        answers: ['y','y', 'y', 'y', 'y', 'i', 'i'],
-        words: ['mýt', 'mýdlem', 'myslet', 'úmysl', 'průmysl','mi','mít']
-    }
-];
 
         // SLOŽENÍ VŠECH SLOV
         const allWordsBasic = [
@@ -709,9 +612,6 @@ const dictationTexts = [
         let currentMode = 'fillGap';
         let currentWord = {};
         let usedWords = [];
-        let currentDictation = null;
-        let dictationAnswers = [];
-        let currentGapIndex = null;
 
         // FUNKCE PRO VÝBĚR ÚROVNĚ
        function changeLevel(level) {
@@ -740,114 +640,7 @@ const dictationTexts = [
         generateVariantQuestion();
     }
 }
-function generateDictation() {
-    currentDictation = dictationTexts[Math.floor(Math.random() * dictationTexts.length)];
-    dictationAnswers = new Array(currentDictation.answers.length).fill(null);
-    
-    const container = document.getElementById('dictationText');
-    container.innerHTML = '';
-    
-    let gapIndex = 0;
-    const parts = currentDictation.text.split('_');
-    
-    parts.forEach((part, i) => {
-        const span = document.createElement('span');
-        span.textContent = part;
-        container.appendChild(span);
-        
-        if (i < parts.length - 1) {
-            const gap = document.createElement('span');
-            gap.className = 'dictation-gap';
-            gap.textContent = '_';
-            gap.dataset.index = gapIndex;
-            gap.onclick = () => openDictationPopup(gapIndex);
-            container.appendChild(gap);
-            gapIndex++;
-        }
-    });
-    
-    document.getElementById('dictationFeedback').classList.add('hidden');
-    document.getElementById('nextDictationBtn').classList.add('hidden');
-    document.getElementById('checkDictationBtn').classList.add('hidden');
-}
 
-function openDictationPopup(index) {
-    currentGapIndex = index;
-    document.getElementById('dictationPopup').classList.remove('hidden');
-    document.getElementById('dictationOverlay').classList.remove('hidden');
-}
-
-function closeDictationPopup() {
-    document.getElementById('dictationPopup').classList.add('hidden');
-    document.getElementById('dictationOverlay').classList.add('hidden');
-}
-
-function selectDictationAnswer(answer) {
-    if (currentGapIndex === null) return;
-    
-    dictationAnswers[currentGapIndex] = answer;
-    
-    const gaps = document.querySelectorAll('.dictation-gap');
-    const gap = gaps[currentGapIndex];
-    gap.textContent = answer.toUpperCase();
-    gap.classList.add('filled');
-    
-    closeDictationPopup();
-    
-    // Zkontroluj, zda jsou všechna pole vyplněná
-    if (dictationAnswers.every(a => a !== null)) {
-        document.getElementById('checkDictationBtn').classList.remove('hidden');
-    }
-}
-
-function checkDictation() {
-    let correct = 0;
-    let incorrect = 0;
-    
-    const gaps = document.querySelectorAll('.dictation-gap');
-    
-    dictationAnswers.forEach((answer, index) => {
-        const gap = gaps[index];
-        const isCorrect = answer === currentDictation.answers[index];
-        
-        gap.classList.remove('filled');
-        gap.classList.add(isCorrect ? 'correct' : 'incorrect');
-        
-        if (isCorrect) {
-            correct++;
-            gap.textContent = currentDictation.words[index].match(/[yýií]/i)[0].toUpperCase();
-        } else {
-            incorrect++;
-            gap.textContent = currentDictation.words[index].match(/[yýií]/i)[0].toUpperCase();
-        }
-        
-        gap.style.pointerEvents = 'none';
-    });
-    
-    const total = currentDictation.answers.length;
-    const percentage = Math.round((correct / total) * 100);
-    
-    const feedback = document.getElementById('dictationFeedback');
-    feedback.classList.remove('hidden', 'correct', 'incorrect');
-    
-    if (percentage === 100) {
-        feedback.classList.add('correct');
-        feedback.textContent = `🎉 Perfektní! Všechno správně! (${correct}/${total})`;
-    } else if (percentage >= 70) {
-        feedback.classList.add('correct');
-        feedback.textContent = `✨ Velmi dobře! ${correct} správně, ${incorrect} chybně (${percentage}%)`;
-    } else {
-        feedback.classList.add('incorrect');
-        feedback.textContent = `💪 Zkus to znovu! ${correct} správně, ${incorrect} chybně (${percentage}%)`;
-    }
-    
-    document.getElementById('checkDictationBtn').classList.add('hidden');
-    document.getElementById('nextDictationBtn').classList.remove('hidden');
-}
-
-function nextDictation() {
-    generateDictation();
-}
         // FUNKCE PRO VÝBĚR REŽIMU
         function changeMode(mode) {
             currentMode = mode;
@@ -876,14 +669,6 @@ function nextDictation() {
                 document.getElementById('theoryMode').classList.remove('hidden');
                 generateTheory();
             }
-            else if (mode === 'dictation') {
-    document.getElementById('statsBar').classList.add('hidden');
-    document.getElementById('fillGapMode').classList.add('hidden');
-    document.getElementById('chooseVariantMode').classList.add('hidden');
-    document.getElementById('theoryMode').classList.add('hidden');
-    document.getElementById('dictationMode').classList.remove('hidden');
-    generateDictation();
-}
         }
 
         // GENEROVÁNÍ OTÁZKY - DOPLŇ Y/I
