@@ -712,10 +712,10 @@
             feedback.classList.remove('hidden', 'correct', 'incorrect');
             feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
             
-            if (isCorrect) {
-                const messages = ['🎉 Výborně!', '✨ Skvělá práce!', '🌟 Perfektní!', '👏 Správně!'];
-                feedback.textContent = messages[Math.floor(Math.random() * messages.length)];
-            } else {
+           if (isCorrect) {
+    const messages = ['🎉 Výborně!', '✨ Skvělá práce!', '🌟 Perfektní!', '👏 Správně!'];
+    feedback.textContent = messages[Math.floor(Math.random() * messages.length)] + ` - ${currentWord.word}`;
+}else {
                 feedback.textContent = `❌ Správná odpověď: ${currentWord.word}`;
             }
 
