@@ -714,7 +714,7 @@
             
            if (isCorrect) {
     const messages = ['🎉 Výborně!', '✨ Skvělá práce!', '🌟 Perfektní!', '👏 Správně!'];
-    feedback.textContent = messages[Math.floor(Math.random() * messages.length)] + ` - ${currentWord.word}`;
+    feedback.textContent = messages[Math.floor(Math.random() * messages.length)] + ` Slovo: ${currentWord.word}`;
 }else {
                 feedback.textContent = `❌ Správná odpověď: ${currentWord.word}`;
             }
