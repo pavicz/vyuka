@@ -113,13 +113,14 @@
         }
 
         .dictation-gap:hover {
-            background: var(--bg-light);
+            background: #e8f5e9;
             border-bottom-width: 4px;
         }
 
         .dictation-gap.filled {
             background: #e3f2fd;
             color: var(--primary);
+            border-bottom-color: var(--primary);
         }
 
         .dictation-gap.correct {
@@ -151,6 +152,7 @@
             margin-bottom: 20px;
             text-align: center;
             color: var(--text-dark);
+            font-weight: 600;
         }
 
         .popup-buttons {
@@ -160,7 +162,7 @@
         }
 
         .popup-btn {
-            padding: 20px;
+            padding: 25px;
             font-size: 2em;
             font-weight: 600;
             border: 3px solid var(--primary);
@@ -174,7 +176,7 @@
         .popup-btn:hover {
             background: var(--primary);
             color: var(--white);
-            transform: translateY(-3px);
+            transform: scale(1.05);
         }
 
         .overlay {
@@ -185,35 +187,38 @@
             bottom: 0;
             background: rgba(0,0,0,0.5);
             z-index: 999;
+            cursor: pointer;
         }
 
         .check-btn {
             display: block;
             width: 250px;
             margin: 30px auto;
-            padding: 15px;
-            font-size: 1.1em;
+            padding: 18px;
+            font-size: 1.2em;
             font-weight: 600;
             background: var(--primary);
             color: var(--white);
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
         }
 
         .check-btn:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
         }
 
         .feedback {
             text-align: center;
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
             font-weight: 600;
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
 
         .feedback.correct {
@@ -228,7 +233,7 @@
 
         .next-btn {
             display: block;
-            width: 200px;
+            width: 220px;
             margin: 20px auto 0;
             padding: 15px;
             font-size: 1.1em;
@@ -247,7 +252,7 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         @media (max-width: 768px) {
@@ -265,6 +270,7 @@
 
             .popup-btn {
                 font-size: 1.5em;
+                padding: 20px;
             }
         }
     </style>
@@ -324,8 +330,8 @@
         const dictationTexts = [
             {
                 text: "Musíme si m_t ruce m_dlem po každé práci. Zkusme m_slet na to, jaký velký úm_sl má náš prům_sl s ochranou přírody. Věřte m_, že m_t takovou zkušenost je cenné.",
-                answers: ['y','y', 'y', 'y', 'y', 'i', 'i'],
-                words: ['mýt', 'mýdlem', 'myslet', 'úmysl', 'průmysl','mi','mít']
+                answers: ['y', 'y', 'y', 'y', 'y', 'i', 'i'],
+                words: ['mýt', 'mýdlem', 'myslet', 'úmysl', 'průmysl', 'mi', 'mít']
             },
             {
                 text: "M_š v našem domě je malá. Um_vadlo v koupelně je nové a m_dlo voní krásně. M_slivec jde lesem a m_slí na zvěř. Sm_sl života je někdy těžké najít.",
@@ -333,9 +339,9 @@
                 words: ['Myš', 'umyvadlo', 'mýdlo', 'Myslivec', 'myslí', 'Smysl']
             },
             {
-                text: "Dm_chal do ohně a chmýří se rozlétlo. Zam_kal dveře a šel spát. M_ška běhala po domě. Hm_z létal kolem květin.",
-                answers: ['ý', 'y', 'y', 'y'],
-                words: ['Dmýchal', 'zamykal', 'Myška', 'Hmyz']
+                text: "Dm_chal do ohně a chm_ří se rozlétlo. Zam_kal dveře a šel spát. M_ška běhala po domě. Hm_z létal kolem květin.",
+                answers: ['y', 'y', 'y', 'y', 'y'],
+                words: ['Dmýchal', 'chmýří', 'zamykal', 'Myška', 'Hmyz']
             }
         ];
 
@@ -383,6 +389,7 @@
         function closePopup() {
             document.getElementById('popup').classList.add('hidden');
             document.getElementById('overlay').classList.add('hidden');
+            currentGapIndex = null;
         }
 
         function selectAnswer(answer) {
@@ -392,11 +399,12 @@
             
             const gaps = document.querySelectorAll('.dictation-gap');
             const gap = gaps[currentGapIndex];
-            gap.textContent = answer.toUpperCase();
+            gap.textContent = answer === 'y' ? 'Y' : 'I';
             gap.classList.add('filled');
             
             closePopup();
             
+            // Zkontroluj, zda jsou všechna pole vyplněná
             if (dictationAnswers.every(a => a !== null)) {
                 document.getElementById('checkBtn').classList.remove('hidden');
             }
@@ -417,13 +425,19 @@
                 
                 if (isCorrect) {
                     correct++;
-                    gap.textContent = currentDictation.words[index].match(/[yýií]/i)[0].toUpperCase();
                 } else {
                     incorrect++;
-                    gap.textContent = currentDictation.words[index].match(/[yýií]/i)[0].toUpperCase();
                 }
                 
-                gap.style.pointerEvents = 'none';
+                // Zobraz správné písmeno z daného slova
+                const word = currentDictation.words[index];
+                const yOrI = word.match(/[yýií]/i);
+                if (yOrI) {
+                    gap.textContent = yOrI[0].toUpperCase();
+                }
+                
+                gap.onclick = null;
+                gap.style.cursor = 'default';
             });
             
             const total = currentDictation.answers.length;
@@ -451,6 +465,7 @@
             generateDictation();
         }
 
+        // Inicializace
         generateDictation();
     </script>
 </body>
