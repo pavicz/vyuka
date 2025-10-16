@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diktáty - Vyjmenovaná slova</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .letters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+            margin-bottom: 30px;
+        }
+
+        .letter-card {
+            background: var(--white);
+            border: 3px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: var(--text-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        .letter-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .letter-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-width: 4px;
+        }
+
+        .letter-card.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .letter-card.active .letter-big {
+            color: var(--white);
+        }
+
+        .letter-card.coming-soon {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: var(--text-light);
+        }
+
+        .letter-card.coming-soon:hover {
+            transform: none;
+            box-shadow: var(--shadow);
+        }
+
+        .letter-big {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .letter-label {
+            color: var(--text-light);
+            font-size: 0.9em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: var(--white);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .status-badge.coming-soon {
+            background: var(--text-light);
+        }
+
+        .all-letters-card {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            border: none;
+            padding: 40px;
+        }
+
+        .all-letters-card .letter-big {
+            color: var(--white);
+            font-size: 2em;
+        }
+
+        .all-letters-card .letter-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1em;
+        }
+
+        .all-letters-card:hover::before {
+            opacity: 0.2;
+        }
+
+        .info-section {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .info-section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .info-section p {
+            line-height: 1.8;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .letters-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 15px;
+            }
+
+            .letter-big {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="index.html">Čeština</a>
+            <span>›</span>
+            <strong>Diktáty</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1>📖 Diktáty - Vyjmenovaná slova</h1>
+                <p class="subtitle">
+                    Vyber si písmeno a procvičuj vyjmenovaná slova formou diktátu.<br>
+                    Klikneš na podtržítko a vybereš správné písmeno Y nebo I.
+                </p>
+            </header>
+
+            <div class="letters-grid">
+                <a href="diktat-b.html" class="letter-card coming-soon">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="letter-big">B</div>
+                    <div class="letter-label">Diktát po B</div>
+                </a>
+
+                <a href="diktat-l.html" class="letter-card coming-soon">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="letter-big">L</div>
+                    <div class="letter-label">Diktát po L</div>
+                </a>
+
+                <a href="diktat-m.html" class="letter-card active">
+                    <span class="status-badge">Aktivní</span>
+                    <div class="letter-big">M</div>
+                    <div class="letter-label">Diktát po M</div>
+                </a>
+
+                <a href="diktat-p.html" class="letter-card coming-soon">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="letter-big">P</div>
+                    <div class="letter-label">Diktát po P</div>
+                </a>
+
+                <a href="diktat-s.html" class="letter-card coming-soon">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="letter-big">S</div>
+                    <div class="letter-label">Diktát po S</div>
+                </a>
+
+                <a href="diktat-v.html" class="letter-card coming-soon">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="letter-big">V</div>
+                    <div class="letter-label">Diktát po V</div>
+                </a>
+
+                <a href="diktat-z.html" class="letter-card coming-soon">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="letter-big">Z</div>
+                    <div class="letter-label">Diktát po Z</div>
+                </a>
+
+                <a href="diktat-vse.html" class="letter-card all-letters-card coming-soon">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="letter-big">🎯 Všechna písmena</div>
+                    <div class="letter-label">Kompletní diktát se všemi vyjmenovanými slovy</div>
+                </a>
+            </div>
+
+            <div class="info-section">
+                <h3>ℹ️ Jak fungují diktáty?</h3>
+                <p>
+                    <strong>1.</strong> Vyber si písmeno, které chceš procvičovat
+                </p>
+                <p>
+                    <strong>2.</strong> Přečti si text s vynechanými písmeny (podtržítka)
+                </p>
+                <p>
+                    <strong>3.</strong> Klikni na podtržítko a vyber správné písmeno Y/Ý nebo I/Í
+                </p>
+                <p>
+                    <strong>4.</strong> Po vyplnění všech mezer klikni na "Zkontrolovat vše"
+                </p>
+                <p>
+                    <strong>5.</strong> Uvidíš, co máš správně (zelená) a co špatně (červená)
+                </p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Vzdělávací platforma</p>
+        </footer>
+    </div>
+</body>
+</html>
