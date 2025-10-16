@@ -22,7 +22,7 @@
     border-bottom-width: 4px;
 }
 
-.dictation-gap.filled {
+.n-gap.filled {
     background: #e3f2fd;
     color: var(--primary);
 }
@@ -883,8 +883,8 @@ function nextDictation() {
     document.getElementById('statsBar').classList.add('hidden');
     document.getElementById('fillGapMode').classList.add('hidden');
     document.getElementById('chooseVariantMode').classList.add('hidden');
-    document.getElementById('theoryMode').classList.add('hidden');
     document.getElementById('dictationMode').classList.remove('hidden');
+    document.getElementById('theoryMode').classList.add('hidden');
     generateDictation();
 }
         }
