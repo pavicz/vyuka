@@ -1,17 +1,502 @@
-<a href="mocniny.html" class="topic-card">
-        <span class="status-badge">Aktivní</span>
-        <div class="topic-header">
-            <span class="topic-icon">⚡</span>
-            <div>
-                <h2>Mocniny</h2>
-                <span class="difficulty medium">Střední</span>
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mocniny - Procvičování</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2196F3;
+            --primary-dark: #1976D2;
+            --success: #4CAF50;
+            --error: #f44336;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .level-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .level-btn {
+            padding: 20px;
+            background: var(--bg-light);
+            border: 3px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .level-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .level-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .level-icon {
+            font-size: 2em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .exercise-area {
+            background: var(--bg-light);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .question-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .equation {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .power {
+            font-size: 0.6em;
+            vertical-align: super;
+        }
+
+        .input-area {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 20px;
+            font-size: 2em;
+            text-align: center;
+            border: 3px solid var(--primary);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 15px rgba(33, 150, 243, 0.3);
+        }
+
+        .answer-input.correct {
+            border-color: var(--success);
+            background: #e8f5e9;
+        }
+
+        .answer-input.incorrect {
+            border-color: var(--error);
+            background: #ffebee;
+        }
+
+        .answer-input:disabled {
+            background: var(--bg-light);
+            cursor: not-allowed;
+        }
+
+        .check-btn {
+            display: block;
+            width: 200px;
+            margin: 25px auto 0;
+            padding: 18px;
+            font-size: 1.2em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .next-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .hint {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.95em;
+            margin-top: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .equation {
+                font-size: 2.5em;
+            }
+
+            .answer-input {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="index.html">Matematika</a>
+            <span>›</span>
+            <strong>Mocniny</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1>⚡ Mocniny</h1>
+                <p class="subtitle">Procvič si umocňování čísel</p>
+            </header>
+
+            <div class="level-selector">
+                <button class="level-btn active" onclick="changeLevel('basic')">
+                    <span class="level-icon">⭐</span>
+                    Lehká<br>
+                    <small style="font-size: 0.85em;">(2² až 99²)</small>
+                </button>
+                <button class="level-btn" onclick="changeLevel('medium')">
+                    <span class="level-icon">⭐⭐</span>
+                    Střední<br>
+                    <small style="font-size: 0.85em;">(+ desetinná čísla)</small>
+                </button>
+                <button class="level-btn" onclick="changeLevel('hard')">
+                    <span class="level-icon">⭐⭐⭐</span>
+                    Těžká<br>
+                    <small style="font-size: 0.85em;">(všechno dohromady)</small>
+                </button>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-box">
+                    <div class="stat-value" id="correct">0</div>
+                    <div class="stat-label">✓ Správně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="incorrect">0</div>
+                    <div class="stat-label">✗ Chybně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="percentage">0%</div>
+                    <div class="stat-label">📊 Úspěšnost</div>
+                </div>
+            </div>
+
+            <div class="exercise-area">
+                <div class="question-header">
+                    <div class="question-number" id="questionNum">Otázka 1</div>
+                    <div>Kolik je:</div>
+                </div>
+
+                <div class="equation" id="equation">5<span class="power">2</span></div>
+
+                <div class="input-area">
+                    <input type="number" 
+                           class="answer-input" 
+                           id="answerInput" 
+                           placeholder="?" 
+                           onkeypress="if(event.key==='Enter') checkAnswer()">
+                    <div class="hint">💡 Napiš výsledek a stiskni Enter</div>
+                </div>
+
+                <button class="check-btn" onclick="checkAnswer()">Zkontrolovat</button>
+
+                <div id="feedback" class="feedback hidden"></div>
+                <button id="nextBtn" class="next-btn hidden" onclick="nextQuestion()">
+                    Další příklad →
+                </button>
             </div>
         </div>
-        <p class="topic-description">
-            Procvič si umocňování čísel. Tři úrovně obtížnosti - celá i desetinná čísla.
-        </p>
-        <div class="topic-stats">
-            <span class="stat">⏱️ 10-15 min</span>
-            <span class="stat">📝 Neomezené příklady</span>
-        </div>
-    </a>
+    </div>
+
+    <script>
+        let currentLevel = 'basic';
+        let stats = {correct: 0, incorrect: 0, total: 0, current: 1};
+        let currentQuestion = {};
+
+        function changeLevel(level) {
+            currentLevel = level;
+            
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            stats = {correct: 0, incorrect: 0, total: 0, current: 1};
+            updateStats();
+            generateQuestion();
+        }
+
+        function generateQuestion() {
+            let base, exponent, result;
+            
+            if (currentLevel === 'basic') {
+    // Lehká: 2² až 99²
+    base = Math.floor(Math.random() * 98) + 2; // 2-99
+    exponent = 2;
+    result = Math.pow(base, exponent);
+} else if (currentLevel === 'medium') {
+                // Střední: desetinná čísla (0.1-2.0) na druhou, max 1 desetinné místo
+                const decimals = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0];
+                base = decimals[Math.floor(Math.random() * decimals.length)];
+                exponent = 2;
+                result = Math.round(Math.pow(base, exponent) * 100) / 100; // Zaokrouhlení na 2 des. místa
+            } else {
+                // Těžká: mix všeho
+                const rand = Math.random();
+                if (rand < 0.5) {
+                    // Celá čísla 2-9
+                    base = Math.floor(Math.random() * 8) + 2;
+                    exponent = 2;
+                } else {
+                    // Desetinná čísla
+                    const decimals = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0];
+                    base = decimals[Math.floor(Math.random() * decimals.length)];
+                    exponent = 2;
+                }
+                result = Math.round(Math.pow(base, exponent) * 100) / 100;
+            }
+
+            currentQuestion = {base, exponent, result};
+
+            document.getElementById('questionNum').textContent = `Otázka ${stats.current}`;
+            document.getElementById('equation').innerHTML = `${base}<span class="power">${exponent}</span> = ?`;
+            
+            const input = document.getElementById('answerInput');
+            input.value = '';
+            input.disabled = false;
+            input.classList.remove('correct', 'incorrect');
+            input.focus();
+
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+        }
+
+        function checkAnswer() {
+            const input = document.getElementById('answerInput');
+            const userAnswer = parseFloat(input.value);
+            
+            if (isNaN(userAnswer)) {
+                alert('⚠️ Prosím, zadej platné číslo!');
+                return;
+            }
+
+            // Tolerace pro desetinná čísla (0.01)
+            const tolerance = 0.01;
+            const isCorrect = Math.abs(userAnswer - currentQuestion.result) < tolerance;
+
+            stats.total++;
+            if (isCorrect) {
+                stats.correct++;
+            } else {
+                stats.incorrect++;
+            }
+
+            updateStats();
+
+            input.disabled = true;
+            input.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden', 'correct', 'incorrect');
+            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+            if (isCorrect) {
+                const messages = [
+                    '🎉 Výborně! To je správně!',
+                    '✨ Skvělá práce!',
+                    '🌟 Perfektní!',
+                    '🎯 Přesně tak!',
+                    '👏 Správně!'
+                ];
+                feedback.textContent = messages[Math.floor(Math.random() * messages.length)];
+            } else {
+                feedback.textContent = `❌ Správná odpověď: ${currentQuestion.base}² = ${currentQuestion.result}`;
+            }
+
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            stats.current++;
+            generateQuestion();
+        }
+
+        function updateStats() {
+            document.getElementById('correct').textContent = stats.correct;
+            document.getElementById('incorrect').textContent = stats.incorrect;
+            const percentage = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+            document.getElementById('percentage').textContent = percentage + '%';
+        }
+
+        // Inicializace
+        generateQuestion();
+    </script>
+</body>
+</html>
