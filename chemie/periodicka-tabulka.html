@@ -331,22 +331,22 @@
                 <button class="level-btn active" onclick="changeLevel('level1')">
                     <span class="level-icon">⭐</span>
                     Úroveň 1<br>
-                    <small style="font-size: 0.85em;">(základní prvky)</small>
+                    <small style="font-size: 0.85em;">(úroveň 1)</small>
                 </button>
                 <button class="level-btn" onclick="changeLevel('level2')">
-                    <span class="level-icon">⭐⭐</span>
+                    <span class="level-icon">⭐</span>
                     Úroveň 2<br>
-                    <small style="font-size: 0.85em;">(+ kovy)</small>
+                    <small style="font-size: 0.85em;">(úroveň 2)</small>
                 </button>
                 <button class="level-btn" onclick="changeLevel('level3')">
-                    <span class="level-icon">⭐⭐⭐</span>
+                    <span class="level-icon">⭐⭐</span>
                     Úroveň 3<br>
-                    <small style="font-size: 0.85em;">(+ vzácné plyny)</small>
+                    <small style="font-size: 0.85em;">(úroveň 3)</small>
                 </button>
                 <button class="level-btn" onclick="changeLevel('level4')">
                     <span class="level-icon">⭐⭐⭐⭐</span>
                     Úroveň 4<br>
-                    <small style="font-size: 0.85em;">(všechny prvky)</small>
+                    <small style="font-size: 0.85em;">(všechny úrovně)</small>
                 </button>
             </div>
 
@@ -451,9 +451,9 @@
             if (level === 'level1') {
                 currentElements = elementsLevel1;
             } else if (level === 'level2') {
-                currentElements = [...elementsLevel1, ...elementsLevel2];
+                currentElements = [...elementsLevel2];
             } else if (level === 'level3') {
-                currentElements = [...elementsLevel1, ...elementsLevel2, ...elementsLevel3];
+                currentElements = [...elementsLevel3];
             } else if (level === 'level4') {
                 currentElements = elementsLevel4;
             }
