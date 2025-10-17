@@ -282,8 +282,6 @@
             <span>›</span>
             <a href="index.html">Čeština</a>
             <span>›</span>
-            <a href="vyjmenovana-slova.html">Vyjmenovaná slova</a>
-            <span>›</span>
             <a href="diktaty.html">Diktáty</a>
             <span>›</span>
             <strong>Písmeno M</strong>
@@ -306,12 +304,12 @@
                     <!-- Dynamicky generováno -->
                 </div>
 
-                <button id="checkBtn" class="check-btn hidden" onclick="checkDictation()">
+                <button id="checkBtn" class="check-btn hidden">
                     Zkontrolovat vše
                 </button>
 
                 <div id="feedback" class="feedback hidden"></div>
-                <button id="nextBtn" class="next-btn hidden" onclick="nextDictation()">
+                <button id="nextBtn" class="next-btn hidden">
                     Nový diktát →
                 </button>
             </div>
@@ -321,39 +319,31 @@
     <div id="popup" class="popup hidden">
         <div class="popup-title">Vyber správné písmeno:</div>
         <div class="popup-buttons">
-            <button class="popup-btn" onclick="selectAnswer('y')">Y/Ý</button>
-            <button class="popup-btn" onclick="selectAnswer('i')">I/Í</button>
+            <button class="popup-btn" data-answer="y">Y/Ý</button>
+            <button class="popup-btn" data-answer="i">I/Í</button>
         </div>
     </div>
 
-    <div id="overlay" class="overlay hidden" onclick="closePopup()"></div>
+    <div id="overlay" class="overlay hidden"></div>
 
     <script>
         const dictationTexts = [
             {
-                text: "Musíme si m_t ruce m_dlem po každé práci. Zkusme m_slet na to, jaký velký úm_sl má náš prům_sl s ochranou přírody. Věřte m_, že m_t takovou zkušenost je cenné.",
-                answers: ['y', 'y', 'y', 'y', 'y', 'i', 'i'],
-                words: ['mýt', 'mýdlem', 'myslet', 'úmysl', 'průmysl', 'mi', 'mít']
-            },
-            {
-                text: "M_š v našem domě je malá. Um_vadlo v koupelně je nové a m_dlo voní krásně. M_slivec jde lesem a m_slí na zvěř. Sm_sl života je někdy těžké najít.",
-                answers: ['y', 'y', 'y', 'y', 'y', 'y'],
-                words: ['Myš', 'umyvadlo', 'mýdlo', 'Myslivec', 'myslí', 'Smysl']
-            },
-           {
-    text: "Dm_chal do ohně a chm_ří se rozlétlo. Zam_kal dveře a šel spát. M_ška běhala po domě. Hm_z létal kolem květin.",
-    answers: ['y', 'y', 'y', 'y', 'y'],
-    words: ['Dmýchal', 'chmýří', 'zamykal', 'Myška', 'Hmyz']
-}
+                text: "Musíme si m_t ruce m_dlem po každé práci. Zkusme m_slet na to, jaký velký úm_sl má náš prům_sl s ochranou přírody.",
+                answers: ['y', 'y', 'y', 'y', 'y'],
+                words: ['mýt', 'mýdlem', 'myslet', 'úmysl', 'průmysl']
+            }
         ];
 
         let currentDictation = null;
         let dictationAnswers = [];
         let currentGapIndex = null;
+        let gapElements = [];
 
         function generateDictation() {
             currentDictation = dictationTexts[Math.floor(Math.random() * dictationTexts.length)];
             dictationAnswers = new Array(currentDictation.answers.length).fill(null);
+            gapElements = [];
             
             const container = document.getElementById('dictationText');
             container.innerHTML = '';
@@ -371,7 +361,7 @@
                     gap.className = 'dictation-gap';
                     gap.textContent = '_';
                     gap.dataset.index = gapIndex;
-                    gap.onclick = () => openPopup(gapIndex);
+                    gapElements.push(gap);
                     container.appendChild(gap);
                     gapIndex++;
                 }
@@ -395,18 +385,24 @@
         }
 
         function selectAnswer(answer) {
-            if (currentGapIndex === null) return;
+            if (currentGapIndex === null || currentGapIndex === undefined) {
+                console.error('currentGapIndex is null/undefined');
+                return;
+            }
+            
+            if (!gapElements[currentGapIndex]) {
+                console.error('Gap element not found at index:', currentGapIndex);
+                return;
+            }
             
             dictationAnswers[currentGapIndex] = answer;
             
-            const gaps = document.querySelectorAll('.dictation-gap');
-            const gap = gaps[currentGapIndex];
+            const gap = gapElements[currentGapIndex];
             gap.textContent = answer === 'y' ? 'Y' : 'I';
             gap.classList.add('filled');
             
             closePopup();
             
-            // Zkontroluj, zda jsou všechna pole vyplněná
             if (dictationAnswers.every(a => a !== null)) {
                 document.getElementById('checkBtn').classList.remove('hidden');
             }
@@ -416,10 +412,8 @@
             let correct = 0;
             let incorrect = 0;
             
-            const gaps = document.querySelectorAll('.dictation-gap');
-            
             dictationAnswers.forEach((answer, index) => {
-                const gap = gaps[index];
+                const gap = gapElements[index];
                 const isCorrect = answer === currentDictation.answers[index];
                 
                 gap.classList.remove('filled');
@@ -431,7 +425,6 @@
                     incorrect++;
                 }
                 
-                // Zobraz správné písmeno z daného slova
                 const word = currentDictation.words[index];
                 const yOrI = word.match(/[yýií]/i);
                 if (yOrI) {
@@ -466,6 +459,27 @@
         function nextDictation() {
             generateDictation();
         }
+
+        // Event listenery
+        document.getElementById('overlay').addEventListener('click', closePopup);
+        document.getElementById('checkBtn').addEventListener('click', checkDictation);
+        document.getElementById('nextBtn').addEventListener('click', nextDictation);
+
+        // Delegování událostí pro mezery
+        document.getElementById('dictationText').addEventListener('click', (e) => {
+            if (e.target.classList.contains('dictation-gap')) {
+                const index = parseInt(e.target.dataset.index);
+                openPopup(index);
+            }
+        });
+
+        // Tlačítka v popup
+        document.querySelectorAll('.popup-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const answer = e.target.dataset.answer;
+                selectAnswer(answer);
+            });
+        });
 
         // Inicializace
         generateDictation();
