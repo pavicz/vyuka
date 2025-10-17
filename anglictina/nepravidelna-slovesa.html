@@ -409,15 +409,15 @@
 <div class="mode-selector" style="margin-bottom: 15px;">
     <button class="mode-btn active" onclick="changeLevel('easy')">
         <span class="mode-icon">⭐</span>
-        Lehká (23 sloves)
+        Strana 1 (23 sloves)
     </button>
     <button class="mode-btn" onclick="changeLevel('medium')">
-        <span class="mode-icon">⭐⭐</span>
-        Střední (42 sloves)
+        <span class="mode-icon">⭐</span>
+        Strana 2 (19 sloves)
     </button>
     <button class="mode-btn" onclick="changeLevel('hard')">
-        <span class="mode-icon">⭐⭐⭐</span>
-        Těžká (všechna)
+        <span class="mode-icon">⭐⭐</span>
+        Dohromady 1+2 (42 všechna)
     </button>
 </div>
             <div class="mode-selector">
@@ -570,6 +570,31 @@ const verbsMedium = [
             {inf: 'go', past: 'went', part: 'gone', cz: 'jít'},
             {inf: 'have', past: 'had', part: 'had', cz: 'mít'},
             {inf: 'know', past: 'knew', part: 'known', cz: 'vědět, znát'},
+       
+   
+];
+
+const verbsHard = [
+            {inf: 'be', past: 'was/were', part: 'been', cz: 'být'},
+            {inf: 'become', past: 'became', part: 'become', cz: 'stát se'},
+            {inf: 'break', past: 'broke', part: 'broken', cz: 'zlomit'},
+            {inf: 'build', past: 'built', part: 'built', cz: 'postavit, stavět'},
+            {inf: 'buy', past: 'bought', part: 'bought', cz: 'koupit'},
+            {inf: 'can', past: 'can', part: '', cz: 'umět, moci'},
+            {inf: 'choose', past: 'chose', part: 'chosen', cz: 'vybrat'},
+            {inf: 'come', past: 'came', part: 'come', cz: 'přijít'},
+            {inf: 'cut', past: 'cut', part: 'cut', cz: 'sekat, řezat'},
+            {inf: 'do', past: 'did', part: 'done', cz: 'dělat'},
+            {inf: 'drink', past: 'drank', part: 'drunk', cz: 'pít'},
+            {inf: 'eat', past: 'ate', part: 'eaten', cz: 'jíst'},
+            {inf: 'fall', past: 'fell', part: 'fallen', cz: 'spadnout, padat'},
+            {inf: 'find', past: 'found', part: 'found', cz: 'najít'},
+            {inf: 'forget', past: 'forgot', part: 'forgotten', cz: 'zapomenout'},
+            {inf: 'get', past: 'got', part: 'got/gotten', cz: 'dostat'},
+            {inf: 'give', past: 'gave', part: 'given', cz: 'dát'},
+            {inf: 'go', past: 'went', part: 'gone', cz: 'jít'},
+            {inf: 'have', past: 'had', part: 'had', cz: 'mít'},
+            {inf: 'know', past: 'knew', part: 'known', cz: 'vědět, znát'},
             {inf: 'learn', past: 'learnt', part: 'learnt', cz: 'učit se'},
             {inf: 'leave', past: 'left', part: 'left', cz: 'opustit, nechat'},
             {inf: 'lose', past: 'lost', part: 'lost', cz: 'ztratit'},
@@ -593,72 +618,6 @@ const verbsMedium = [
             {inf: 'win', past: 'won', part: 'won', cz: 'vyhrát'},
             {inf: 'write', past: 'wrote', part: 'written', cz: 'psát'}
    
-];
-
-const verbsHard = [
-    {inf: 'be', past: 'was/were', part: 'been', cz: 'být'},
-            {inf: 'become', past: 'became', part: 'become', cz: 'stát se'},
-            {inf: 'begin', past: 'began', part: 'begun', cz: 'začít'},
-            {inf: 'break', past: 'broke', part: 'broken', cz: 'zlomit'},
-            {inf: 'bring', past: 'brought', part: 'brought', cz: 'přinést'},
-            {inf: 'build', past: 'built', part: 'built', cz: 'stavět'},
-            {inf: 'buy', past: 'bought', part: 'bought', cz: 'koupit'},
-            {inf: 'catch', past: 'caught', part: 'caught', cz: 'chytit'},
-            {inf: 'choose', past: 'chose', part: 'chosen', cz: 'vybrat'},
-            {inf: 'come', past: 'came', part: 'come', cz: 'přijít'},
-            {inf: 'do', past: 'did', part: 'done', cz: 'dělat'},
-            {inf: 'drink', past: 'drank', part: 'drunk', cz: 'pít'},
-            {inf: 'drive', past: 'drove', part: 'driven', cz: 'řídit'},
-            {inf: 'eat', past: 'ate', part: 'eaten', cz: 'jíst'},
-            {inf: 'fall', past: 'fell', part: 'fallen', cz: 'padat'},
-            {inf: 'feel', past: 'felt', part: 'felt', cz: 'cítit'},
-            {inf: 'find', past: 'found', part: 'found', cz: 'najít'},
-            {inf: 'fly', past: 'flew', part: 'flown', cz: 'letět'},
-            {inf: 'forget', past: 'forgot', part: 'forgotten', cz: 'zapomenout'},
-            {inf: 'get', past: 'got', part: 'got/gotten', cz: 'dostat'},
-            {inf: 'give', past: 'gave', part: 'given', cz: 'dát'},
-            {inf: 'go', past: 'went', part: 'gone', cz: 'jít'},
-            {inf: 'have', past: 'had', part: 'had', cz: 'mít'},
-            {inf: 'hear', past: 'heard', part: 'heard', cz: 'slyšet'},
-            {inf: 'hide', past: 'hid', part: 'hidden', cz: 'skrýt'},
-            {inf: 'hit', past: 'hit', part: 'hit', cz: 'udeřit'},
-            {inf: 'hold', past: 'held', part: 'held', cz: 'držet'},
-            {inf: 'keep', past: 'kept', part: 'kept', cz: 'udržet'},
-            {inf: 'know', past: 'knew', part: 'known', cz: 'znát'},
-            {inf: 'leave', past: 'left', part: 'left', cz: 'opustit'},
-            {inf: 'lend', past: 'lent', part: 'lent', cz: 'půjčit'},
-            {inf: 'let', past: 'let', part: 'let', cz: 'nechat'},
-            {inf: 'lose', past: 'lost', part: 'lost', cz: 'ztratit'},
-            {inf: 'make', past: 'made', part: 'made', cz: 'vyrobit'},
-            {inf: 'mean', past: 'meant', part: 'meant', cz: 'znamenat'},
-            {inf: 'meet', past: 'met', part: 'met', cz: 'potkat'},
-            {inf: 'pay', past: 'paid', part: 'paid', cz: 'platit'},
-            {inf: 'put', past: 'put', part: 'put', cz: 'položit'},
-            {inf: 'read', past: 'read', part: 'read', cz: 'číst'},
-            {inf: 'ride', past: 'rode', part: 'ridden', cz: 'jet (na kole)'},
-            {inf: 'ring', past: 'rang', part: 'rung', cz: 'zvonit'},
-            {inf: 'run', past: 'ran', part: 'run', cz: 'běžet'},
-            {inf: 'say', past: 'said', part: 'said', cz: 'říct'},
-            {inf: 'see', past: 'saw', part: 'seen', cz: 'vidět'},
-            {inf: 'sell', past: 'sold', part: 'sold', cz: 'prodat'},
-            {inf: 'send', past: 'sent', part: 'sent', cz: 'poslat'},
-            {inf: 'show', past: 'showed', part: 'shown', cz: 'ukázat'},
-            {inf: 'sing', past: 'sang', part: 'sung', cz: 'zpívat'},
-            {inf: 'sit', past: 'sat', part: 'sat', cz: 'sedět'},
-            {inf: 'sleep', past: 'slept', part: 'slept', cz: 'spát'},
-            {inf: 'speak', past: 'spoke', part: 'spoken', cz: 'mluvit'},
-            {inf: 'spend', past: 'spent', part: 'spent', cz: 'utrácet'},
-            {inf: 'stand', past: 'stood', part: 'stood', cz: 'stát'},
-            {inf: 'swim', past: 'swam', part: 'swum', cz: 'plavat'},
-            {inf: 'take', past: 'took', part: 'taken', cz: 'brát'},
-            {inf: 'teach', past: 'taught', part: 'taught', cz: 'učit'},
-            {inf: 'tell', past: 'told', part: 'told', cz: 'povídat'},
-            {inf: 'think', past: 'thought', part: 'thought', cz: 'myslet'},
-            {inf: 'understand', past: 'understood', part: 'understood', cz: 'rozumět'},
-            {inf: 'wake', past: 'woke', part: 'woken', cz: 'budit'},
-            {inf: 'wear', past: 'wore', part: 'worn', cz: 'nosit (oblečení)'},
-            {inf: 'win', past: 'won', part: 'won', cz: 'vyhrát'},
-            {inf: 'write', past: 'wrote', part: 'written', cz: 'psát'}
 ];
 
 let currentLevel = 'easy';
