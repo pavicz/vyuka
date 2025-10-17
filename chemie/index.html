@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemie - Témata</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #9C27B0;
+            --primary-dark: #7B1FA2;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--white);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .topic-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: var(--text-dark);
+            border-left: 5px solid var(--primary);
+            position: relative;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-left-width: 8px;
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .topic-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+
+        .topic-card h2 {
+            font-size: 1.5em;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .difficulty {
+            display: inline-block;
+            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .difficulty.easy {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .difficulty.medium {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .difficulty.hard {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .topic-description {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .topic-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: var(--white);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .status-badge.coming-soon {
+            background: var(--text-light);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: var(--white);
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <strong>Chemie</strong>
+        </div>
+
+        <header>
+            <h1>🧪 Chemie</h1>
+            <p class="subtitle">Vyber si téma a začni objevovat svět chemie</p>
+        </header>
+
+        <main>
+            <div class="topics-grid">
+                <a href="periodicka-tabulka.html" class="topic-card">
+                    <span class="status-badge">Aktivní</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">⚛️</span>
+                        <div>
+                            <h2>Periodická tabulka</h2>
+                            <span class="difficulty medium">Střední</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Nauč se rozpoznávat chemické prvky podle jejich značky. Čtyři úrovně obtížnosti s postupným přidáváním prvků.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 15-20 min</span>
+                        <span class="stat">⚛️ 50+ prvků</span>
+                    </div>
+                </a>
+
+                <a href="chemicke-vzorce.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🧬</span>
+                        <div>
+                            <h2>Chemické vzorce</h2>
+                            <span class="difficulty hard">Náročné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Procvič si psaní a rozpoznávání chemických vzorců sloučenin.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 20 min</span>
+                        <span class="stat">📝 Vzorce</span>
+                    </div>
+                </a>
+
+                <a href="chemicke-reakce.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">⚗️</span>
+                        <div>
+                            <h2>Chemické reakce</h2>
+                            <span class="difficulty hard">Náročné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Nauč se vyrovnávat chemické rovnice a rozpoznávat typy reakcí.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 25 min</span>
+                        <span class="stat">⚖️ Rovnice</span>
+                    </div>
+                </a>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Vzdělávací platforma</p>
+        </footer>
+    </div>
+</body>
+</html>
