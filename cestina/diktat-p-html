@@ -284,12 +284,12 @@
             <span>›</span>
             <a href="diktaty.html">Diktáty</a>
             <span>›</span>
-            <strong>Písmeno M</strong>
+            <strong>Písmeno P</strong>
         </div>
 
         <div class="main-card">
             <header>
-                <h1>📖 Diktát po M</h1>
+                <h1>📖 Diktát po P</h1>
                 <p class="subtitle">Klikni na podtržítka a vyber správné písmeno</p>
             </header>
 
@@ -329,36 +329,37 @@
     <script>
         const dictationTexts = [
             {
-                text: "Musíme si m_t ruce m_dlem po každé práci. Zkusme m_slet na to, jaký velký úm_sl má náš prům_sl s ochranou přírody. Otec si zm_lil svou m_ru tolerance s leností. M_ jsme si sbalili m_sy, ve kterých jsme měli oběd. Nový ml_nek na kávu byl dražší než celý ml_n. Musel se v m_šlenkách zamknout, aby ho nikdo nerušil.",
-                answers: ['y', 'y', 'y', 'y', 'y', 'y', 'i', 'y', 'i', 'y', 'y', 'y'],
-                words: ['mýt', 'mýdlem', 'myslet', 'úmysl', 'průmysl', 'zmýlil', 'míru', 'My', 'mísy', 'mlýnek', 'mlýn', 'myšlenkách']
+                text: "Děti p_kají (ve hře) u zdi, dokud je p_kola nezachytí. Jeho největší p_cha byla ta drahá motorka. Za své prohřešky musí brzy p_kat (nést trest). P_lník na nehty se třp_til v tašce. Včela op_lovala okvětní lístky, tatínek op_loval kus železa p_lníkem. Slepice se zlostně čep_ří na kocoura. Starý strom byl obsypán žlutým p_lem.    ",
+                answers: ['i', 'i', 'y', 'y', 'i', 'y', 'y', 'i', 'i', 'y', 'y'],
+                words: ['pikají', 'pikola', 'pýcha', 'pykat', 'pilník', 'třpytil', 'opylovala', 'opiloval', 'pilníkem', 'čepýří', 'pylem']
             },
              {
-                text: "Cestou do Litom_šle se v m_nulosti platilo m_to za vjezd do města. M_sa s ovocem stála na stole, vedle níž se m_la čerstvá zelenina. Sladké chm_ří z pampelišek létalo ve vzduchu, když jsem dm_chal do ohně. Děti m_slí na prázdniny a m_ří s prarodiči k rybníku. M_val si tvář a přitom přem_šlel, jestli se má spokojit s m_čem. ",
-                answers: ['y', 'i', 'y', 'i', 'y', 'y', 'y', 'y', 'i', 'y', 'y', 'i'],
-                words: ['Litomyšle', 'minulosti', 'mýto', 'mísa', 'myla', 'chmýří', 'dmýchal', 'myslí', 'míří', 'Mýval', 'přemýšlel', 'míčem']
+                text: "Byl na sebe p_šný, ale p_cha se v něm skrývala. Nešikovná kuchařka si p_chla do prstu. Ráno p_l čerstvé mléko a odpoledne op_loval dřevo. P_tel mouky byl těžký, musel ho prop_chnout. Netopýr je noční živočich. Ten starý slep_š nemá žádné nohy. Kůň stáhl p_sky a ukázal zuby. P_smo se na tenkém pap_ře rozmazalo. Jsem strašp_tel, bojím se v noci chodit sám.",
+                answers: ['y', 'y', 'i', 'i', 'i', 'y', 'i', 'y', 'y', 'i', 'i', 'y'],
+                words: ['pyšný', 'pýcha', 'píchla', 'pil', 'opiloval', 'Pytel', 'propíchnout', 'slepýš', 'pysky', 'Písmo', 'papíře', 'strašpytel']
             },
  {
-                text: "Sm_t nečistoty ze zdi chce trpělivost a m_t trochu času. M_mo naši vesnici stojí historický ml_n, kde se mele mouka. M_vali jsme ve zvyku se každý večer zam_šlet nad uplynulým dnem. Ukázal m_ m_sto, kde byla dříve m_ší díra a schovka pro poklad. Je snadné se zm_lit, když nevíš, kam přesně m_říš. ",
-                answers: ['y', 'i', 'i', 'y', 'i', 'y', 'i', 'i', 'y', 'y', 'i'],
-                words: ['Smýt', 'mít', 'mimo', 'mlýn', 'Mívali', 'zamýšlet', 'mi', 'místo', 'myší', 'zmýlit', 'míříš']
+                text: "Rybář používal třp_tku na lov. P_ská si na flétnu svou oblíbenou p_seň. Kůň měl podkovu na svém kop_tku. Ztratil jsem klíč od p_vní lahve. Třp_tivá ozdoba se leskla na slunci. Zkus se na chvíli zam_slet a zp_tovat své chyby. Hráč na hřišti klop_tl o drn. Ztratil jsem otv_rák na p_vní lahve. Lichokop_tník má na noze jedno kop_to.",
+                answers: ['y', 'i', 'i', 'y', 'i', 'y', 'y', 'y', 'i', 'i', 'y', 'y'],
+                words: ['třpytku', 'Píská', 'píseň', 'kopýtku', 'pivní', 'Třpytivá', 'zpytovat', 'klopýtl', 'otvírák', 'pivní', 'Lichokopytník','kopyto']
             },
 
              {
-        text: "M_š v našem domě je malá. Um_vadlo v koupelně je nové a m_dlo voní krásně. M_sa s těstem byla příliš velká, a tak se to m_chalo špatně. M_slím, že by sis měl um_t to špinavé zrcadlo. Učitel se nechtěl zm_lit v jeho m_rných pokrocích. Lesní m_tina byla zanedbaná, ale m_řila k jezeru.",
-        answers: ['y', 'y', 'y', 'i', 'i', 'y', 'y', 'y', 'i', 'y', 'i'],
-        words: ['Myš', 'umyvadlo', 'mýdlo',  'Mísa', 'míchalo', 'Myslím', 'umýt', 'zmýlit', 'mírných', 'mýtina', 'mířila']
+        text: "Uklouzla na mokrém p_sku a klop_tla. Potřebuješ p_lně studovat, abys p_šně obstál u zkoušky. Trny na keři p_chají, buď opatrný. P_l se vznášel ve vzduchu, což mi vadilo. Slepice čep_ří peří, když je zima. Pořád si jen p_skal svou oblíbenou p_seň. Květina, kterou jsem op_lil, brzy vykvetla. ",
+        answers: ['i', 'y', 'i', 'y', 'i', 'y', 'y', 'i', 'i', 'y'],
+        words: ['písku', 'klopýtla', 'pilně',  'pyšně', 'píchají', 'Pyl', 'čepýří', 'pískal', 'píseň', 'opýlil']
     },
 
              {
-                text: "M_t rád pohyb a m_t čisté oblečení jsou důležité věci. Viděl jsem malou m_š utíkat přes lesní m_tinu, kde leželo jemné chm_ří. M_ jsme se vydali do starého mlýna a zamkli za sebou dveře. M_l si ruce, zatímco m_slel nad m_stem kam um_stí nový m_kroskop.",
-                answers: ['i', 'i', 'y', 'y', 'y', 'y', 'y', 'y', 'i', 'i', 'i'],
-                words: ['mít', 'mít', 'myš', 'mýtinu', 'chmýří', 'my', 'myl', 'myslel', 'místem', 'umístí', 'mikroskop']
+                text: "Při hře na schovávanou bude p_kat Jenda. Po neúspěchu cítil velkou p_chu a hněv. P_la (nástroj) byla velmi stará a tupá. Zvíře ohrnovalo p_sk, když dostalo špatné jídlo. Slep_š ty rozbité střepy dohromady? Na hrubý p_tel patří hrubá záplata.",
+                answers: ['i', 'y', 'i', 'y', 'i', 'y'],
+                words: ['pikat', 'pýchu', 'Pila', 'pysk', 'Slepíš', 'pytel']
             },
+
    {
-        text: "Dm_chal do ohně. Zam_kal dveře. M_ška běhala po domě. Hm_z létal kolem květin. Cesta do Litom_šle byla dlouhá a plná různých m_tů a pověstí. Na tomto m_stě stával ml_n s mohutným kamenem. Předkové m_vali pole hned za novým ml_nem. M_l si ruce, zatímco m_slel na m_lku v receptu.",
-        answers: ['y', 'y', 'y', 'y', 'y', 'y', 'i', 'y', 'i', 'y', 'y', 'y', 'y'],
-        words: ['Dmýchal', 'zamykal', 'Myška', 'Hmyz', 'Litomyšle', 'mýtů', 'místě', 'mlýn', 'mívali', 'mlýnem', 'Myl', 'myslel', 'mýlku']
+        text: "P_tlík s cukrem praskl a vysypal se. Potápěči sbírají p_sky ze dna moře. Klop_tal po schodech, jako by se op_l. Kovář osazoval kop_to podkovou. P_vo z místního pivovaru je výborné. P_pání kuřat bylo hlasité a otravné. Byla to p_šná a nepříjemná p_satelka. Na zahradě roste plevel zvaný p_r. Na p_kniku jsme p_li čaj a jedli p_škoty." ,
+        answers: ['y', 'i', 'y', 'i', 'y', 'i', 'i', 'y', 'i', 'y', 'i', 'i', 'i'],
+        words: ['Pytlík', 'písky', 'Klopýtal', 'opil', 'kopyto', 'Pivo', 'pípání', 'pyšná', 'pisatelka', 'pýr', 'pikniku', 'pili', 'piškoty']
     }
         ];
 
