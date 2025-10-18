@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Procvičování pravopisu - Bě/bje,vě/vje,mě/mně a pě</title>
+    <title>Procvičování Bě/bje</title>
     <style>
         * {
             margin: 0;
@@ -123,37 +123,6 @@
             box-shadow: var(--shadow);
         }
 
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .tab-btn {
-            padding: 12px 24px;
-            border: 2px solid var(--primary);
-            background: var(--white);
-            color: var(--primary);
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 1em;
-        }
-
-        .tab-btn:hover {
-            background: var(--bg-light);
-            transform: translateY(-2px);
-        }
-
-        .tab-btn.active {
-            background: var(--primary);
-            color: var(--white);
-            box-shadow: var(--shadow);
-        }
-
         .exercise-card {
             background: var(--bg-light);
             border-radius: 15px;
@@ -178,7 +147,7 @@
         }
 
         .exercise-text {
-            font-size: 1.1em;
+            font-size: 1.3em;
             color: var(--text-dark);
             margin-bottom: 15px;
             line-height: 1.6;
@@ -222,10 +191,11 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .option-btn {
-            padding: 10px 20px;
+            padding: 15px 30px;
             border: 2px solid var(--primary);
             background: var(--white);
             color: var(--primary);
@@ -233,7 +203,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
-            font-size: 1em;
+            font-size: 1.2em;
         }
 
         .option-btn:hover:not(:disabled) {
@@ -390,12 +360,6 @@
             font-size: 1.5em;
         }
 
-        .info-section h4 {
-            color: var(--primary-dark);
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
         .info-section ul {
             list-style-position: inside;
             color: var(--text-dark);
@@ -404,6 +368,47 @@
 
         .info-section li {
             margin-bottom: 8px;
+        }
+
+        .info-section strong {
+            color: var(--primary);
+        }
+
+        .question-progress {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .answer-feedback {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .answer-feedback .feedback-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .answer-feedback .correct-sentence {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            line-height: 1.8;
+        }
+
+        .answer-feedback .user-answer {
+            background: #ffebee;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f44336;
+            color: #c62828;
+            font-weight: 600;
         }
 
         footer {
@@ -421,17 +426,17 @@
                 font-size: 2em;
             }
 
-            .tabs {
-                gap: 8px;
-            }
-
-            .tab-btn {
-                padding: 10px 16px;
-                font-size: 0.9em;
-            }
-
             .exercise-card {
                 padding: 20px;
+            }
+
+            .exercise-text {
+                font-size: 1.1em;
+            }
+
+            .option-btn {
+                font-size: 1em;
+                padding: 12px 24px;
             }
         }
     </style>
@@ -445,13 +450,13 @@
             <span>›</span>
             <a href="pravopis.html">Pravopis</a>
             <span>›</span>
-            <strong>ě/je a mě/mně</strong>
+            <strong>Bě / bje</strong>
         </div>
 
         <div class="main-card">
             <header>
-                <h1>✍️ Procvičování pravopisu</h1>
-                <p class="subtitle">Bě/bje, mě/mně, vě/vje a pě</p>
+                <h1>🅱️ Procvičování Bě / bje</h1>
+                <p class="subtitle">Nauč se správně psát bě nebo bje</p>
             </header>
 
             <div class="mode-selector">
@@ -460,49 +465,21 @@
                 <button class="mode-btn" onclick="setMode('buttons', this)">🎯 Tlačítka</button>
             </div>
 
-            <div class="tabs">
-                <button class="tab-btn active" onclick="setTab('be-bje', this)">Bě / bje</button>
-                <button class="tab-btn" onclick="setTab('me-mne', this)">Mě / mně</button>
-                <button class="tab-btn" onclick="setTab('ve-vje', this)">Vě / vje</button>
-                <button class="tab-btn" onclick="setTab('pe', this)">Pě</button>
-                <button class="tab-btn" onclick="setTab('all', this)">Vše dohromady</button>
-            </div>
-
             <div id="exercises-container"></div>
 
-            <div class="control-buttons">
+            <div class="control-buttons" id="control-buttons">
                 <button class="btn btn-primary" id="check-btn" onclick="checkAnswers()">Zkontrolovat odpovědi</button>
-                <button class="btn btn-success" id="reset-btn" onclick="resetQuiz()" style="display: none;">🔄 Zkusit znovu</button>
+                <button class="btn btn-success" id="reset-btn" onclick="generateNewTest()" style="display: none;">🔄 Nový test</button>
             </div>
 
             <div id="results-container"></div>
 
             <div class="info-section">
-                <h3>📖 Pravidla</h3>
-                
-                <h4>Bě nebo bje?</h4>
+                <h3>📖 Pravidla pro Bě / bje</h3>
                 <ul>
                     <li><strong>Bě</strong> píšeme většinou: o sobě, k tobě, k dědě, potřebuji, líbí se</li>
                     <li><strong>Bje</strong> píšeme u slov: kobjec, objed, pobjeda, skbjela, zkoubjka (dříve kobec, obed...)</li>
-                </ul>
-                
-                <h4>Mě nebo mně?</h4>
-                <ul>
-                    <li><strong>Mě</strong> píšeme po předložkách: pro mě, na mě, v mě, u mě, beze mě</li>
-                    <li><strong>Mě</strong> ve 4. pádě: vidíš mě, zeptej se mě</li>
-                    <li><strong>Mně</strong> ve 3. a 6. pádě: dej mně, při mně, o mně, k mně</li>
-                </ul>
-
-                <h4>Vě nebo vje?</h4>
-                <ul>
-                    <li><strong>Vě</strong> píšeme většinou: prvě, ověs, návěs, povětří, závěr</li>
-                    <li><strong>Vje</strong> píšeme u slov: vjezd, vjelet, dvjeře (dveře), kvjeten (květen)</li>
-                </ul>
-
-                <h4>Pě</h4>
-                <ul>
-                    <li><strong>Pě</strong> se píše ve všech tvarech (neexistuje "pje")</li>
-                    <li>Příklady: pěkný, zápěstí, kopěčky, roztomilý úpěl, tělocvična</li>
+                    <li>Tip: Zkus si slovo rozdělit na slabiky a poslouchat výslovnost</li>
                 </ul>
             </div>
         </div>
@@ -513,100 +490,60 @@
     </div>
 
     <script>
-        const data = {
-            'be-bje': [
-                { id: 1, text: "doo_ _jednávka surovin", correct: "bje", hint: "Dědě, tě, sobě" },
-                  { "id": 2, "text": "zápalná o_ _ť", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 3, "text": "ob_ _vitel", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 4, "text": "velký zá_ _r", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 5, "text": "od_ _ry krve", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 6, "text": "významný o_ _vitel", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 7, "text": "kruhový o_ _zd", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 8, "text": "viděli hří_ _", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 9, "text": "na kor_ _", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 10, "text": "pod_ _rák", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 11, "text": "nikdo se neo_ _vil", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 12, "text": "o_ _tní beránek", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 13, "text": "holou_ _", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 14, "text": "novodobým o_ _vem", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 15, "text": "silový a o_ _mový trénink", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 16, "text": "vý_ _h koní", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 17, "text": "zápalná o_ _ť", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 18, "text": "Kvalitní o_ _ktiv", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 19, "text": "nadšený s_ _ratel", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 20, "text": "upřímné o_ _tí", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 21, "text": "ob_ _mný náklad", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 22, "text": "rychlý _ _žec", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 23, "text": "o_ _t celý svět", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 24, "text": "skvělý o_ _d", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 25, "text": "úžasný o_ _v", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 26, "text": "hra_ _", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 27, "text": "o_ _kty na mapě", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 28, "text": "o_ _ti zločinu", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 29, "text": "pří_ _h ze života", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 30, "text": "o_ _tí havarované vozidla bylo nemožné", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 31, "text": "o_ _hl stodolu", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 32, "text": "teleo_ _ktiv", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 33, "text": "o_ _ma rukama", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 34, "text": "poo_ _dvej s námi", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 35, "text": "_ _snit", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 36, "text": "s_ _rač vzorků", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 37, "text": "lovci z_ _hů", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 38, "text": "o_ _žnice země", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 39, "text": "náboženské o_ _tiště", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 40, "text": "něžné o_ _tí", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 41, "text": "staré _ _lidlo", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 42, "text": "o_ _mná nádrž", "correct": "bje", "hint": "Dědě, tě, sobě" },
-                  { "id": 43, "text": "kolo_ _žka", "correct": "bě", "hint": "Dědě, tě, sobě" },
-                  { "id": 44, "text": "na_ _račka", "correct": "bě", "hint": "Dědě, tě, sobě" }
+        const data = [
+ { id: 1, text: "doo_ _ jednávka surovin", correct: "bě", hint: "Dědě, tě, sobě" }
+  { "id": 2, "text": "zápalná o_ _ ť", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 3, "text": "ob_ _ vitel", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 4, "text": "velký zá_ _ r", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 5, "text": "od_ _ ry krve", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 6, "text": "významný o_ _ vitel", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 7, "text": "kruhový o_ _ zd", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 8, "text": "viděli hří_ _ ", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 9, "text": "na kor_ _ ", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 10, "text": "pod_ _ rák", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 11, "text": "nikdo se neo_ _ vil", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 12, "text": "o_ _ tní beránek", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 13, "text": "holou_ _ ", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 14, "text": "novodobým o_ _ vem", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 15, "text": "silový a o_ _ mový trénink", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 16, "text": "vý_ _ h koní", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 17, "text": "zápalná o_ _ ť", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 18, "text": "Kvalitní o_ _ ktiv", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 19, "text": "nadšený s_ _ ratel", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 20, "text": "upřímné o_ _ tí", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 21, "text": "ob_ _mný náklad", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 22, "text": "rychlý _ _žec", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 23, "text": "o_ _t celý svět", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 24, "text": "skvělý o_ _d", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 25, "text": "úžasný o_ _v", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 26, "text": "hra_ _", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 27, "text": "o_ _kty na mapě", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 28, "text": "o_ _ti zločinu", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 29, "text": "pří_ _h ze života", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 30, "text": "o_ _tí havarované vozidla bylo nemožné", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 31, "text": "o_ _hl stodolu", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 32, "text": "teleo_ _ktiv", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 33, "text": "o_ _ma rukama", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 34, "text": "poo_ _dvej s námi", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 35, "text": "_ _snit", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 36, "text": "s_ _rač vzorků", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 37, "text": "lovci z_ _hů", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 38, "text": "o_ _žnice země", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 39, "text": "náboženské o_ _tiště", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 40, "text": "něžné o_ _tí", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 41, "text": "staré _ _lidlo", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 42, "text": "o_ _mná nádrž", "correct": "bje", "hint": "Dědě, tě, sobě" },
+  { "id": 43, "text": "kolo_ _žka", "correct": "bě", "hint": "Dědě, tě, sobě" },
+  { "id": 44, "text": "na_ _račka", "correct": "bě", "hint": "Dědě, tě, sobě" },
+{ "id": 45, "text": "chutný o_ _d", "correct": "bě", "hint": "Dědě, tě, sobě" },
+{ "id": 46, "text": "Pepa b_ _ha rychle", "correct": "bě", "hint": "Dědě, tě, sobě" },
+{ "id": 47, "text": "největší o_ _v lidstva", "correct": "bje", "hint": "Dědě, tě, sobě" },
+{ "id": 48, "text": "o_ _zd města Strakonice", "correct": "bje", "hint": "Dědě, tě, sobě" },
+{ "id": 49, "text": "přespolní b_ _zec", "correct": "bě", "hint": "Dědě, tě, sobě" },
+{ "id": 50, "text": "b_ _žecký závod", "correct": "bě", "hint": "Dědě, tě, sobě" }
+]
+;
 
-
-            ],
-            'me-mne': [
-                { id: 1, text: "Dej to _ _ .", correct: "mně", hint: "komu?" },
-                { id: 2, text: "Poslali to _ _ .", correct: "mně", hint: "komu?" },
-                { id: 3, text: "Půjdeš se _ _ _?", correct: "mnou", hint: "s kým?" },
-                { id: 4, text: "Máš něco pro _ _ _?", correct: "mě", hint: "pro koho?" },
-                { id: 5, text: "Mluvil o _ _ _.", correct: "mně", hint: "o kom?" },
-                { id: 6, text: "Díváš se na _ _ _?", correct: "mě", hint: "na koho?" },
-                { id: 7, text: "Může být v _ _ _ klid.", correct: "mě", hint: "v kom?" },
-                { id: 8, text: "Zeptej se _ _ _.", correct: "mě", hint: "koho?" },
-                { id: 9, text: "Pomůžeš _ _ _?", correct: "mi", hint: "komu?" },
-                { id: 10, text: "Při _ _ _ seděla babička.", correct: "mně", hint: "při kom?" },
-                { id: 11, text: "Ke _ _ _ přišel kamarád.", correct: "mně", hint: "ke komu?" },
-                { id: 12, text: "Stůj u _ _ _.", correct: "mě", hint: "u koho?" }
-            ],
-            've-vje': [
-                { id: 1, text: "Chodím do prv_ _ ho ročníku.", correct: "vě", hint: "Prv-ní" },
-                { id: 2, text: "Zítra pojedeme na _ _ let.", correct: "vje", hint: "Vje-jet, výlet" },
-                { id: 3, text: "Dědeček pracuje na po_ _ tří.", correct: "vě", hint: "Pov-ětří" },
-                { id: 4, text: "Koupili jsme nový ná_ _ s.", correct: "vě", hint: "Nav-ěsit" },
-                { id: 5, text: "Pod_ _ ra se otevírá směrem ven.", correct: "vje", hint: "Dvje-ře" },
-                { id: 6, text: "Přečetl jsem si o_ _ st.", correct: "vě", hint: "Ov-ěstit" },
-                { id: 7, text: "Mám rád trav_ _ ční měsíc.", correct: "vje", hint: "Kvje-ten" },
-                { id: 8, text: "Vím to na_ _ rno.", correct: "vě", hint: "Nav-ěrno" },
-                { id: 9, text: "Zhlédl jsem zá_ _ r.", correct: "vě", hint: "Záv-ěr" },
-                { id: 10, text: "Dostal jsem od_ _ tví k narozeninám.", correct: "vě", hint: "Odv-ětit" },
-                { id: 11, text: "Zakoupil jsem _ _ nec.", correct: "vě", hint: "V-ěnec" },
-                { id: 12, text: "Prohráli jsme v první po_ _ dě.", correct: "vě", hint: "Pov-ěda" }
-            ],
-            'pe': [
-                { id: 1, text: "Koupili jsme do zahrady ká_ _.", correct: "pě", hint: "Kap-ě" },
-                { id: 2, text: "Máme krásný zá_ _ s.", correct: "pě", hint: "Záp-ěs" },
-                { id: 3, text: "Děti si hrají v pís_ _čku.", correct: "pě", hint: "Písek" },
-                { id: 4, text: "V obchodě mají ros_ _ tý košíček.", correct: "pě", hint: "Rosp-ětý" },
-                { id: 5, text: "Máme nový ko_ _ ček na dlažbu.", correct: "pě", hint: "Kop-ěček" },
-                { id: 6, text: "Babička uvařila kus zá_ _ nky.", correct: "pě", hint: "Záp-ěnka" },
-                { id: 7, text: "Zahra_ _ l jsem na klavír.", correct: "pě", hint: "Zahrap-ět" },
-                { id: 8, text: "To je krásný ú_ _ l!", correct: "pě", hint: "Úp-ěl" },
-                { id: 9, text: "Máme na zahradě ro_ _ tou lilii.", correct: "pě", hint: "Rosp-ětý" },
-                { id: 10, text: "Chodím cvičit do tělocvi_ _ ny.", correct: "pě", hint: "Tělocvik" },
-                { id: 11, text: "Dal jsem si výbo_ _ rný oběd.", correct: "pě", hint: "Výbor" },
-                { id: 12, text: "Musíme poro_ _ tý plot.", correct: "pě", hint: "Rosp-ětý" }
-            ]
-        };
-
-        let currentTab = 'be-bje';
         let currentMode = 'input';
         let answers = {};
         let showResults = false;
@@ -615,43 +552,42 @@
         let currentTestQuestions = [];
         const QUESTIONS_PER_TEST = 10;
 
-        const buttonOptions = {
-            'be-bje': ['bě', 'bje'],
-            've-vje': ['vě', 'vje'],
-            'pe': ['pě'],
-            'me-mne': ['mě', 'mně', 'mi', 'mnou'],
-            'all': ['bě', 'bje', 'vě', 'vje', 'pě', 'mě', 'mně', 'mi', 'mnou']
-        };
+        function selectRandomQuestions(questions, count) {
+            if (questions.length <= count) {
+                return [...questions];
+            }
+            const shuffled = [...questions].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count);
+        }
+
+        function generateNewTest() {
+            currentTestQuestions = selectRandomQuestions(data, QUESTIONS_PER_TEST);
+            answers = {};
+            showResults = false;
+            currentQuestionIndex = 0;
+            buttonModeAnswered = false;
+            document.getElementById('results-container').innerHTML = '';
+            updateControlButtons();
+            renderExercises();
+        }
+
+        function getCurrentSentences() {
+            return currentTestQuestions.length > 0 ? currentTestQuestions : selectRandomQuestions(data, QUESTIONS_PER_TEST);
+        }
 
         function setMode(mode, element) {
             currentMode = mode;
             document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
-            resetQuiz();
-        }
-
-        function setTab(tab, element) {
-            currentTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
-            resetQuiz();
-        }
-
-        function getCurrentSentences() {
-            if (currentTab === 'all') {
-                return [...data['be-bje'], ...data['me-mne'], ...data['ve-vje'], ...data['pe']];
-            }
-            return data[currentTab];
+            generateNewTest();
         }
 
         function renderExercises() {
             const container = document.getElementById('exercises-container');
             const sentences = getCurrentSentences();
             
-            // Režim tlačítek - zobrazit jen jednu otázku
             if (currentMode === 'buttons' && !showResults) {
                 if (currentQuestionIndex >= sentences.length) {
-                    // Všechny otázky zodpovězeny
                     showFinalResults();
                     return;
                 }
@@ -659,60 +595,44 @@
                 const sentence = sentences[currentQuestionIndex];
                 const userAnswer = (answers[sentence.id] || '').toLowerCase().trim();
                 const isCorrect = userAnswer === sentence.correct.toLowerCase();
-                const options = buttonOptions[currentTab];
 
                 container.innerHTML = `
-                    <div style="text-align: center; margin-bottom: 20px; color: var(--text-light);">
+                    <div class="question-progress">
                         Otázka ${currentQuestionIndex + 1} z ${sentences.length}
                     </div>
-                    <div class="exercise-card" style="min-height: 300px;">
+                    <div class="exercise-card" style="min-height: 350px;">
                         <div class="exercise-header">
                             <div class="exercise-number">${currentQuestionIndex + 1}.</div>
                             <div style="flex: 1;">
-                                <div class="exercise-text" style="font-size: 1.3em; margin-bottom: 25px;">
+                                <div class="exercise-text">
                                     ${sentence.text}
                                 </div>
                                 
                                 ${!buttonModeAnswered ? `
-                                    <div class="buttons-area" style="justify-content: center;">
-                                        ${options.map(option => `
-                                            <button 
-                                                class="option-btn"
-                                                style="font-size: 1.2em; padding: 15px 30px;"
-                                                onclick="handleButtonAnswer(${sentence.id}, '${option}')"
-                                            >
-                                                ${option}
-                                            </button>
-                                        `).join('')}
+                                    <div class="buttons-area">
+                                        <button class="option-btn" onclick="handleButtonAnswer(${sentence.id}, 'bě')">bě</button>
+                                        <button class="option-btn" onclick="handleButtonAnswer(${sentence.id}, 'bje')">bje</button>
                                     </div>
                                 ` : `
-                                    <div style="text-align: center;">
-                                        <div style="margin-bottom: 20px;">
-                                            <span style="font-size: 1.3em; font-weight: 600; color: ${isCorrect ? '#4CAF50' : '#f44336'};">
-                                                ${isCorrect ? '✓ Správně!' : '✗ Špatně!'}
-                                            </span>
+                                    <div class="answer-feedback">
+                                        <div class="feedback-title" style="color: ${isCorrect ? '#4CAF50' : '#f44336'};">
+                                            ${isCorrect ? '✓ Správně!' : '✗ Špatně!'}
                                         </div>
                                         
-                                        <div style="background: var(--bg-light); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                                            <div style="margin-bottom: 10px; color: var(--text-light);">
+                                        <div class="correct-sentence">
+                                            <div style="margin-bottom: 10px; color: var(--text-light); font-size: 0.9em;">
                                                 ${isCorrect ? 'Tvoje odpověď:' : 'Správná odpověď:'}
                                             </div>
-                                            <div style="font-size: 1.3em; line-height: 1.8;">
-                                                ${sentence.text.replace('_ _', `<strong style="color: var(--primary);">${sentence.correct}</strong>`).replace('_ _ _', `<strong style="color: var(--primary);">${sentence.correct}</strong>`)}
-                                            </div>
+                                            ${sentence.text.replace('_ _', `<strong style="color: var(--primary);">${sentence.correct}</strong>`)}
                                         </div>
 
                                         ${!isCorrect ? `
-                                            <div style="background: #ffebee; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #f44336;">
-                                                <div style="color: #c62828; font-weight: 600;">Tvoje odpověď: ${userAnswer}</div>
+                                            <div class="user-answer">
+                                                Tvoje odpověď: ${userAnswer}
                                             </div>
                                         ` : ''}
 
-                                        <button 
-                                            class="btn btn-primary"
-                                            onclick="nextQuestion()"
-                                            style="font-size: 1.1em;"
-                                        >
+                                        <button class="btn btn-primary" onclick="nextQuestion()">
                                             ${currentQuestionIndex < sentences.length - 1 ? 'Další otázka →' : 'Zobrazit výsledky'}
                                         </button>
                                     </div>
@@ -724,7 +644,6 @@
                 return;
             }
             
-            // Režim psaní - zobrazit všechny otázky
             container.innerHTML = sentences.map((sentence, index) => {
                 const userAnswer = (answers[sentence.id] || '').toLowerCase().trim();
                 const isCorrect = userAnswer === sentence.correct.toLowerCase();
@@ -808,17 +727,21 @@
 
             document.getElementById('exercises-container').innerHTML = `
                 <div class="results-card">
-                    <h3>🏆 Výsledek</h3>
+                    <h3>🏆 Výsledek testu</h3>
                     <div class="results-stats">
                         Správně: <strong>${correct}</strong> z <strong>${total}</strong>
                     </div>
                     <div class="results-percentage">${percentage}%</div>
                     <div class="results-message ${messageClass}">${message}</div>
+                    <div style="margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="generateNewTest()">
+                            🔄 Nový test (10 nových otázek)
+                        </button>
+                    </div>
                 </div>
             `;
 
-            document.getElementById('check-btn').style.display = 'none';
-            document.getElementById('reset-btn').style.display = 'inline-flex';
+            document.getElementById('control-buttons').style.display = 'none';
             showResults = true;
         }
 
@@ -855,7 +778,7 @@
 
             document.getElementById('results-container').innerHTML = `
                 <div class="results-card">
-                    <h3>🏆 Výsledek</h3>
+                    <h3>🏆 Výsledek testu</h3>
                     <div class="results-stats">
                         Správně: <strong>${correct}</strong> z <strong>${total}</strong>
                     </div>
@@ -870,31 +793,20 @@
         function updateControlButtons() {
             const checkBtn = document.getElementById('check-btn');
             const resetBtn = document.getElementById('reset-btn');
+            const controlButtons = document.getElementById('control-buttons');
             
             if (currentMode === 'buttons') {
-                checkBtn.style.display = 'none';
+                controlButtons.style.display = 'none';
             } else {
+                controlButtons.style.display = 'flex';
                 checkBtn.style.display = showResults ? 'none' : 'inline-flex';
+                resetBtn.style.display = showResults ? 'inline-flex' : 'none';
             }
-            
-            resetBtn.style.display = showResults ? 'inline-flex' : 'none';
-        }
-
-        function resetQuiz() {
-            answers = {};
-            showResults = false;
-            currentQuestionIndex = 0;
-            buttonModeAnswered = false;
-            document.getElementById('check-btn').style.display = 'inline-flex';
-            document.getElementById('reset-btn').style.display = 'none';
-            document.getElementById('results-container').innerHTML = '';
-            updateControlButtons();
-            renderExercises();
         }
 
         // Inicializace
         updateControlButtons();
-        renderExercises();
+        generateNewTest();
     </script>
 </body>
 </html>
