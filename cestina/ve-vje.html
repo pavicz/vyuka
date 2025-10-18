@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procvičování Vě/vje</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .mode-selector {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .mode-selector label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .mode-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .mode-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .exercise-card {
+            background: var(--bg-light);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .exercise-header {
+            display: flex;
+            align-items: start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .exercise-number {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2em;
+            min-width: 30px;
+        }
+
+        .exercise-text {
+            font-size: 1.3em;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .input-area input {
+            padding: 12px 20px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            font-size: 1em;
+            width: 150px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .input-area input:disabled {
+            background: var(--white);
+            cursor: not-allowed;
+        }
+
+        .input-area input.correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .input-area input.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .buttons-area {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .option-btn {
+            padding: 15px 30px;
+            border: 2px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--bg-light);
+            transform: translateY(-2px);
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .option-btn.correct {
+            background: #4CAF50;
+            color: var(--white);
+            border-color: #4CAF50;
+        }
+
+        .option-btn.incorrect {
+            background: #f44336;
+            color: var(--white);
+            border-color: #f44336;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .hint {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .feedback {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            color: #4CAF50;
+        }
+
+        .feedback.incorrect {
+            color: #f44336;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-success:hover {
+            background: #388E3C;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .results-card {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+            border: 3px solid var(--primary);
+        }
+
+        .results-card h3 {
+            color: var(--primary);
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .results-stats {
+            font-size: 1.3em;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .results-percentage {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 15px 0;
+        }
+
+        .results-message {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .results-message.excellent {
+            color: #4CAF50;
+        }
+
+        .results-message.good {
+            color: #2196F3;
+        }
+
+        .results-message.practice {
+            color: #FF9800;
+        }
+
+        .info-section {
+            background: var(--bg-light);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 40px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .info-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .info-section ul {
+            list-style-position: inside;
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+
+        .info-section strong {
+            color: var(--primary);
+        }
+
+        .question-progress {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .answer-feedback {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .answer-feedback .feedback-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .answer-feedback .correct-sentence {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            line-height: 1.8;
+        }
+
+        .answer-feedback .user-answer {
+            background: #ffebee;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f44336;
+            color: #c62828;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .exercise-card {
+                padding: 20px;
+            }
+
+            .exercise-text {
+                font-size: 1.1em;
+            }
+
+            .option-btn {
+                font-size: 1em;
+                padding: 12px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="index.html">Čeština</a>
+            <span>›</span>
+            <a href="pravopis.html">Pravopis</a>
+            <span>›</span>
+            <strong>Vě / vje</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1> Procvičování Vě / vje</h1>
+                <p class="subtitle">Nauč se správně psát vě nebo vje</p>
+            </header>
+
+            <div class="mode-selector">
+                <label>Režim procvičování:</label>
+                <button class="mode-btn active" onclick="setMode('input', this)">📝 Psaní</button>
+                <button class="mode-btn" onclick="setMode('buttons', this)">🎯 Tlačítka</button>
+            </div>
+
+            <div id="exercises-container"></div>
+
+            <div class="control-buttons" id="control-buttons">
+                <button class="btn btn-primary" id="check-btn" onclick="checkAnswers()">Zkontrolovat odpovědi</button>
+                <button class="btn btn-success" id="reset-btn" onclick="generateNewTest()" style="display: none;">🔄 Nový test</button>
+            </div>
+
+            <div id="results-container"></div>
+
+            <div class="info-section">
+                <h3>📖 Pravidla pro Vě / vje</h3>
+                <ul>
+                    <li><strong>Základní pravdila:</strong> v kořenu slova píšeme vždy vě. Skupinu vje píšeme pouze tehdy, když v je součástí předpony.</li>
+                    <li><strong>Bě:</strong> píšeme většinou: vědec, světlo, závěj...</li>
+                    <li><strong>Bje:</strong> píšeme u slov: vjel, vjezd, vjem...</li>
+                     <li><strong>Bě na konci slova:</strong> na konci slova píšeme vždy vě - po hlavě, v kávě, na ostrově...</li>
+                    <li>Tip: Zkus si slovo rozdělit na slabiky a poslouchat výslovnost</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Vzdělávací platforma</p>
+        </footer>
+    </div>
+
+    <script>
+        const data = [
+  { "id": 1, "text": "S_ _domitá práce", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 2, "text": "zvukové _ _my", "correct": "vje", "hint": "Dědě, tě, sobě" },
+  { "id": 3, "text": "Hančino _ _no", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 4, "text": "s_ _telný kužel", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 5, "text": "tvářila se vyzýva_ _", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 6, "text": "_ _zd do obce", "correct": "vje", "hint": "Dědě, tě, sobě" },
+  { "id": 7, "text": "typo_ _ se hodil", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 8, "text": "neparkovat u _ _zdu", "correct": "vje", "hint": "Dědě, tě, sobě" },
+  { "id": 9, "text": "_ _rtel chmele", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 10, "text": "zákaz _ _zdu", "correct": "vje", "hint": "Dědě, tě, sobě" },
+  { "id": 11, "text": "zdobené zá_ _sy", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 12, "text": "nastoupili sebe_ _domě", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 13, "text": "radostná z_ _st", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 14 "text": "na _ _ky", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 15, "text": "_ _l do dvora", "correct": "vje", "hint": "Dědě, tě, sobě" },
+  { "id": 16, "text": "po_ _řit", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 17, "text": "zá_ _je sněhu", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 18, "text": "drogo_ _ závislý", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 19, "text": "_ _ková bariera", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 20, "text": "oční _ _m", "correct": "vje", "hint": "Dědě, tě, sobě" },
+  { "id": 21, "text": "očekávaná z_ _st", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 22, "text": "hlado_ _ pokukoval", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 23, "text": "špatný _ _zd", "correct": "vje", "hint": "Dědě, tě, sobě" },
+  { "id": 24, "text": "na Já_ _", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 25, "text": "jednal dra_ _", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 26, "text": "jedl zdra_ _", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 27, "text": "zá_ _sné lůžko", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 28, "text": "suro_ _ se strkali", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 29, "text": "za_ _třit stopu", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 30, "text": "vlakové ná_ _stí", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 31, "text": "shovíva_ _", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 32, "text": "_ _dou na rampu", "correct": "vje", "hint": "Dědě, tě, sobě" },
+  { "id": 33, "text": "z_ _d", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 34, "text": "_ _šák na kabáty", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 35, "text": "_ _čný problém", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 36, "text": "po_ _sit kabát", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 37, "text": "_ _i si do vlasů", "correct": "vje", "hint": "Dědě, tě, sobě" },
+  { "id": 38, "text": "k_ _ten", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 39, "text": "_ _rozvěstové", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 40, "text": "všechny odpo_ _di", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 41, "text": "ho_ _zí svíčková", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 42, "text": "_ _decký pokus", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 43, "text": "_ _dro vody", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 44, "text": "_ _tný podmět", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 45, "text": "platil hoto_ _", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 46, "text": "úspěšný _ _dec", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 47, "text": "známá po_ _st", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 48, "text": "na _ _tvi", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 49, "text": "vysoké _ _že", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 50, "text": "h_ _zdy zářily", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 51, "text": "smyslový _ _m", "correct": "vje", "hint": "Dědě, tě, sobě" },
+  { "id": 52, "text": "operní _ _vec", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 53, "text": "děravé _ _dro", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 54, "text": "celá _ _čnost", "correct": "vě", "hint": "Dědě, tě, sobě" },
+  { "id": 55, "text": "po_ _rčivý", "correct": "vě", "hint": "Dědě, tě, sobě" }
+]
+
+;
+
+        let currentMode = 'input';
+        let answers = {};
+        let showResults = false;
+        let currentQuestionIndex = 0;
+        let buttonModeAnswered = false;
+        let currentTestQuestions = [];
+        const QUESTIONS_PER_TEST = 10;
+
+        function selectRandomQuestions(questions, count) {
+            if (questions.length <= count) {
+                return [...questions];
+            }
+            const shuffled = [...questions].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count);
+        }
+
+        function generateNewTest() {
+            currentTestQuestions = selectRandomQuestions(data, QUESTIONS_PER_TEST);
+            answers = {};
+            showResults = false;
+            currentQuestionIndex = 0;
+            buttonModeAnswered = false;
+            document.getElementById('results-container').innerHTML = '';
+            updateControlButtons();
+            renderExercises();
+        }
+
+        function getCurrentSentences() {
+            return currentTestQuestions.length > 0 ? currentTestQuestions : selectRandomQuestions(data, QUESTIONS_PER_TEST);
+        }
+
+        function setMode(mode, element) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            generateNewTest();
+        }
+
+        function renderExercises() {
+            const container = document.getElementById('exercises-container');
+            const sentences = getCurrentSentences();
+            
+            if (currentMode === 'buttons' && !showResults) {
+                if (currentQuestionIndex >= sentences.length) {
+                    showFinalResults();
+                    return;
+                }
+
+                const sentence = sentences[currentQuestionIndex];
+                const userAnswer = (answers[sentence.id] || '').toLowerCase().trim();
+                const isCorrect = userAnswer === sentence.correct.toLowerCase();
+
+                container.innerHTML = `
+                    <div class="question-progress">
+                        Otázka ${currentQuestionIndex + 1} z ${sentences.length}
+                    </div>
+                    <div class="exercise-card" style="min-height: 350px;">
+                        <div class="exercise-header">
+                            <div class="exercise-number">${currentQuestionIndex + 1}.</div>
+                            <div style="flex: 1;">
+                                <div class="exercise-text">
+                                    ${sentence.text}
+                                </div>
+                                
+                                ${!buttonModeAnswered ? `
+                                    <div class="buttons-area">
+                                        <button class="option-btn" onclick="handleButtonAnswer(${sentence.id}, 'vě')">vě</button>
+                                        <button class="option-btn" onclick="handleButtonAnswer(${sentence.id}, 'vje')">vje</button>
+                                    </div>
+                                ` : `
+                                    <div class="answer-feedback">
+                                        <div class="feedback-title" style="color: ${isCorrect ? '#4CAF50' : '#f44336'};">
+                                            ${isCorrect ? '✓ Správně!' : '✗ Špatně!'}
+                                        </div>
+                                        
+                                        <div class="correct-sentence">
+                                            <div style="margin-bottom: 10px; color: var(--text-light); font-size: 0.9em;">
+                                                ${isCorrect ? 'Tvoje odpověď:' : 'Správná odpověď:'}
+                                            </div>
+                                            ${sentence.text.replace('_ _', `<strong style="color: var(--primary);">${sentence.correct}</strong>`)}
+                                        </div>
+
+                                        ${!isCorrect ? `
+                                            <div class="user-answer">
+                                                Tvoje odpověď: ${userAnswer}
+                                            </div>
+                                        ` : ''}
+
+                                        <button class="btn btn-primary" onclick="nextQuestion()">
+                                            ${currentQuestionIndex < sentences.length - 1 ? 'Další otázka →' : 'Zobrazit výsledky'}
+                                        </button>
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = sentences.map((sentence, index) => {
+                const userAnswer = (answers[sentence.id] || '').toLowerCase().trim();
+                const isCorrect = userAnswer === sentence.correct.toLowerCase();
+                const isAnswered = userAnswer !== '';
+
+                return `
+                    <div class="exercise-card">
+                        <div class="exercise-header">
+                            <div class="exercise-number">${index + 1}.</div>
+                            <div style="flex: 1;">
+                                <div class="exercise-text">${sentence.text}</div>
+                                <div class="input-area">
+                                    <input 
+                                        type="text" 
+                                        id="input-${sentence.id}"
+                                        value="${answers[sentence.id] || ''}"
+                                        ${showResults ? 'disabled' : ''}
+                                        class="${showResults ? (isCorrect ? 'correct' : (isAnswered ? 'incorrect' : '')) : ''}"
+                                        placeholder="..."
+                                        onchange="handleAnswer(${sentence.id}, this.value)"
+                                    />
+                                    ${showResults ? `
+                                        <span class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                                            ${isCorrect ? '✓' : `✗ Správně: ${sentence.correct}`}
+                                        </span>
+                                    ` : ''}
+                                </div>
+                                ${!showResults ? `<div class="hint">💡 ${sentence.hint}</div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function handleAnswer(id, value) {
+            answers[id] = value;
+            if (!showResults) {
+                renderExercises();
+            }
+        }
+
+        function handleButtonAnswer(id, value) {
+            answers[id] = value;
+            buttonModeAnswered = true;
+            renderExercises();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            buttonModeAnswered = false;
+            renderExercises();
+        }
+
+        function showFinalResults() {
+            const sentences = getCurrentSentences();
+            let correct = 0;
+            
+            sentences.forEach(sentence => {
+                const userAnswer = (answers[sentence.id] || '').toLowerCase().trim();
+                if (userAnswer === sentence.correct.toLowerCase()) {
+                    correct++;
+                }
+            });
+
+            const total = sentences.length;
+            const percentage = Math.round((correct / total) * 100);
+
+            let message = '';
+            let messageClass = '';
+            if (percentage === 100) {
+                message = '🎉 Výborně! Všechno správně!';
+                messageClass = 'excellent';
+            } else if (percentage >= 80) {
+                message = '👍 Velmi dobře! Ještě trochu procvičit!';
+                messageClass = 'good';
+            } else {
+                message = '💪 Nezapomeň si zopakovat pravidla!';
+                messageClass = 'practice';
+            }
+
+            document.getElementById('exercises-container').innerHTML = `
+                <div class="results-card">
+                    <h3>🏆 Výsledek testu</h3>
+                    <div class="results-stats">
+                        Správně: <strong>${correct}</strong> z <strong>${total}</strong>
+                    </div>
+                    <div class="results-percentage">${percentage}%</div>
+                    <div class="results-message ${messageClass}">${message}</div>
+                    <div style="margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="generateNewTest()">
+                            🔄 Nový test (10 nových otázek)
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('control-buttons').style.display = 'none';
+            showResults = true;
+        }
+
+        function checkAnswers() {
+            const sentences = getCurrentSentences();
+            let correct = 0;
+            
+            sentences.forEach(sentence => {
+                const userAnswer = (answers[sentence.id] || '').toLowerCase().trim();
+                if (userAnswer === sentence.correct.toLowerCase()) {
+                    correct++;
+                }
+            });
+
+            const total = sentences.length;
+            const percentage = Math.round((correct / total) * 100);
+
+            showResults = true;
+            document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('reset-btn').style.display = 'inline-flex';
+
+            let message = '';
+            let messageClass = '';
+            if (percentage === 100) {
+                message = '🎉 Výborně! Všechno správně!';
+                messageClass = 'excellent';
+            } else if (percentage >= 80) {
+                message = '👍 Velmi dobře! Ještě trochu procvičit!';
+                messageClass = 'good';
+            } else {
+                message = '💪 Nezapomeň si zopakovat pravidla!';
+                messageClass = 'practice';
+            }
+
+            document.getElementById('results-container').innerHTML = `
+                <div class="results-card">
+                    <h3>🏆 Výsledek testu</h3>
+                    <div class="results-stats">
+                        Správně: <strong>${correct}</strong> z <strong>${total}</strong>
+                    </div>
+                    <div class="results-percentage">${percentage}%</div>
+                    <div class="results-message ${messageClass}">${message}</div>
+                </div>
+            `;
+
+            renderExercises();
+        }
+
+        function updateControlButtons() {
+            const checkBtn = document.getElementById('check-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const controlButtons = document.getElementById('control-buttons');
+            
+            if (currentMode === 'buttons') {
+                controlButtons.style.display = 'none';
+            } else {
+                controlButtons.style.display = 'flex';
+                checkBtn.style.display = showResults ? 'none' : 'inline-flex';
+                resetBtn.style.display = showResults ? 'inline-flex' : 'none';
+            }
+        }
+
+        // Inicializace
+        updateControlButtons();
+        generateNewTest();
+    </script>
+</body>
+</html>
