@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procvičování pravopisu - Bě/bje, mě/mně, vě/vje, pě</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .mode-selector {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .mode-selector label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .mode-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .mode-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .tab-btn:hover {
+            background: var(--bg-light);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .exercise-card {
+            background: var(--bg-light);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .exercise-header {
+            display: flex;
+            align-items: start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .exercise-number {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2em;
+            min-width: 30px;
+        }
+
+        .exercise-text {
+            font-size: 1.1em;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .input-area input {
+            padding: 12px 20px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            font-size: 1em;
+            width: 150px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .input-area input:disabled {
+            background: var(--white);
+            cursor: not-allowed;
+        }
+
+        .input-area input.correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .input-area input.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .buttons-area {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .option-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--bg-light);
+            transform: translateY(-2px);
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .option-btn.correct {
+            background: #4CAF50;
+            color: var(--white);
+            border-color: #4CAF50;
+        }
+
+        .option-btn.incorrect {
+            background: #f44336;
+            color: var(--white);
+            border-color: #f44336;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .hint {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .feedback {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            color: #4CAF50;
+        }
+
+        .feedback.incorrect {
+            color: #f44336;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-success:hover {
+            background: #388E3C;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .results-card {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+            border: 3px solid var(--primary);
+        }
+
+        .results-card h3 {
+            color: var(--primary);
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .results-stats {
+            font-size: 1.3em;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .results-percentage {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 15px 0;
+        }
+
+        .results-message {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .results-message.excellent {
+            color: #4CAF50;
+        }
+
+        .results-message.good {
+            color: #2196F3;
+        }
+
+        .results-message.practice {
+            color: #FF9800;
+        }
+
+        .info-section {
+            background: var(--bg-light);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 40px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .info-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .info-section h4 {
+            color: var(--primary-dark);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .info-section ul {
+            list-style-position: inside;
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .tabs {
+                gap: 8px;
+            }
+
+            .tab-btn {
+                padding: 10px 16px;
+                font-size: 0.9em;
+            }
+
+            .exercise-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="index.html">Čeština</a>
+            <span>›</span>
+            <strong>Pravopis</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1>✍️ Procvičování pravopisu</h1>
+                <p class="subtitle">Bě/bje, mě/mně, vě/vje a pě</p>
+            </header>
+
+            <div class="mode-selector">
+                <label>Režim procvičování:</label>
+                <button class="mode-btn active" onclick="setMode('input', this)">📝 Psaní</button>
+                <button class="mode-btn" onclick="setMode('buttons', this)">🎯 Tlačítka</button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="setTab('be-bje', this)">Bě / bje</button>
+                <button class="tab-btn" onclick="setTab('me-mne', this)">Mě / mně</button>
+                <button class="tab-btn" onclick="setTab('ve-vje', this)">Vě / vje</button>
+                <button class="tab-btn" onclick="setTab('pe', this)">Pě</button>
+                <button class="tab-btn" onclick="setTab('all', this)">Vše dohromady</button>
+            </div>
+
+            <div id="exercises-container"></div>
+
+            <div class="control-buttons">
+                <button class="btn btn-primary" id="check-btn" onclick="checkAnswers()">Zkontrolovat odpovědi</button>
+                <button class="btn btn-success" id="reset-btn" onclick="resetQuiz()" style="display: none;">🔄 Zkusit znovu</button>
+            </div>
+
+            <div id="results-container"></div>
+
+            <div class="info-section">
+                <h3>📖 Pravidla</h3>
+                
+                <h4>Bě nebo bje?</h4>
+                <ul>
+                    <li><strong>Bě</strong> píšeme většinou: o sobě, k tobě, k dědě, potřebuji, líbí se</li>
+                    <li><strong>Bje</strong> píšeme u slov: kobjec, objed, pobjeda, skbjela, zkoubjka (dříve kobec, obed...)</li>
+                </ul>
+                
+                <h4>Mě nebo mně?</h4>
+                <ul>
+                    <li><strong>Mě</strong> píšeme po předložkách: pro mě, na mě, v mě, u mě, beze mě</li>
+                    <li><strong>Mě</strong> ve 4. pádě: vidíš mě, zeptej se mě</li>
+                    <li><strong>Mně</strong> ve 3. a 6. pádě: dej mně, při mně, o mně, k mně</li>
+                </ul>
+
+                <h4>Vě nebo vje?</h4>
+                <ul>
+                    <li><strong>Vě</strong> píšeme většinou: prvě, ověs, návěs, povětří, závěr</li>
+                    <li><strong>Vje</strong> píšeme u slov: vjezd, vjelet, dvjeře (dveře), kvjeten (květen)</li>
+                </ul>
+
+                <h4>Pě</h4>
+                <ul>
+                    <li><strong>Pě</strong> se píše ve všech tvarech (neexistuje "pje")</li>
+                    <li>Příklady: pěkný, zápěstí, kopěčky, roztomilý úpěl, tělocvična</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Vzdělávací platforma</p>
+        </footer>
+    </div>
+
+    <script>
+        const data = {
+            'be-bje': [
+                { id: 1, text: "Musím se o to _ _ postarat.", correct: "bě", hint: "Dědě, tě, sobě" },
+                { id: 2, text: "Na po_ _ čce jsem si koupil známky.", correct: "bje", hint: "Kobje-r, obje-d" },
+                { id: 3, text: "Těším se na to plav_ _ ní.", correct: "bje", hint: "Kobje-r, obje-d" },
+                { id: 4, text: "Při_ _ hl jsem pozdě.", correct: "bě", hint: "Dědě, tě, sobě" },
+                { id: 5, text: "Babička mi vyprávěla o so_ _ .", correct: "bě", hint: "Dědě, tě, sobě" },
+                { id: 6, text: "Ve sky_ _ li byla tajná místnost.", correct: "bje", hint: "Kobje-r, obje-d" },
+                { id: 7, text: "Potře_ _ uji nové tužky.", correct: "bě", hint: "Potřebo-vat" },
+                { id: 8, text: "O_ _ d se podává v poledne.", correct: "bje", hint: "Kobje-r, obje-d" },
+                { id: 9, text: "To se mi nelí_ _ .", correct: "bě", hint: "Líbit" },
+                { id: 10, text: "Zkou_ _ l jsem to několikrát.", correct: "bje", hint: "Zkouška, zkoušet" },
+                { id: 11, text: "O to_ _ si říkám každý den.", correct: "bě", hint: "Dědě, tě, sobě" },
+                { id: 12, text: "Ko_ _ rec se nám rozbil.", correct: "bje", hint: "Kobje-r" }
+            ],
+            'me-mne': [
+                { id: 1, text: "Dej to _ _ .", correct: "mně", hint: "komu?" },
+                { id: 2, text: "Poslali to _ _ .", correct: "mně", hint: "komu?" },
+                { id: 3, text: "Půjdeš se _ _ _?", correct: "mnou", hint: "s kým?" },
+                { id: 4, text: "Máš něco pro _ _ _?", correct: "mě", hint: "pro koho?" },
+                { id: 5, text: "Mluvil o _ _ _.", correct: "mně", hint: "o kom?" },
+                { id: 6, text: "Díváš se na _ _ _?", correct: "mě", hint: "na koho?" },
+                { id: 7, text: "Může být v _ _ _ klid.", correct: "mě", hint: "v kom?" },
+                { id: 8, text: "Zeptej se _ _ _.", correct: "mě", hint: "koho?" },
+                { id: 9, text: "Pomůžeš _ _ _?", correct: "mi", hint: "komu?" },
+                { id: 10, text: "Při _ _ _ seděla babička.", correct: "mně", hint: "při kom?" },
+                { id: 11, text: "Ke _ _ _ přišel kamarád.", correct: "mně", hint: "ke komu?" },
+                { id: 12, text: "Stůj u _ _ _.", correct: "mě", hint: "u koho?" }
+            ],
+            've-vje': [
+                { id: 1, text: "Chodím do prv_ _ ho ročníku.", correct: "vě", hint: "Prv-ní" },
+                { id: 2, text: "Zítra pojedeme na _ _ let.", correct: "vje", hint: "Vje-jet, výlet" },
+                { id: 3, text: "Dědeček pracuje na po_ _ tří.", correct: "vě", hint: "Pov-ětří" },
+                { id: 4, text: "Koupili jsme nový ná_ _ s.", correct: "vě", hint: "Nav-ěsit" },
+                { id: 5, text: "Pod_ _ ra se otevírá směrem ven.", correct: "vje", hint: "Dvje-ře" },
+                { id: 6, text: "Přečetl jsem si o_ _ st.", correct: "vě", hint: "Ov-ěstit" },
+                { id: 7, text: "Mám rád trav_ _ ční měsíc.", correct: "vje", hint: "Kvje-ten" },
+                { id: 8, text: "Vím to na_ _ rno.", correct: "vě", hint: "Nav-ěrno" },
+                { id: 9, text: "Zhlédl jsem zá_ _ r.", correct: "vě", hint: "Záv-ěr" },
+                { id: 10, text: "Dostal jsem od_ _ tví k narozeninám.", correct: "vě", hint: "Odv-ětit" },
+                { id: 11, text: "Zakoupil jsem _ _ nec.", correct: "vě", hint: "V-ěnec" },
+                { id: 12, text: "Prohráli jsme v první po_ _ dě.", correct: "vě", hint: "Pov-ěda" }
+            ],
+            'pe': [
+                { id: 1, text: "Koupili jsme do zahrady ká_ _.", correct: "pě", hint: "Kap-ě" },
+                { id: 2, text: "Máme krásný zá_ _ s.", correct: "pě", hint: "Záp-ěs" },
+                { id: 3, text: "Děti si hrají v pís_ _čku.", correct: "pě", hint: "Písek" },
+                { id: 4, text: "V obchodě mají ros_ _ tý košíček.", correct: "pě", hint: "Rosp-ětý" },
+                { id: 5, text: "Máme nový ko_ _ ček na dlažbu.", correct: "pě", hint: "Kop-ěček" },
+                { id: 6, text: "Babička uvařila kus zá_ _ nky.", correct: "pě", hint: "Záp-ěnka" },
+                { id: 7, text: "Zahra_ _ l jsem na klavír.", correct: "pě", hint: "Zahrap-ět" },
+                { id: 8, text: "To je krásný ú_ _ l!", correct: "pě", hint: "Úp-ěl" },
+                { id: 9, text: "Máme na zahradě ro_ _ tou lilii.", correct: "pě", hint: "Rosp-ětý" },
+                { id: 10, text: "Chodím cvičit do tělocvi_ _ ny.", correct: "pě", hint: "Tělocvik" },
+                { id: 11, text: "Dal jsem si výbo_ _ rný oběd.", correct: "pě", hint: "Výbor" },
+                { id: 12, text: "Musíme poro_ _ tý plot.", correct: "pě", hint: "Rosp-ětý" }
+            ]
+        };
+
+        let currentTab = 'be-bje';
+        let currentMode = 'input';
+        let answers = {};
+        let showResults = false;
+        let currentQuestionIndex = 0;
+        let buttonModeAnswered = false;
+        let currentTestQuestions = [];
+        const QUESTIONS_PER_TEST = 10;
+
+        const buttonOptions = {
+            'be-bje': ['bě', 'bje'],
+            've-vje': ['vě', 'vje'],
+            'pe': ['pě'],
+            'me-mne': ['mě', 'mně', 'mi', 'mnou'],
+            'all': ['bě', 'bje', 'vě', 'vje', 'pě', 'mě', 'mně', 'mi', 'mnou']
+        };
+
+        function setMode(mode, element) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            resetQuiz();
+        }
+
+        function setTab(tab, element) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            resetQuiz();
+        }
+
+        function getCurrentSentences() {
+            if (currentTab === 'all') {
+                return [...data['be-bje'], ...data['me-mne'], ...data['ve-vje'], ...data['pe']];
+            }
+            return data[currentTab];
+        }
+
+        function renderExercises() {
+            const container = document.getElementById('exercises-container');
+            const sentences = getCurrentSentences();
+            
+            // Režim tlačítek - zobrazit jen jednu otázku
+            if (currentMode === 'buttons' && !showResults) {
+                if (currentQuestionIndex >= sentences.length) {
+                    // Všechny otázky zodpovězeny
+                    showFinalResults();
+                    return;
+                }
+
+                const sentence = sentences[currentQuestionIndex];
+                const userAnswer = (answers[sentence.id] || '').toLowerCase().trim();
+                const isCorrect = userAnswer === sentence.correct.toLowerCase();
+                const options = buttonOptions[currentTab];
+
+                container.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 20px; color: var(--text-light);">
+                        Otázka ${currentQuestionIndex + 1} z ${sentences.length}
+                    </div>
+                    <div class="exercise-card" style="min-height: 300px;">
+                        <div class="exercise-header">
+                            <div class="exercise-number">${currentQuestionIndex + 1}.</div>
+                            <div style="flex: 1;">
+                                <div class="exercise-text" style="font-size: 1.3em; margin-bottom: 25px;">
+                                    ${sentence.text}
+                                </div>
+                                
+                                ${!buttonModeAnswered ? `
+                                    <div class="buttons-area" style="justify-content: center;">
+                                        ${options.map(option => `
+                                            <button 
+                                                class="option-btn"
+                                                style="font-size: 1.2em; padding: 15px 30px;"
+                                                onclick="handleButtonAnswer(${sentence.id}, '${option}')"
+                                            >
+                                                ${option}
+                                            </button>
+                                        `).join('')}
+                                    </div>
+                                ` : `
+                                    <div style="text-align: center;">
+                                        <div style="margin-bottom: 20px;">
+                                            <span style="font-size: 1.3em; font-weight: 600; color: ${isCorrect ? '#4CAF50' : '#f44336'};">
+                                                ${isCorrect ? '✓ Správně!' : '✗ Špatně!'}
+                                            </span>
+                                        </div>
+                                        
+                                        <div style="background: var(--bg-light); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                                            <div style="margin-bottom: 10px; color: var(--text-light);">
+                                                ${isCorrect ? 'Tvoje odpověď:' : 'Správná odpověď:'}
+                                            </div>
+                                            <div style="font-size: 1.3em; line-height: 1.8;">
+                                                ${sentence.text.replace('_ _', `<strong style="color: var(--primary);">${sentence.correct}</strong>`).replace('_ _ _', `<strong style="color: var(--primary);">${sentence.correct}</strong>`)}
+                                            </div>
+                                        </div>
+
+                                        ${!isCorrect ? `
+                                            <div style="background: #ffebee; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #f44336;">
+                                                <div style="color: #c62828; font-weight: 600;">Tvoje odpověď: ${userAnswer}</div>
+                                            </div>
+                                        ` : ''}
+
+                                        <button 
+                                            class="btn btn-primary"
+                                            onclick="nextQuestion()"
+                                            style="font-size: 1.1em;"
+                                        >
+                                            ${currentQuestionIndex < sentences.length - 1 ? 'Další otázka →' : 'Zobrazit výsledky'}
+                                        </button>
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Režim psaní - zobrazit všechny otázky
+            container.innerHTML = sentences.map((sentence, index) => {
+                const userAnswer = (answers[sentence.id] || '').toLowerCase().trim();
+                const isCorrect = userAnswer === sentence.correct.toLowerCase();
+                const isAnswered = userAnswer !== '';
+
+                return `
+                    <div class="exercise-card">
+                        <div class="exercise-header">
+                            <div class="exercise-number">${index + 1}.</div>
+                            <div style="flex: 1;">
+                                <div class="exercise-text">${sentence.text}</div>
+                                <div class="input-area">
+                                    <input 
+                                        type="text" 
+                                        id="input-${sentence.id}"
+                                        value="${answers[sentence.id] || ''}"
+                                        ${showResults ? 'disabled' : ''}
+                                        class="${showResults ? (isCorrect ? 'correct' : (isAnswered ? 'incorrect' : '')) : ''}"
+                                        placeholder="..."
+                                        onchange="handleAnswer(${sentence.id}, this.value)"
+                                    />
+                                    ${showResults ? `
+                                        <span class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                                            ${isCorrect ? '✓' : `✗ Správně: ${sentence.correct}`}
+                                        </span>
+                                    ` : ''}
+                                </div>
+                                ${!showResults ? `<div class="hint">💡 ${sentence.hint}</div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function handleAnswer(id, value) {
+            answers[id] = value;
+            if (!showResults) {
+                renderExercises();
+            }
+        }
+
+        function handleButtonAnswer(id, value) {
+            answers[id] = value;
+            buttonModeAnswered = true;
+            renderExercises();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            buttonModeAnswered = false;
+            renderExercises();
+        }
+
+        function showFinalResults() {
+            const sentences = getCurrentSentences();
+            let correct = 0;
+            
+            sentences.forEach(sentence => {
+                const userAnswer = (answers[sentence.id] || '').toLowerCase().trim();
+                if (userAnswer === sentence.correct.toLowerCase()) {
+                    correct++;
+                }
+            });
+
+            const total = sentences.length;
+            const percentage = Math.round((correct / total) * 100);
+
+            let message = '';
+            let messageClass = '';
+            if (percentage === 100) {
+                message = '🎉 Výborně! Všechno správně!';
+                messageClass = 'excellent';
+            } else if (percentage >= 80) {
+                message = '👍 Velmi dobře! Ještě trochu procvičit!';
+                messageClass = 'good';
+            } else {
+                message = '💪 Nezapomeň si zopakovat pravidla!';
+                messageClass = 'practice';
+            }
+
+            document.getElementById('exercises-container').innerHTML = `
+                <div class="results-card">
+                    <h3>🏆 Výsledek</h3>
+                    <div class="results-stats">
+                        Správně: <strong>${correct}</strong> z <strong>${total}</strong>
+                    </div>
+                    <div class="results-percentage">${percentage}%</div>
+                    <div class="results-message ${messageClass}">${message}</div>
+                </div>
+            `;
+
+            document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('reset-btn').style.display = 'inline-flex';
+            showResults = true;
+        }
+
+        function checkAnswers() {
+            const sentences = getCurrentSentences();
+            let correct = 0;
+            
+            sentences.forEach(sentence => {
+                const userAnswer = (answers[sentence.id] || '').toLowerCase().trim();
+                if (userAnswer === sentence.correct.toLowerCase()) {
+                    correct++;
+                }
+            });
+
+            const total = sentences.length;
+            const percentage = Math.round((correct / total) * 100);
+
+            showResults = true;
+            document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('reset-btn').style.display = 'inline-flex';
+
+            let message = '';
+            let messageClass = '';
+            if (percentage === 100) {
+                message = '🎉 Výborně! Všechno správně!';
+                messageClass = 'excellent';
+            } else if (percentage >= 80) {
+                message = '👍 Velmi dobře! Ještě trochu procvičit!';
+                messageClass = 'good';
+            } else {
+                message = '💪 Nezapomeň si zopakovat pravidla!';
+                messageClass = 'practice';
+            }
+
+            document.getElementById('results-container').innerHTML = `
+                <div class="results-card">
+                    <h3>🏆 Výsledek</h3>
+                    <div class="results-stats">
+                        Správně: <strong>${correct}</strong> z <strong>${total}</strong>
+                    </div>
+                    <div class="results-percentage">${percentage}%</div>
+                    <div class="results-message ${messageClass}">${message}</div>
+                </div>
+            `;
+
+            renderExercises();
+        }
+
+        function updateControlButtons() {
+            const checkBtn = document.getElementById('check-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            
+            if (currentMode === 'buttons') {
+                checkBtn.style.display = 'none';
+            } else {
+                checkBtn.style.display = showResults ? 'none' : 'inline-flex';
+            }
+            
+            resetBtn.style.display = showResults ? 'inline-flex' : 'none';
+        }
+
+        function resetQuiz() {
+            answers = {};
+            showResults = false;
+            currentQuestionIndex = 0;
+            buttonModeAnswered = false;
+            document.getElementById('check-btn').style.display = 'inline-flex';
+            document.getElementById('reset-btn').style.display = 'none';
+            document.getElementById('results-container').innerHTML = '';
+            updateControlButtons();
+            renderExercises();
+        }
+
+        // Inicializace
+        updateControlButtons();
+        renderExercises();
+    </script>
+</body>
+</html>
