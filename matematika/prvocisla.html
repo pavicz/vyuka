@@ -534,6 +534,7 @@
     </div>
 
     <script>
+        let usedNumbers = new Set();
         let stats = {
             correct: 0,
             incorrect: 0,
@@ -595,18 +596,25 @@
         }
 
         function generateFactorizationQuestion() {
-            const base = Math.floor(Math.random() * 20) + 10;
-            currentNumber = base;
-            currentFactors = primeFactorization(currentNumber);
+    // Generuj unikátní číslo, které ještě nebylo použito
+    let attempts = 0;
+    do {
+        currentNumber = Math.floor(Math.random() * 989) + 10; // 10 až 999
+        attempts++;
+        if (attempts > 100) break; // Bezpečnostní pojistka
+    } while (usedNumbers.has(currentNumber));
+    
+    usedNumbers.add(currentNumber);
+    currentFactors = primeFactorization(currentNumber);
 
-            document.getElementById('factorQuestionNum').textContent = `Otázka ${stats.current}`;
-            document.getElementById('factorNumber').textContent = currentNumber;
-            document.getElementById('factorInput').value = '';
-            document.getElementById('factorFeedback').classList.add('hidden');
-            document.getElementById('factorResult').classList.add('hidden');
-            document.getElementById('nextFactorBtn').classList.add('hidden');
-            document.getElementById('factorInput').disabled = false;
-        }
+    document.getElementById('factorQuestionNum').textContent = `Otázka ${stats.current}`;
+    document.getElementById('factorNumber').textContent = currentNumber;
+    document.getElementById('factorInput').value = '';
+    document.getElementById('factorFeedback').classList.add('hidden');
+    document.getElementById('factorResult').classList.add('hidden');
+    document.getElementById('nextFactorBtn').classList.add('hidden');
+    document.getElementById('factorInput').disabled = false;
+}
 
         function checkPrime(userAnswer) {
             const isCorrect = userAnswer === isPrime(currentNumber);
@@ -701,25 +709,26 @@
         }
 
         function changeMode(mode) {
-            currentMode = mode;
-            stats.current = 1;
-            
-            document.querySelectorAll('.mode-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            event.target.closest('.mode-btn').classList.add('active');
+    currentMode = mode;
+    stats.current = 1;
+    usedNumbers.clear(); // Resetuj použitá čísla
+    
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    event.target.closest('.mode-btn').classList.add('active');
 
-            if (mode === 'recognition') {
-                document.getElementById('recognitionMode').classList.remove('hidden');
-                document.getElementById('factorizationMode').classList.add('hidden');
-                generateRecognitionQuestion();
-            } else {
-                document.getElementById('recognitionMode').classList.add('hidden');
-                document.getElementById('factorizationMode').classList.remove('hidden');
-                generateFactorizationQuestion();
-            }
-        }
+    if (mode === 'recognition') {
+        document.getElementById('recognitionMode').classList.remove('hidden');
+        document.getElementById('factorizationMode').classList.add('hidden');
+        generateRecognitionQuestion();
+    } else {
+        document.getElementById('recognitionMode').classList.add('hidden');
+        document.getElementById('factorizationMode').classList.remove('hidden');
+        generateFactorizationQuestion();
+    }
+}
 
         function toggleTheory() {
             const content = document.getElementById('theoryContent');
