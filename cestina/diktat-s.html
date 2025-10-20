@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diktát po M - Vyjmenovaná slova</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --success: #4CAF50;
+            --error: #f44336;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .exercise-area {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .question-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .dictation-text {
+            font-size: 1.3em;
+            line-height: 2;
+            text-align: justify;
+            margin: 30px 0;
+        }
+
+        .dictation-gap {
+            display: inline-block;
+            min-width: 30px;
+            padding: 2px 8px;
+            border-bottom: 3px solid var(--primary);
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 0 2px;
+        }
+
+        .dictation-gap:hover {
+            background: #e8f5e9;
+            border-bottom-width: 4px;
+        }
+
+        .dictation-gap.filled {
+            background: #e3f2fd;
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .dictation-gap.correct {
+            background: #e8f5e9;
+            color: var(--success);
+            border-bottom-color: var(--success);
+        }
+
+        .dictation-gap.incorrect {
+            background: #ffebee;
+            color: var(--error);
+            border-bottom-color: var(--error);
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .popup-title {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .popup-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .popup-btn {
+            padding: 25px;
+            font-size: 2em;
+            font-weight: 600;
+            border: 3px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .popup-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: scale(1.05);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            cursor: pointer;
+        }
+
+        .check-btn {
+            display: block;
+            width: 250px;
+            margin: 30px auto;
+            padding: 18px;
+            font-size: 1.2em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .check-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .next-btn {
+            display: block;
+            width: 220px;
+            margin: 20px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .dictation-text {
+                font-size: 1.1em;
+            }
+
+            .popup-btn {
+                font-size: 1.5em;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="index.html">Čeština</a>
+            <span>›</span>
+            <a href="diktaty.html">Diktáty</a>
+            <span>›</span>
+            <strong>Písmeno M</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1>📖 Diktát po M</h1>
+                <p class="subtitle">Klikni na podtržítka a vyber správné písmeno</p>
+            </header>
+
+            <div class="exercise-area">
+                <div class="question-header">
+                    <div style="color: var(--text-light); font-size: 0.9em;">
+                        💡 Klikni na každé podtržítko a vyber Y/Ý nebo I/Í
+                    </div>
+                </div>
+
+                <div class="dictation-text" id="dictationText">
+                    <!-- Dynamicky generováno -->
+                </div>
+
+                <button id="checkBtn" class="check-btn hidden">
+                    Zkontrolovat vše
+                </button>
+
+                <div id="feedback" class="feedback hidden"></div>
+                <button id="nextBtn" class="next-btn hidden">
+                    Nový diktát →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup" class="popup hidden">
+        <div class="popup-title">Vyber správné písmeno:</div>
+        <div class="popup-buttons">
+            <button class="popup-btn" data-answer="y">Y/Ý</button>
+            <button class="popup-btn" data-answer="i">I/Í</button>
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay hidden"></div>
+
+    <script>
+        const dictationTexts = [
+            {
+                text: "Děda si hrál s malým s_nkem a vnoučaty. Už jsme se nas_tili s_rovými topinkami. S_tá (výrazná) modrá barva mi šíleně sluší. Na stole ležely s_rečky a s_rky. Zlos_n s_dlil v opuštěném domě. Po jídle jsem byl dos_ta nas_cen a už nemám hlad. Odložil jsem s_rup na stůl vedle talíře. Malý s_n se s_rou (chemický prvek) by mohl způsobit neštěstí.",
+                answers: ['y', 'y', 'y', 'y', 'y', 'i', 'y', 'i', 'y', 'y', 'i', 'y', 'y'],
+                words: ['synkem', 'nasytili', 'sýrovými', 'Sytá', 'syrečky', 'sirky', 'Zlosyn', 'sídlil', 'dosyta', 'nasycen', 'sirup', 'syn', 'sírou']
+            },
+
+             {
+                text: "S_nem mého bratra je můj s_novec. S_ra (chemický prvek) je velmi žlutá, ale s_rová omáčka má jinou barvu. Venku je s_chravé a vlhké počasí, zůstaň doma. Us_chající stromy musíme zalévat. To s_rové vejce není k jídlu, uvař ho. S_rotek si oblíbil syrovou zeleninu. S_rové brambory nechutnají vůbec dobře. S_la větru se s_lila a lámala stromy. Můj s_n sílí každým dnem. ",
+                answers: ['y', 'y', 'i', 'y', 'y', 'y', 'y', 'i', 'y', 'i', 'i', 'y'],
+                words: ['Synem', 'synovec', 'Síra', 'sýrová', 'sychravé', 'Usychající', 'syrové', 'Sirotek', 'Syrové', 'Síla', 'sílila', 'syn']
+            },
+
+
+ {
+                text: "Malý s_ček se usadil na střeše domu a s_čkoval. S_kora modřinka je oblíbený ptáček. S_sel si s_slí zásoby potravy na zimu. Slyšeli jsme, jak ten člověk úzkostně s_pal. Viděl jsem s_ť na chytání sýkorek. S_korka s_dli ve speciální budce. Ten s_sel vypadá, že je už s_tý.",
+                answers: ['y', 'y', 'y', 'y', 'y', 'i', 'i', 'y', 'i', 'y', 'y'],
+                words: ['sýček', 'sýčkoval', 'Sýkora', 'Sysel', 'syslí', 'sípal', 'síť', 'Sýkorka', 'sídlí', 'sysel', 'sytý']
+            },
+
+
+             {
+        text: "Do s_pky je potřeba nas_pat obilí. Had začal s_čet, když se cítil ohrožen. Půda byla s_pká a suchá, snadno se drolila. Zás_p na rány je potřeba nas_pat opatrně. Dětské os_pky (nemoc) jsou nepříjemné.S_slové jsou chráněni, jejich počet s_lí. Jeho tiché s_pání bylo známkou nemoci. ",
+        answers: ['y', 'y', 'y', 'y', 'y', 'y', 'y', 'y', 'i', 'i', 'i'],
+        words: ['sýpky', 'nasypat', 'syčet',  'sypká', 'Zásyp', 'nasypat', 'osypky', 'Syslové', 'sílí', 'sípání']
+    },
+
+
+             {
+                text: "S_novec přijel ze S_rie. S_rař používá s_řidlo k výrobě s_rů. Málo zralý plod je vždy s_rový. Voda se v poušti rychle zas_chá. S_chravo dnes panuje po celém s_dlíšti. Byl zraněný, jen s_pal a nemohl mluvit. S_slí nora byla plná s_rových plodů.  ",
+                answers: ['y', 'y', 'y', 'y', 'y', 'y', 'y', 'y', 'i', 'i', 'y', 'y'],
+                words: ['Synovec', 'Sýrie', 'Sýrař', 'syřidlo', 'sýrů', 'syrový', 'zasychá', 'Sychravo', 'sídlišti', 'sípal', 'Syslí', 'syrových']
+            },
+
+   {
+        text: "S_čivý zvuk unikající páry se rozléhal dílnou. Nas_pal jsem s_pký písek do dětského hřiště. Slyšeli jsme s_čka houkat v noci. S_syfos (postava z mytologie) byl odsouzen k věčnému trápení. V s_rové hlíně našel poklad. To je os_řelý kraj, kde všechno usychá. Ta dívka má tak s_lná ramena. Potřeboval s_lu, aby se uzdravil. Na silnici je potřeba pos_pat štěrk. ",
+        answers: ['y', 'y', 'y', 'y', 'i', 'y', 'i', 'i', 'i', 'y'],
+        words: ['Syčivý', 'Nasypal', 'sypký', 'sýčka', 'Sisyfos', 'syrové', 'osiřelý', 'silná', 'sílu', 'posypat']
+    }
+
+        ];
+
+        let currentDictation = null;
+        let dictationAnswers = [];
+        let currentGapIndex = null;
+        let gapElements = [];
+
+        function generateDictation() {
+            currentDictation = dictationTexts[Math.floor(Math.random() * dictationTexts.length)];
+            dictationAnswers = new Array(currentDictation.answers.length).fill(null);
+            gapElements = [];
+            
+            const container = document.getElementById('dictationText');
+            container.innerHTML = '';
+            
+            let gapIndex = 0;
+            const parts = currentDictation.text.split('_');
+            
+            parts.forEach((part, i) => {
+                const span = document.createElement('span');
+                span.textContent = part;
+                container.appendChild(span);
+                
+                if (i < parts.length - 1) {
+                    const gap = document.createElement('span');
+                    gap.className = 'dictation-gap';
+                    gap.textContent = '_';
+                    gap.dataset.index = gapIndex;
+                    gapElements.push(gap);
+                    container.appendChild(gap);
+                    gapIndex++;
+                }
+            });
+            
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('checkBtn').classList.add('hidden');
+        }
+
+        function openPopup(index) {
+            currentGapIndex = index;
+            document.getElementById('popup').classList.remove('hidden');
+            document.getElementById('overlay').classList.remove('hidden');
+        }
+
+        function closePopup() {
+            document.getElementById('popup').classList.add('hidden');
+            document.getElementById('overlay').classList.add('hidden');
+            currentGapIndex = null;
+        }
+
+        function selectAnswer(answer) {
+            if (currentGapIndex === null || currentGapIndex === undefined) {
+                console.error('currentGapIndex is null/undefined');
+                return;
+            }
+            
+            if (!gapElements[currentGapIndex]) {
+                console.error('Gap element not found at index:', currentGapIndex);
+                return;
+            }
+            
+            dictationAnswers[currentGapIndex] = answer;
+            
+            const gap = gapElements[currentGapIndex];
+            gap.textContent = answer === 'y' ? 'Y' : 'I';
+            gap.classList.add('filled');
+            
+            closePopup();
+            
+            if (dictationAnswers.every(a => a !== null)) {
+                document.getElementById('checkBtn').classList.remove('hidden');
+            }
+        }
+
+        function checkDictation() {
+            let correct = 0;
+            let incorrect = 0;
+            
+            dictationAnswers.forEach((answer, index) => {
+                const gap = gapElements[index];
+                const isCorrect = answer === currentDictation.answers[index];
+                
+                gap.classList.remove('filled');
+                gap.classList.add(isCorrect ? 'correct' : 'incorrect');
+                
+                if (isCorrect) {
+                    correct++;
+                } else {
+                    incorrect++;
+                }
+                
+                const word = currentDictation.words[index];
+                const yOrI = word.match(/[yýií]/i);
+                if (yOrI) {
+                    gap.textContent = yOrI[0].toUpperCase();
+                }
+                
+                gap.onclick = null;
+                gap.style.cursor = 'default';
+            });
+            
+            const total = currentDictation.answers.length;
+            const percentage = Math.round((correct / total) * 100);
+            
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden', 'correct', 'incorrect');
+            
+            if (percentage === 100) {
+                feedback.classList.add('correct');
+                feedback.textContent = `🎉 Perfektní! Všechno správně! (${correct}/${total})`;
+            } else if (percentage >= 70) {
+                feedback.classList.add('correct');
+                feedback.textContent = `✨ Velmi dobře! ${correct} správně, ${incorrect} chybně (${percentage}%)`;
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.textContent = `💪 Zkus to znovu! ${correct} správně, ${incorrect} chybně (${percentage}%)`;
+            }
+            
+            document.getElementById('checkBtn').classList.add('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
+
+        function nextDictation() {
+            generateDictation();
+        }
+
+        // Event listenery
+        document.getElementById('overlay').addEventListener('click', closePopup);
+        document.getElementById('checkBtn').addEventListener('click', checkDictation);
+        document.getElementById('nextBtn').addEventListener('click', nextDictation);
+
+        // Delegování událostí pro mezery
+        document.getElementById('dictationText').addEventListener('click', (e) => {
+            if (e.target.classList.contains('dictation-gap')) {
+                const index = parseInt(e.target.dataset.index);
+                openPopup(index);
+            }
+        });
+
+        // Tlačítka v popup
+        document.querySelectorAll('.popup-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const answer = e.target.dataset.answer;
+                selectAnswer(answer);
+            });
+        });
+
+        // Inicializace
+        generateDictation();
+    </script>
+</body>
+</html>
