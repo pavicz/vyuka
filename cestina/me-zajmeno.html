@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procvičování zájmena JÁ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .mode-selector {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .mode-selector label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .mode-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .mode-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .exercise-card {
+            background: var(--bg-light);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .exercise-header {
+            display: flex;
+            align-items: start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .exercise-number {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2em;
+            min-width: 30px;
+        }
+
+        .exercise-text {
+            font-size: 1.3em;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .input-area input {
+            padding: 12px 20px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            font-size: 1em;
+            width: 150px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .input-area input:disabled {
+            background: var(--white);
+            cursor: not-allowed;
+        }
+
+        .input-area input.correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .input-area input.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .input-area select {
+            padding: 12px 20px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            font-size: 1em;
+            width: 100px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            background: var(--white);
+        }
+
+        .input-area select:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+        }
+
+        .input-area select:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .input-area select.correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .input-area select.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .buttons-area {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .option-btn {
+            padding: 15px 30px;
+            border: 2px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--bg-light);
+            transform: translateY(-2px);
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .option-btn.correct {
+            background: #4CAF50;
+            color: var(--white);
+            border-color: #4CAF50;
+        }
+
+        .option-btn.incorrect {
+            background: #f44336;
+            color: var(--white);
+            border-color: #f44336;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .hint {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .feedback {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            color: #4CAF50;
+        }
+
+        .feedback.incorrect {
+            color: #f44336;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-success:hover {
+            background: #388E3C;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .results-card {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+            border: 3px solid var(--primary);
+        }
+
+        .results-card h3 {
+            color: var(--primary);
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .results-stats {
+            font-size: 1.3em;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .results-percentage {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 15px 0;
+        }
+
+        .results-message {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .results-message.excellent {
+            color: #4CAF50;
+        }
+
+        .results-message.good {
+            color: #2196F3;
+        }
+
+        .results-message.practice {
+            color: #FF9800;
+        }
+
+        .info-section {
+            background: var(--bg-light);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 40px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .info-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .info-section table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .info-section th,
+        .info-section td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .info-section th {
+            background: var(--primary);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .info-section tr:hover {
+            background: #f5f5f5;
+        }
+
+        .question-progress {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .answer-feedback {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .answer-feedback .feedback-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .answer-feedback .correct-sentence {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            line-height: 1.8;
+        }
+
+        .answer-feedback .user-answer {
+            background: #ffebee;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f44336;
+            color: #c62828;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .exercise-text {
+                font-size: 1.1em;
+            }
+
+            .option-btn {
+                font-size: 1em;
+                padding: 12px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="index.html">Čeština</a>
+            <span>›</span>
+            <a href="pravopis.html">Pravopis</a>
+            <span>›</span>
+            <strong>Zájmeno JÁ</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1>👤 Procvičování zájmena JÁ</h1>
+                <p class="subtitle">Doplňovačka a určování pádů</p>
+            </header>
+
+            <div class="mode-selector">
+                <label>Typ cvičení:</label>
+                <button class="mode-btn active" onclick="setExerciseType('doplnovacka', this)">📝 Doplňovačka</button>
+                <button class="mode-btn" onclick="setExerciseType('pady', this)">🎯 Určování pádů</button>
+            </div>
+
+            <div id="exercises-container"></div>
+
+            <div class="control-buttons" id="control-buttons">
+                <button class="btn btn-primary" id="check-btn" onclick="checkAnswers()">Zkontrolovat odpovědi</button>
+                <button class="btn btn-success" id="reset-btn" onclick="generateNewTest()" style="display: none;">🔄 Nový test</button>
+            </div>
+
+            <div id="results-container"></div>
+
+            <div class="info-section">
+                <h3>📖 Skloňování zájmena JÁ</h3>
+                <table>
+                    <tr>
+                        <th>Pád</th>
+                        <th>Otázka</th>
+                        <th>Tvar</th>
+                        <th>Příklad</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1. pád</strong></td>
+                        <td>kdo?</td>
+                        <td><strong>já</strong></td>
+                        <td>Já jsemStudent.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. pád</strong></td>
+                        <td>(koho?)</td>
+                        <td><strong>mě, mne</strong></td>
+                        <td>Bojí se mě. / Všimli si mne.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. pád</strong></td>
+                        <td>komu?</td>
+                        <td><strong>mně, mi</strong></td>
+                        <td>Dej to mně. / Řekl mi pravdu.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. pád</strong></td>
+                        <td>koho?</td>
+                        <td><strong>mě, mne</strong></td>
+                        <td>Vidíš mě? / Potkali mne.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6. pád</strong></td>
+                        <td>o kom?</td>
+                        <td><strong>mně</strong></td>
+                        <td>Mluví o mně. / Myslí na mně.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7. pád</strong></td>
+                        <td>s kým?</td>
+                        <td><strong>mnou</strong></td>
+                        <td>Půjdeš se mnou?</td>
+                    </tr>
+                </table>
+                <p style="margin-top: 15px; line-height: 1.8;">
+                    <strong>Poznámka:</strong> Tvary "mě" a "mně" se liší podle pádu a přízvuku. 
+                    "Mi" je krátký nepřízvučný tvar 3. pádu. Ve 2. a 4. pádě můžeme použít "mě" i "mne" (mne je knižnější).
+                </p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Vzdělávací platforma</p>
+        </footer>
+    </div>
+
+    <script>
+        const data = {
+            doplnovacka: [
+        { id: 1, text: "Vidíš ___?", correct: "mě", pad: "4", hint: "4. pád - koho?" },
+        { id: 2, text: "Dej to ___.", correct: "mně", pad: "3", hint: "3. pád - komu?" },
+        { id: 3, text: "Půjdeš se ___?", correct: "mnou", pad: "7", hint: "7. pád - s kým?" },
+        { id: 4, text: "Mluvili o ___.", correct: "mně", pad: "6", hint: "6. pád - o kom?" },
+        { id: 5, text: "Bojí se ___.", correct: "mě", pad: "2", hint: "2. pád - koho?" },
+        { id: 6, text: "Řekl ___ pravdu.", correct: "mi", pad: "3", hint: "3. pád - komu?" },
+        { id: 7, text: "Myslí na ___.", correct: "mně", pad: "6", hint: "6. pád - na kom?" },
+        { id: 8, text: "Pomůžeš ___?", correct: "mi", pad: "3", hint: "3. pád - komu?" },
+        { id: 9, text: "Zeptej se ___.", correct: "mě", pad: "2", hint: "2. pád - koho?" },
+        { id: 10, text: "Při ___ seděla babička.", correct: "mně", pad: "6", hint: "6. pád - při kom?" },
+        { id: 11, text: "Máš něco pro ___?", correct: "mě", pad: "4", hint: "4. pád - pro koho?" },
+        { id: 12, text: "Ke ___ přišel kamarád.", correct: "mně", pad: "3", hint: "3. pád - ke komu?" },
+        { id: 13, text: "Stůj u ___.", correct: "mě", pad: "2", hint: "2. pád - u koho?" },
+        { id: 14, text: "Může být v ___ klid.", correct: "mě", pad: "6", hint: "6. pád - v kom?" },
+        { id: 15, text: "Díváš se na ___?", correct: "mě", pad: "4", hint: "4. pád - na koho?" },
+        { id: 16, text: "Počkej na ___.", correct: "mě", pad: "4", hint: "4. pád - na koho?" },
+        { id: 17, text: "Šel se ___.", correct: "mnou", pad: "7", hint: "7. pád - s kým?" },
+        { id: 18, text: "Nevšímej si ___.", correct: "mě", pad: "2", hint: "2. pád - koho?" },
+        { id: 19, text: "Zajímá se o ___.", correct: "mě", pad: "4", hint: "4. pád - o koho?" },
+        { id: 20, text: "Sedí vedle ___.", correct: "mě", pad: "2", hint: "2. pád - koho?" },
+        { id: 21, text: "Bude se ___ věnovat.", correct: "mi", pad: "3", hint: "3. pád - komu?" },
+        { id: 22, text: "Pamatuje si ___.", correct: "mě", pad: "4", hint: "4. pád - koho?" },
+        { id: 23, text: "Buď ke ___ hodný.", correct: "mně", pad: "3", hint: "3. pád - ke komu?" },
+        { id: 24, text: "Záleží na ___.", correct: "mně", pad: "6", hint: "6. pád - na kom?" },
+        { id: 25, text: "Odpověz ___!", correct: "mi", pad: "3", hint: "3. pád - komu?" },
+        { id: 26, text: "Ptal se ___.", correct: "mě", pad: "2", hint: "2. pád - koho?" },
+        { id: 27, text: "Byl u ___.", correct: "mě", pad: "2", hint: "2. pád - u koho?" },
+        { id: 28, text: "Jde za ___.", correct: "mnou", pad: "7", hint: "7. pád - za kým?" },
+        { id: 29, text: "Slyšel o ___.", correct: "mně", pad: "6", hint: "6. pád - o kom?" },
+        { id: 30, text: "Polib ___!", correct: "mě", pad: "4", hint: "4. pád - koho?" },
+        { id: 31, text: "Vrátil se ke ___.", correct: "mně", pad: "3", hint: "3. pád - ke komu?" },
+        { id: 32, text: "Smál se ___.", correct: "mi", pad: "3", hint: "3. pád - komu?" },
+        { id: 33, text: "Hledali ___.", correct: "mě", pad: "4", hint: "4. pád - koho?" },
+        { id: 34, text: "Neboj se ___.", correct: "mě", pad: "2", hint: "2. pád - koho?" },
+        { id: 35, text: "Potkal ___.", correct: "mě", pad: "4", hint: "4. pád - koho?" },
+        { id: 36, text: "Ukázal ___.", correct: "mi", pad: "3", hint: "3. pád - komu?" },
+        { id: 37, text: "Koupil to pro ___.", correct: "mě", pad: "4", hint: "4. pád - pro koho?" },
+        { id: 38, text: "Píše o ___.", correct: "mně", pad: "6", hint: "6. pád - o kom?" },
+        { id: 39, text: "Souhlasí se ___.", correct: "mnou", pad: "7", hint: "7. pád - s kým?" },
+        { id: 40, text: "Volal ___.", correct: "mi", pad: "3", hint: "3. pád - komu?" },
+        { id: 41, text: "Opřel se o ___.", correct: "mě", pad: "4", hint: "4. pád - o koho?" },
+        { id: 42, text: "Stará se o ___.", correct: "mě", pad: "4", hint: "4. pád - o koho?" },
+        { id: 43, text: "Přišel za ___.", correct: "mnou", pad: "7", hint: "7. pád - za kým?" },
+        { id: 44, text: "Usmál se na ___.", correct: "mě", pad: "4", hint: "4. pád - na koho?" },
+        { id: 45, text: "Dostal se ke ___.", correct: "mně", pad: "3", hint: "3. pád - ke komu?" },
+        { id: 46, text: "Obrátil se na ___.", correct: "mě", pad: "4", hint: "4. pád - na koho?" },
+        { id: 47, text: "Hovoří o ___.", correct: "mně", pad: "6", hint: "6. pád - o kom?" },
+        { id: 48, text: "Vzpomíná na ___.", correct: "mě", pad: "4", hint: "4. pád - na koho?" },
+        { id: 49, text: "Staví se u ___.", correct: "mě", pad: "2", hint: "2. pád - u koho?" },
+        { id: 50, text: "Tančil se ___.", correct: "mnou", pad: "7", hint: "7. pád - s kým?" }
+    ],
+            pady: [
+        { id: 1, text: "Vidíš mě?", correct: "4", options: ["2", "3", "4", "6"], hint: "koho?" },
+        { id: 2, text: "Dej to mně.", correct: "3", options: ["2", "3", "4", "6"], hint: "komu?" },
+        { id: 3, text: "Půjdeš se mnou?", correct: "7", options: ["3", "4", "6", "7"], hint: "s kým?" },
+        { id: 4, text: "Mluvili o mně.", correct: "6", options: ["2", "3", "4", "6"], hint: "o kom?" },
+        { id: 5, text: "Bojí se mě.", correct: "2", options: ["2", "3", "4", "6"], hint: "koho?" },
+        { id: 6, text: "Řekl mi pravdu.", correct: "3", options: ["2", "3", "4", "6"], hint: "komu?" },
+        { id: 7, text: "Myslí na mně.", correct: "6", options: ["2", "3", "4", "6"], hint: "na kom?" },
+        { id: 8, text: "Pomůžeš mi?", correct: "3", options: ["2", "3", "4", "6"], hint: "komu?" },
+        { id: 9, text: "Zeptej se mě.", correct: "2", options: ["2", "3", "4", "6"], hint: "koho?" },
+        { id: 10, text: "Při mně seděla babička.", correct: "6", options: ["2", "3", "4", "6"], hint: "při kom?" },
+        { id: 11, text: "Máš něco pro mě?", correct: "4", options: ["2", "3", "4", "6"], hint: "pro koho?" },
+        { id: 12, text: "Ke mně přišel kamarád.", correct: "3", options: ["2", "3", "4", "6"], hint: "ke komu?" },
+        { id: 13, text: "Stůj u mě.", correct: "2", options: ["2", "3", "4", "6"], hint: "u koho?" },
+        { id: 14, text: "Může být v mě klid.", correct: "6", options: ["2", "3", "4", "6"], hint: "v kom?" },
+        { id: 15, text: "Díváš se na mě?", correct: "4", options: ["2", "3", "4", "6"], hint: "na koho?" },
+        { id: 16, text: "Počkej na mě.", correct: "4", options: ["2", "3", "4", "6"], hint: "na koho?" },
+        { id: 17, text: "Šel se mnou.", correct: "7", options: ["3", "4", "6", "7"], hint: "s kým?" },
+        { id: 18, text: "Nevšímej si mě.", correct: "2", options: ["2", "3", "4", "6"], hint: "koho?" },
+        { id: 19, text: "Zajímá se o mě.", correct: "4", options: ["2", "3", "4", "6"], hint: "o koho?" },
+        { id: 20, text: "Sedí vedle mě.", correct: "2", options: ["2", "3", "4", "6"], hint: "koho?" },
+        { id: 21, text: "Bude se mi věnovat.", correct: "3", options: ["2", "3", "4", "6"], hint: "komu?" },
+        { id: 22, text: "Pamatuje si mě.", correct: "4", options: ["2", "3", "4", "6"], hint: "koho?" },
+        { id: 23, text: "Buď ke mně hodný.", correct: "3", options: ["2", "3", "4", "6"], hint: "ke komu?" },
+        { id: 24, text: "Záleží na mně.", correct: "6", options: ["2", "3", "4", "6"], hint: "na kom?" },
+        { id: 25, text: "Odpověz mi!", correct: "3", options: ["2", "3", "4", "6"], hint: "komu?" },
+        { id: 26, text: "Ptal se mě.", correct: "2", options: ["2", "3", "4", "6"], hint: "koho?" },
+        { id: 27, text: "Byl u mě.", correct: "2", options: ["2", "3", "4", "6"], hint: "u koho?" },
+        { id: 28, text: "Jde za mnou.", correct: "7", options: ["3", "4", "6", "7"], hint: "za kým?" },
+        { id: 29, text: "Slyšel o mně.", correct: "6", options: ["2", "3", "4", "6"], hint: "o kom?" },
+        { id: 30, text: "Polib mě!", correct: "4", options: ["2", "3", "4", "6"], hint: "koho?" },
+        { id: 31, text: "Vrátil se ke mně.", correct: "3", options: ["2", "3", "4", "6"], hint: "ke komu?" },
+        { id: 32, text: "Smál se mi.", correct: "3", options: ["2", "3", "4", "6"], hint: "komu?" },
+        { id: 33, text: "Hledali mě.", correct: "4", options: ["2", "3", "4", "6"], hint: "koho?" },
+        { id: 34, text: "Neboj se mě.", correct: "2", options: ["2", "3", "4", "6"], hint: "koho?" },
+        { id: 35, text: "Potkal mě.", correct: "4", options: ["2", "3", "4", "6"], hint: "koho?" },
+        { id: 36, text: "Ukázal mi.", correct: "3", options: ["2", "3", "4", "6"], hint: "komu?" },
+        { id: 37, text: "Koupil to pro mě.", correct: "4", options: ["2", "3", "4", "6"], hint: "pro koho?" },
+        { id: 38, text: "Píše o mně.", correct: "6", options: ["2", "3", "4", "6"], hint: "o kom?" },
+        { id: 39, text: "Souhlasí se mnou.", correct: "7", options: ["3", "4", "6", "7"], hint: "s kým?" },
+        { id: 40, text: "Volal mi.", correct: "3", options: ["2", "3", "4", "6"], hint: "komu?" },
+        { id: 41, text: "Opřel se o mě.", correct: "4", options: ["2", "3", "4", "6"], hint: "o koho?" },
+        { id: 42, text: "Stará se o mě.", correct: "4", options: ["2", "3", "4", "6"], hint: "o koho?" },
+        { id: 43, text: "Přišel za mnou.", correct: "7", options: ["3", "4", "6", "7"], hint: "za kým?" },
+        { id: 44, text: "Usmál se na mě.", correct: "4", options: ["2", "3", "4", "6"], hint: "na koho?" },
+        { id: 45, text: "Dostal se ke mně.", correct: "3", options: ["2", "3", "4", "6"], hint: "ke komu?" },
+        { id: 46, text: "Obrátil se na mě.", correct: "4", options: ["2", "3", "4", "6"], hint: "na koho?" },
+        { id: 47, text: "Hovoří o mně.", correct: "6", options: ["2", "3", "4", "6"], hint: "o kom?" },
+        { id: 48, text: "Vzpomíná na mě.", correct: "4", options: ["2", "3", "4", "6"], hint: "na koho?" },
+        { id: 49, text: "Staví se u mě.", correct: "2", options: ["2", "3", "4", "6"], hint: "u koho?" },
+        { id: 50, text: "Tančil se mnou.", correct: "7", options: ["3", "4", "6", "7"], hint: "s kým?" }
+    ]
+};
+
+        let exerciseType = 'doplnovacka';
+        let answers = {};
+        let showResults = false;
+        let currentTestQuestions = [];
+        const QUESTIONS_PER_TEST = 10;
+
+        function selectRandomQuestions(questions, count) {
+            if (questions.length <= count) {
+                return [...questions];
+            }
+            const shuffled = [...questions].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count);
+        }
+
+        function generateNewTest() {
+            const allQuestions = data[exerciseType];
+            currentTestQuestions = selectRandomQuestions(allQuestions, QUESTIONS_PER_TEST);
+            answers = {};
+            showResults = false;
+            document.getElementById('results-container').innerHTML = '';
+            document.getElementById('control-buttons').style.display = 'flex';
+            document.getElementById('check-btn').style.display = 'inline-flex';
+            document.getElementById('reset-btn').style.display = 'none';
+            renderExercises();
+        }
+
+        function setExerciseType(type, element) {
+            exerciseType = type;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            generateNewTest();
+        }
+
+        function getCurrentSentences() {
+            return currentTestQuestions.length > 0 ? currentTestQuestions : selectRandomQuestions(data[exerciseType], QUESTIONS_PER_TEST);
+        }
+
+        function renderExercises() {
+            const container = document.getElementById('exercises-container');
+            const sentences = getCurrentSentences();
+            
+            if (exerciseType === 'doplnovacka') {
+                container.innerHTML = sentences.map((sentence, index) => {
+                    const userAnswer = (answers[sentence.id] || '').toLowerCase().trim();
+                    const isCorrect = userAnswer === sentence.correct.toLowerCase();
+                    const isAnswered = userAnswer !== '';
+
+                    return `
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <div class="exercise-number">${index + 1}.</div>
+                                <div style="flex: 1;">
+                                    <div class="exercise-text">${sentence.text}</div>
+                                    <div class="input-area">
+                                        <input 
+                                            type="text" 
+                                            id="input-${sentence.id}"
+                                            value="${answers[sentence.id] || ''}"
+                                            ${showResults ? 'disabled' : ''}
+                                            class="${showResults ? (isCorrect ? 'correct' : (isAnswered ? 'incorrect' : '')) : ''}"
+                                            placeholder="doplň tvar"
+                                            onchange="handleAnswer(${sentence.id}, this.value)"
+                                        />
+                                        ${showResults ? `
+                                            <span class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                                                ${isCorrect ? '✓' : `✗ Správně: ${sentence.correct}`}
+                                            </span>
+                                        ` : ''}
+                                    </div>
+                                    ${!showResults ? `<div class="hint">💡 ${sentence.hint}</div>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                // Určování pádů
+                container.innerHTML = sentences.map((sentence, index) => {
+                    const userAnswer = (answers[sentence.id] || '').trim();
+                    const isCorrect = userAnswer === sentence.correct;
+                    const isAnswered = userAnswer !== '';
+
+                    return `
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <div class="exercise-number">${index + 1}.</div>
+                                <div style="flex: 1;">
+                                    <div class="exercise-text">${sentence.text}</div>
+                                    <div class="input-area">
+                                        <label style="font-weight: 600; margin-right: 10px;">Pád:</label>
+                                        <select 
+                                            id="select-${sentence.id}"
+                                            ${showResults ? 'disabled' : ''}
+                                            class="${showResults ? (isCorrect ? 'correct' : (isAnswered ? 'incorrect' : '')) : ''}"
+                                            onchange="handleAnswer(${sentence.id}, this.value)"
+                                        >
+                                            <option value="">-</option>
+                                            ${sentence.options.map(opt => `
+                                                <option value="${opt}" ${answers[sentence.id] === opt ? 'selected' : ''}>
+                                                    ${opt}. pád
+                                                </option>
+                                            `).join('')}
+                                        </select>
+                                        ${showResults ? `
+                                            <span class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                                                ${isCorrect ? '✓' : `✗ Správně: ${sentence.correct}. pád`}
+                                            </span>
+                                        ` : ''}
+                                    </div>
+                                    ${!showResults ? `<div class="hint">💡 ${sentence.hint}</div>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function handleAnswer(id, value) {
+            answers[id] = value;
+        }
+
+        function checkAnswers() {
+            const sentences = getCurrentSentences();
+            let correct = 0;
+            
+            sentences.forEach(sentence => {
+                let userAnswer = (answers[sentence.id] || '').trim();
+                if (exerciseType === 'doplnovacka') {
+                    userAnswer = userAnswer.toLowerCase();
+                }
+                
+                const correctAnswer = exerciseType === 'doplnovacka' 
+                    ? sentence.correct.toLowerCase() 
+                    : sentence.correct;
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = sentences.length;
+            const percentage = Math.round((correct / total) * 100);
+
+            showResults = true;
+            document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('reset-btn').style.display = 'inline-flex';
+
+            let message = '';
+            let messageClass = '';
+            if (percentage === 100) {
+                message = '🎉 Výborně! Všechno správně!';
+                messageClass = 'excellent';
+            } else if (percentage >= 80) {
+                message = '👍 Velmi dobře! Ještě trochu procvičit!';
+                messageClass = 'good';
+            } else {
+                message = '💪 Nezapomeň si zopakovat pravidla!';
+                messageClass = 'practice';
+            }
+
+            document.getElementById('results-container').innerHTML = `
+                <div class="results-card">
+                    <h3>🏆 Výsledek testu</h3>
+                    <div class="results-stats">
+                        Správně: <strong>${correct}</strong> z <strong>${total}</strong>
+                    </div>
+                    <div class="results-percentage">${percentage}%</div>
+                    <div class="results-message ${messageClass}">${message}</div>
+                </div>
+            `;
+
+            renderExercises();
+        }
+
+        // Inicializace
+        generateNewTest();
+    </script>
+</body>
+</html>
