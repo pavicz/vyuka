@@ -405,6 +405,26 @@
             .options {
                 grid-template-columns: 1fr;
             }
+            .level-btn {
+    padding: 12px 24px;
+    font-size: 1em;
+    font-weight: 600;
+    border: 2px solid var(--primary);
+    background: var(--white);
+    color: var(--primary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.level-btn:hover {
+    background: var(--bg-light);
+}
+
+.level-btn.active {
+    background: var(--primary);
+    color: var(--white);
+}
         }
     </style>
 </head>
@@ -469,6 +489,18 @@
                     Další otázka →
                 </button>
             </div>
+            <div id="factorizationMode" class="exercise-area hidden">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <div style="display: inline-flex; gap: 10px; background: white; padding: 10px; border-radius: 10px;">
+            <button class="level-btn active" onclick="changeLevel(500)">
+                📊 Lehčí (do 500)
+            </button>
+            <button class="level-btn" onclick="changeLevel(999)">
+                🔥 Těžší (do 999)
+            </button>
+        </div>
+    </div>
+    <div class="question">
 
             <div id="factorizationMode" class="exercise-area hidden">
                 <div class="question">
@@ -513,6 +545,9 @@
                     <div class="prime-list">
                         2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71
                     </div>
+                    <div class="hint">
+    💡 Zadej prvočísla oddělená písmenem "x" (např. 2x2x3)
+</div>
 
                     <h3>Důležité vlastnosti:</h3>
                     <p>
@@ -535,73 +570,29 @@
 
     <script>
         let usedNumbers = new Set();
-        let stats = {
-            correct: 0,
-            incorrect: 0,
-            total: 0,
-            current: 1
-        };
+       let stats = {
+    correct: 0,
+    incorrect: 0,
+    total: 0,
+    current: 1
+};
 
-        let currentMode = 'recognition';
-        let currentNumber = 0;
-        let currentFactors = [];
+let currentMode = 'recognition';
+let currentNumber = 0;
+let currentFactors = [];
+let usedNumbers = new Set();
+let maxNumber = 500; // Defaultní úroveň
 
-        const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
 
-        function isPrime(n) {
-            if (n < 2) return false;
-            if (n === 2) return true;
-            if (n % 2 === 0) return false;
-            for (let i = 3; i <= Math.sqrt(n); i += 2) {
-                if (n % i === 0) return false;
-            }
-            return true;
-        }
+// ... (isPrime a primeFactorization zůstávají stejné)
 
-        function primeFactorization(n) {
-            const factors = [];
-            let num = n;
-            
-            for (let i = 2; i <= num; i++) {
-                while (num % i === 0) {
-                    factors.push(i);
-                    num = num / i;
-                }
-            }
-            
-            return factors;
-        }
-
-        function generateRecognitionQuestion() {
-            const usePrime = Math.random() > 0.5;
-            
-            if (usePrime) {
-                currentNumber = primes[Math.floor(Math.random() * primes.length)];
-            } else {
-                do {
-                    currentNumber = Math.floor(Math.random() * 100) + 2;
-                } while (isPrime(currentNumber));
-            }
-
-            document.getElementById('questionNum').textContent = `Otázka ${stats.current}`;
-            document.getElementById('numberDisplay').textContent = currentNumber;
-            
-            document.querySelectorAll('#recognitionMode .option-btn').forEach(btn => {
-                btn.disabled = false;
-                btn.classList.remove('correct', 'incorrect');
-            });
-
-            document.getElementById('feedback').classList.add('hidden');
-            document.getElementById('nextBtn').classList.add('hidden');
-        }
-
-        function generateFactorizationQuestion() {
-    // Generuj unikátní číslo, které ještě nebylo použito
+function generateFactorizationQuestion() {
     let attempts = 0;
     do {
-        currentNumber = Math.floor(Math.random() * 989) + 10; // 10 až 999
+        currentNumber = Math.floor(Math.random() * (maxNumber - 10 + 1)) + 10;
         attempts++;
-        if (attempts > 100) break; // Bezpečnostní pojistka
+        if (attempts > 100) break;
     } while (usedNumbers.has(currentNumber));
     
     usedNumbers.add(currentNumber);
@@ -610,10 +601,81 @@
     document.getElementById('factorQuestionNum').textContent = `Otázka ${stats.current}`;
     document.getElementById('factorNumber').textContent = currentNumber;
     document.getElementById('factorInput').value = '';
+    document.getElementById('factorInput').placeholder = 'např. 2x2x3';
     document.getElementById('factorFeedback').classList.add('hidden');
     document.getElementById('factorResult').classList.add('hidden');
     document.getElementById('nextFactorBtn').classList.add('hidden');
     document.getElementById('factorInput').disabled = false;
+}
+
+function checkFactorization() {
+    const input = document.getElementById('factorInput').value.trim().toLowerCase();
+    
+    // Rozdělíme podle 'x' nebo '*'
+    const userFactors = input.split(/[x*×]/).map(s => parseInt(s.trim())).filter(n => !isNaN(n)).sort((a, b) => a - b);
+    
+    const isCorrect = JSON.stringify(userFactors) === JSON.stringify(currentFactors);
+    
+    stats.total++;
+    if (isCorrect) {
+        stats.correct++;
+    } else {
+        stats.incorrect++;
+    }
+
+    updateStats();
+
+    document.getElementById('factorInput').disabled = true;
+
+    const feedback = document.getElementById('factorFeedback');
+    feedback.classList.remove('hidden', 'correct', 'incorrect');
+    feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+    
+    if (isCorrect) {
+        feedback.textContent = '🎉 Výborně! To je správný rozklad!';
+    } else {
+        feedback.textContent = '❌ Bohužel ne. Podívej se na správný rozklad:';
+        const result = document.getElementById('factorResult');
+        result.classList.remove('hidden');
+        document.getElementById('correctFactors').textContent = currentFactors.join(' × ');
+    }
+
+    document.getElementById('nextFactorBtn').classList.remove('hidden');
+}
+
+function changeLevel(level) {
+    maxNumber = level;
+    usedNumbers.clear();
+    stats.current = 1;
+    
+    document.querySelectorAll('.level-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    generateFactorizationQuestion();
+}
+
+function changeMode(mode) {
+    currentMode = mode;
+    stats.current = 1;
+    usedNumbers.clear();
+    
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    event.target.closest('.mode-btn').classList.add('active');
+
+    if (mode === 'recognition') {
+        document.getElementById('recognitionMode').classList.remove('hidden');
+        document.getElementById('factorizationMode').classList.add('hidden');
+        generateRecognitionQuestion();
+    } else {
+        document.getElementById('recognitionMode').classList.add('hidden');
+        document.getElementById('factorizationMode').classList.remove('hidden');
+        generateFactorizationQuestion();
+    }
 }
 
         function checkPrime(userAnswer) {
