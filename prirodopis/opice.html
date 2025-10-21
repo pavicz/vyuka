@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poznávačka opic - Přírodopis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FFA500;
+            --primary-dark: #FF8C00;
+            --secondary: #FFD700;
+            --success: #4CAF50;
+            --error: #f44336;
+            --bg-light: #FFF9E6;
+            --text-dark: #5C4033;
+            --text-light: #8B7355;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFE4B5 0%, #FFDAB9 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(255, 165, 0, 0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .mode-btn {
+            padding: 20px;
+            background: var(--bg-light);
+            border: 3px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .mode-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .mode-icon {
+            font-size: 2em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid var(--secondary);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .exercise-area {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 3px solid var(--secondary);
+        }
+
+        .question-number {
+            text-align: center;
+            font-size: 1em;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .monkey-image {
+            width: 100%;
+            max-width: 400px;
+            height: 400px;
+            margin: 0 auto 30px;
+            display: block;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 5px solid var(--primary);
+            box-shadow: 0 8px 16px rgba(255, 165, 0, 0.3);
+        }
+
+        .answer-input {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            display: block;
+            padding: 20px;
+            font-size: 1.5em;
+            text-align: center;
+            border: 3px solid var(--primary);
+            border-radius: 10px;
+            background: var(--white);
+            color: var(--text-dark);
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .option-btn {
+            padding: 25px;
+            font-size: 1.3em;
+            font-weight: 600;
+            border: 3px solid var(--primary);
+            background: var(--white);
+            color: var(--text-dark);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.4);
+        }
+
+        .option-btn.correct {
+            background: var(--success);
+            color: var(--white);
+            border-color: var(--success);
+            animation: pulse 0.5s;
+        }
+
+        .option-btn.incorrect {
+            background: var(--error);
+            color: var(--white);
+            border-color: var(--error);
+            animation: shake 0.5s;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .check-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .next-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .monkey-image {
+                max-width: 100%;
+                height: 300px;
+            }
+
+            .answer-input {
+                font-size: 1.2em;
+            }
+
+            .option-btn {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span style="color: var(--text-light); margin: 0 10px;">›</span>
+            <a href="index.html">Přírodopis</a>
+            <span style="color: var(--text-light); margin: 0 10px;">›</span>
+            <strong>Poznávačka opic</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1>🐵 Poznávačka opic</h1>
+                <p class="subtitle">Nauč se rozpoznávat různé druhy opic</p>
+            </header>
+
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="write">
+                    <span class="mode-icon">✏️</span>
+                    Psaní názvu
+                </button>
+                <button class="mode-btn" data-mode="choice">
+                    <span class="mode-icon">🎯</span>
+                    Výběr ze 3
+                </button>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-box">
+                    <div class="stat-value" id="correct">0</div>
+                    <div class="stat-label">✓ Správně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="incorrect">0</div>
+                    <div class="stat-label">✗ Chybně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="percentage">0%</div>
+                    <div class="stat-label">📊 Úspěšnost</div>
+                </div>
+            </div>
+
+            <!-- Režim psaní -->
+            <div id="writeMode" class="exercise-area">
+                <div class="question-number" id="writeQuestionNum">Otázka 1</div>
+                <img id="writeMonkeyImage" class="monkey-image" src="" alt="Opice">
+                <input type="text" id="writeAnswer" class="answer-input" placeholder="Zadej název opice..." autocomplete="off">
+                <button id="writeCheckBtn" class="check-btn">Zkontrolovat</button>
+                <div id="writeFeedback" class="feedback hidden"></div>
+                <button id="writeNextBtn" class="next-btn hidden">Další opice →</button>
+            </div>
+
+            <!-- Režim výběru -->
+            <div id="choiceMode" class="exercise-area hidden">
+                <div class="question-number" id="choiceQuestionNum">Otázka 1</div>
+                <img id="choiceMonkeyImage" class="monkey-image" src="" alt="Opice">
+                <div class="options" id="choiceOptions"></div>
+                <div id="choiceFeedback" class="feedback hidden"></div>
+                <button id="choiceNextBtn" class="next-btn hidden">Další opice →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const monkeys = [
+            { name: 'Gorila', image: 'https://images.unsplash.com/photo-1551135049-8a33b5883817?w=500', variants: ['gorila', 'gorilla'] },
+            { name: 'Šimpanz', image: 'https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?w=500', variants: ['šimpanz', 'simpanz', 'chimpanzee'] },
+            { name: 'Orangutan', image: 'https://images.unsplash.com/photo-1617820406446-0aa8ba3f73e5?w=500', variants: ['orangutan', 'orangutang'] },
+            { name: 'Gibbon', image: 'https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=500', variants: ['gibbon', 'gibon'] },
+            { name: 'Makak', image: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500', variants: ['makak', 'macaque'] },
+            { name: 'Paviàn', image: 'https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?w=500', variants: ['pavián', 'pavian', 'baboon'] },
+            { name: 'Lemur', image: 'https://images.unsplash.com/photo-1610296280370-85e25c62a52f?w=500', variants: ['lemur'] },
+            { name: 'Kapucín', image: 'https://images.unsplash.com/photo-1540206395-68808572332f?w=500', variants: ['kapucín', 'kapucin', 'capuchin'] },
+            { name: 'Vřešťan', image: 'https://images.unsplash.com/photo-1612467081139-16bbf5c13c35?w=500', variants: ['vřešťan', 'vrestat', 'howler'] },
+            { name: 'Tamarín', image: 'https://images.unsplash.com/photo-1583585635793-0e1894c169bd?w=500', variants: ['tamarín', 'tamarin'] }
+        ];
+
+        let stats = {
+            correct: 0,
+            incorrect: 0,
+            total: 0,
+            current: 1
+        };
+
+        let currentMode = 'write';
+        let currentMonkey = null;
+        let usedMonkeys = [];
+
+        function normalizeString(str) {
+            return str.toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .trim();
+        }
+
+        function getRandomMonkey() {
+            if (usedMonkeys.length === monkeys.length) {
+                usedMonkeys = [];
+            }
+            
+            let available = monkeys.filter(m => !usedMonkeys.includes(m));
+            let monkey = available[Math.floor(Math.random() * available.length)];
+            usedMonkeys.push(monkey);
+            return monkey;
+        }
+
+        function getWrongAnswers(correctMonkey) {
+            let wrong = [];
+            let available = monkeys.filter(m => m.name !== correctMonkey.name);
+            
+            while (wrong.length < 2 && available.length > 0) {
+                let index = Math.floor(Math.random() * available.length);
+                wrong.push(available[index]);
+                available.splice(index, 1);
+            }
+            
+            return wrong;
+        }
+
+        function generateWriteQuestion() {
+            currentMonkey = getRandomMonkey();
+            
+            document.getElementById('writeQuestionNum').textContent = `Otázka ${stats.current}`;
+            document.getElementById('writeMonkeyImage').src = currentMonkey.image;
+            document.getElementById('writeAnswer').value = '';
+            document.getElementById('writeAnswer').disabled = false;
+            document.getElementById('writeFeedback').classList.add('hidden');
+            document.getElementById('writeNextBtn').classList.add('hidden');
+            document.getElementById('writeCheckBtn').classList.remove('hidden');
+        }
+
+        function generateChoiceQuestion() {
+            currentMonkey = getRandomMonkey();
+            let wrongAnswers = getWrongAnswers(currentMonkey);
+            let allOptions = [currentMonkey, ...wrongAnswers];
+            
+            allOptions.sort(() => Math.random() - 0.5);
+            
+            document.getElementById('choiceQuestionNum').textContent = `Otázka ${stats.current}`;
+            document.getElementById('choiceMonkeyImage').src = currentMonkey.image;
+            
+            const optionsContainer = document.getElementById('choiceOptions');
+            optionsContainer.innerHTML = '';
+            
+            allOptions.forEach(monkey => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = monkey.name;
+                btn.dataset.monkey = monkey.name;
+                optionsContainer.appendChild(btn);
+            });
+            
+            document.getElementById('choiceFeedback').classList.add('hidden');
+            document.getElementById('choiceNextBtn').classList.add('hidden');
+        }
+
+        function checkWriteAnswer() {
+            const userAnswer = normalizeString(document.getElementById('writeAnswer').value);
+            const correctVariants = currentMonkey.variants.map(v => normalizeString(v));
+            
+            const isCorrect = correctVariants.includes(userAnswer);
+            
+            stats.total++;
+            if (isCorrect) {
+                stats.correct++;
+            } else {
+                stats.incorrect++;
+            }
+            
+            updateStats();
+            
+            document.getElementById('writeAnswer').disabled = true;
+            document.getElementById('writeCheckBtn').classList.add('hidden');
+            
+            const feedback = document.getElementById('writeFeedback');
+            feedback.classList.remove('hidden', 'correct', 'incorrect');
+            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            if (isCorrect) {
+                const messages = [
+                    '🎉 Výborně! To je správně!',
+                    '✨ Skvělá práce!',
+                    '🌟 Perfektní!',
+                    '🐵 Správně!'
+                ];
+                feedback.textContent = messages[Math.floor(Math.random() * messages.length)];
+            } else {
+                feedback.textContent = `❌ Správná odpověď: ${currentMonkey.name}`;
+            }
+            
+            document.getElementById('writeNextBtn').classList.remove('hidden');
+        }
+
+        function checkChoiceAnswer(selectedName) {
+            const isCorrect = selectedName === currentMonkey.name;
+            
+            stats.total++;
+            if (isCorrect) {
+                stats.correct++;
+            } else {
+                stats.incorrect++;
+            }
+            
+            updateStats();
+            
+            const buttons = document.querySelectorAll('#choiceOptions .option-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.dataset.monkey === currentMonkey.name) {
+                    btn.classList.add('correct');
+                } else if (btn.dataset.monkey === selectedName && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            const feedback = document.getElementById('choiceFeedback');
+            feedback.classList.remove('hidden', 'correct', 'incorrect');
+            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            if (isCorrect) {
+                const messages = [
+                    '🎉 Výborně! To je správně!',
+                    '✨ Skvělá práce!',
+                    '🌟 Perfektní!',
+                    '🐵 Správně!'
+                ];
+                feedback.textContent = messages[Math.floor(Math.random() * messages.length)];
+            } else {
+                feedback.textContent = `❌ Správná odpověď: ${currentMonkey.name}`;
+            }
+            
+            document.getElementById('choiceNextBtn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            stats.current++;
+            if (currentMode === 'write') {
+                generateWriteQuestion();
+            } else {
+                generateChoiceQuestion();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('correct').textContent = stats.correct;
+            document.getElementById('incorrect').textContent = stats.incorrect;
+            
+            const percentage = stats.total > 0 
+                ? Math.round((stats.correct / stats.total) * 100) 
+                : 0;
+            document.getElementById('percentage').textContent = percentage + '%';
+        }
+
+        function changeMode(mode) {
+            currentMode = mode;
+            stats.current = 1;
+            usedMonkeys = [];
+            
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById('writeMode').classList.add('hidden');
+            document.getElementById('choiceMode').classList.add('hidden');
+            
+            if (mode === 'write') {
+                document.getElementById('writeMode').classList.remove('hidden');
+                generateWriteQuestion();
+            } else {
+                document.getElementById('choiceMode').classList.remove('hidden');
+                generateChoiceQuestion();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const mode = this.getAttribute('data-mode');
+                    this.classList.add('active');
+                    changeMode(mode);
+                });
+            });
+
+            document.getElementById('writeCheckBtn').addEventListener('click', checkWriteAnswer);
+            document.getElementById('writeNextBtn').addEventListener('click', nextQuestion);
+            document.getElementById('writeAnswer').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !this.disabled) {
+                    checkWriteAnswer();
+                }
+            });
+
+            document.getElementById('choiceNextBtn').addEventListener('click', nextQuestion);
+            document.getElementById('choiceOptions').addEventListener('click', function(e) {
+                if (e.target.classList.contains('option-btn') && !e.target.disabled) {
+                    checkChoiceAnswer(e.target.dataset.monkey);
+                }
+            });
+
+            generateWriteQuestion();
+        });
+    </script>
+</body>
+</html>
