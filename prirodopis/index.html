@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Přírodopis - Témata</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--white);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .topic-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: var(--text-dark);
+            border-left: 5px solid var(--primary);
+            position: relative;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-left-width: 8px;
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .topic-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+
+        .topic-card h2 {
+            font-size: 1.5em;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .difficulty {
+            display: inline-block;
+            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .difficulty.easy {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .difficulty.medium {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .difficulty.hard {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .topic-description {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .topic-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: var(--white);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .status-badge.coming-soon {
+            background: var(--text-light);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: var(--white);
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <strong>Přírodopis</strong>
+        </div>
+
+        <header>
+            <h1>🌿 Přírodopis</h1>
+            <p class="subtitle">Vyber si téma a začni poznávat přírodu</p>
+        </header>
+
+        <main>
+            <div class="topics-grid">
+                <a href="opice.html" class="topic-card">
+                    <span class="status-badge">Aktivní</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🐵</span>
+                        <div>
+                            <h2>Poznávačka opic</h2>
+                            <span class="difficulty easy">Snadné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Nauč se rozpoznávat 10 druhů opic. Psaní názvů nebo výběr ze 3 možností. S obrázky a zpětnou vazbou.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 10-15 min</span>
+                        <span class="stat">🐒 10 druhů</span>
+                    </div>
+                </a>
+
+                <a href="ptaci.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🦅</span>
+                        <div>
+                            <h2>Ptáci ČR</h2>
+                            <span class="difficulty easy">Snadné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Poznávej nejběžnější ptáky České republiky podle vzhledu a zpěvu. Interaktivní kvíz s fotkami.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 15-20 min</span>
+                        <span class="stat">🎵 Se zvuky</span>
+                    </div>
+                </a>
+
+                <a href="stromy.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🌳</span>
+                        <div>
+                            <h2>Listnaté stromy</h2>
+                            <span class="difficulty medium">Střední</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Rozpoznávej stromy podle listů, kůry a plodů. Naučíš se určovat dub, buk, javor a další.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 15 min</span>
+                        <span class="stat">🍂 20+ druhů</span>
+                    </div>
+                </a>
+
+                <a href="savci.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🦊</span>
+                        <div>
+                            <h2>Savci</h2>
+                            <span class="difficulty medium">Střední</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Poznej domácí i volně žijící savce. Jejich zvláštnosti, habitat a způsob života.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 20 min</span>
+                        <span class="stat">🐾 30+ druhů</span>
+                    </div>
+                </a>
+
+                <a href="hmyz.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🦋</span>
+                        <div>
+                            <h2>Hmyz</h2>
+                            <span class="difficulty easy">Snadné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Poznej nejčastější druhy hmyzu - motýli, brouci, včely a další. S detailními makro fotografiemi.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 10-15 min</span>
+                        <span class="stat">🐛 25+ druhů</span>
+                    </div>
+                </a>
+
+                <a href="ryby.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🐟</span>
+                        <div>
+                            <h2>Sladkovodní ryby</h2>
+                            <span class="difficulty medium">Střední</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Rozpoznávej ryby žijící v našich řekách a rybnících. Kapr, štika, candát a další.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 15 min</span>
+                        <span class="stat">🎣 15+ druhů</span>
+                    </div>
+                </a>
+
+                <a href="houby.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🍄</span>
+                        <div>
+                            <h2>Jedlé houby</h2>
+                            <span class="difficulty hard">Náročné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Poznej jedlé houby a nauč se je odlišit od jedovatých. Důležité informace pro houbaře.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 25 min</span>
+                        <span class="stat">⚠️ S varováním</span>
+                    </div>
+                </a>
+
+                <a href="kvetiny.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🌸</span>
+                        <div>
+                            <h2>Květiny a rostliny</h2>
+                            <span class="difficulty easy">Snadné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Poznávej běžné květiny na loukách a zahradách. Naučíš se jejich názvy a vlastnosti.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 15 min</span>
+                        <span class="stat">🌺 30+ druhů</span>
+                    </div>
+                </a>
+
+                <a href="plazi.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🦎</span>
+                        <div>
+                            <h2>Plazi a obojživelníci</h2>
+                            <span class="difficulty medium">Střední</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Poznej ještěrky, hady, žáby a mloka. Rozpoznávání podle vzhledu a prostředí.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 15 min</span>
+                        <span class="stat">🐸 20+ druhů</span>
+                    </div>
+                </a>
+
+                <a href="anatomie.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🫀</span>
+                        <div>
+                            <h2>Lidské tělo</h2>
+                            <span class="difficulty hard">Náročné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Nauč se anatomii lidského těla - orgány, kosti, svaly. S interaktivními diagramy.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 30 min</span>
+                        <span class="stat">📊 Interaktivní</span>
+                    </div>
+                </a>
+
+                <a href="ekologie.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">♻️</span>
+                        <div>
+                            <h2>Ekologie</h2>
+                            <span class="difficulty medium">Střední</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Nauč se o ekosystémech, potravních řetězcích a ochraně přírody. Praktické příklady.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 20 min</span>
+                        <span class="stat">🌍 Pro planetu</span>
+                    </div>
+                </a>
+
+                <a href="mikrokosmos.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🔬</span>
+                        <div>
+                            <h2>Mikroorganismy</h2>
+                            <span class="difficulty hard">Náročné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Poznej bakterie, viry a jednobuněčné organismy. Jejich role v přírodě a medicíně.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 25 min</span>
+                        <span class="stat">🔬 S mikroskopem</span>
+                    </div>
+                </a>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Vzdělávací platforma</p>
+        </footer>
+    </div>
+</body>
+</html>
