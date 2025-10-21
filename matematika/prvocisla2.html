@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prvočísla - Procvičování</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2196F3;
+            --primary-dark: #1976D2;
+            --success: #4CAF50;
+            --error: #f44336;
+            --warning: #ff9800;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .mode-btn {
+            padding: 20px;
+            background: var(--bg-light);
+            border: 3px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .mode-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .mode-icon {
+            font-size: 2em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .exercise-area {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.8em;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .question-number {
+            display: block;
+            font-size: 0.5em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .number-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--primary);
+            text-align: center;
+            margin: 20px 0;
+            padding: 30px;
+            background: var(--white);
+            border-radius: 15px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .option-btn {
+            padding: 25px;
+            font-size: 1.3em;
+            font-weight: 600;
+            border: 3px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .option-btn.correct {
+            background: var(--success);
+            color: var(--white);
+            border-color: var(--success);
+            animation: pulse 0.5s;
+        }
+
+        .option-btn.incorrect {
+            background: var(--error);
+            color: var(--white);
+            border-color: var(--error);
+            animation: shake 0.5s;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .factorization-input {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .factor-input {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 3px solid var(--primary);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .check-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .hint {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.95em;
+            margin-top: 15px;
+        }
+
+        .factorization-result {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .factors {
+            font-size: 1.5em;
+            color: var(--primary);
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .next-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .theory-section {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .theory-section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .theory-content {
+            line-height: 1.8;
+            color: var(--text-dark);
+        }
+
+        .theory-content p {
+            margin-bottom: 15px;
+        }
+
+        .theory-content strong {
+            color: var(--primary);
+        }
+
+        .prime-list {
+            background: var(--white);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .toggle-theory {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            padding: 10px;
+            text-decoration: underline;
+        }
+
+        .tree-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tree-node {
+            background: white;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tree-node.klikaci {
+            cursor: pointer;
+        }
+
+        .tree-node.klikaci:hover {
+            transform: scale(1.1);
+            border-color: var(--warning);
+            box-shadow: 0 0 15px rgba(255, 152, 0, 0.5);
+        }
+
+        .tree-node:hover:not(.prime):not(.expanded) {
+            transform: scale(1.1);
+            border-color: var(--warning);
+            box-shadow: 0 0 15px rgba(255, 152, 0, 0.5);
+        }
+
+        .tree-node.prime {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+            cursor: default;
+        }
+
+        .tree-node.expanded {
+            border-color: var(--text-light);
+            color: var(--text-light);
+            cursor: default;
+        }
+
+        .tree-input-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .factor-inputs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            align-items: center;
+        }
+
+        .factor-inputs input {
+            width: 80px;
+            padding: 10px;
+            font-size: 1.3em;
+            text-align: center;
+            border: 3px solid var(--primary);
+            border-radius: 10px;
+        }
+
+        .modal-btn {
+            padding: 12px 25px;
+            font-size: 1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.confirm {
+            background: var(--success);
+            color: white;
+            margin-right: 10px;
+        }
+
+        .modal-btn.cancel {
+            background: var(--error);
+            color: white;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .tree-level {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            position: relative;
+        }
+
+        .tree-branch {
+            position: absolute;
+            width: 2px;
+            background: var(--primary);
+            transform-origin: top;
+        }
+
+        .tree-branch-left {
+            position: absolute;
+            height: 30px;
+            width: 80px;
+            top: -30px;
+            left: 50%;
+            border-left: 3px solid var(--primary);
+            border-bottom: 3px solid var(--primary);
+            border-bottom-left-radius: 10px;
+        }
+
+        .tree-branch-right {
+            position: absolute;
+            height: 30px;
+            width: 80px;
+            top: -30px;
+            right: 50%;
+            border-right: 3px solid var(--primary);
+            border-bottom: 3px solid var(--primary);
+            border-bottom-right-radius: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .question {
+                font-size: 1.4em;
+            }
+
+            .number-display {
+                font-size: 2em;
+                padding: 20px;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="index.html">Matematika</a>
+            <span>›</span>
+            <strong>Prvočísla</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1>🔍 Prvočísla</h1>
+                <p class="subtitle">Rozpoznej prvočísla a rozlož čísla na prvočinitele</p>
+            </header>
+
+            <div class="mode-selector">
+                <button class="mode-btn active" onclick="zmenRezim('rozpoznavani', this)">
+                    <span class="mode-icon">🎯</span>
+                    Rozpoznávání
+                </button>
+                <button class="mode-btn" onclick="zmenRezim('rozklad', this)">
+                    <span class="mode-icon">🧮</span>
+                    Rozklad
+                </button>
+                <button class="mode-btn" onclick="zmenRezim('strom', this)">
+                    <span class="mode-icon">🌳</span>
+                    Strom
+                </button>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-box">
+                    <div class="stat-value" id="spravne">0</div>
+                    <div class="stat-label">✓ Správně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="chybne">0</div>
+                    <div class="stat-label">✗ Chybně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="uspesnost">0%</div>
+                    <div class="stat-label">📊 Úspěšnost</div>
+                </div>
+            </div>
+
+            <div id="rozpoznavaciRezim" class="exercise-area">
+                <div class="question">
+                    <span class="question-number" id="cisloOtazky">Otázka 1</span>
+                    Je toto číslo prvočíslo?
+                </div>
+                <div class="number-display" id="zobrazeniCisla">17</div>
+                <div class="options">
+                    <button class="option-btn" onclick="zkontrolujPrvocislo(true)">
+                        ✓ ANO
+                    </button>
+                    <button class="option-btn" onclick="zkontrolujPrvocislo(false)">
+                        ✗ NE
+                    </button>
+                </div>
+                <div id="zpetnaVazba" class="feedback hidden"></div>
+                <button id="dalsiBtn" class="next-btn hidden" onclick="dalsiOtazka()">
+                    Další otázka →
+                </button>
+            </div>
+
+            <div id="rozkladRezim" class="exercise-area hidden">
+                <div class="question">
+                    <span class="question-number" id="cisloOtazkyRozklad">Otázka 1</span>
+                    Rozlož číslo na prvočinitele
+                </div>
+                <div class="number-display" id="rozkladCislo">24</div>
+                <div class="factorization-input">
+                    <div class="input-group">
+                        <input type="text" class="factor-input" id="rozkladVstup" 
+                               placeholder="např. 2, 2, 2, 3" 
+                               onkeypress="if(event.key==='Enter') zkontrolujRozklad()">
+                        <button class="check-btn" onclick="zkontrolujRozklad()">
+                            Zkontrolovat
+                        </button>
+                    </div>
+                    <div class="hint">
+                        💡 Zadej prvočísla oddělená čárkami (např. 2, 2, 3)
+                    </div>
+                    <div id="rozkladZpetnaVazba" class="feedback hidden"></div>
+                    <div id="rozkladVysledek" class="factorization-result hidden">
+                        <div>Správný rozklad:</div>
+                        <div class="factors" id="spravneCinitele"></div>
+                    </div>
+                    <button id="dalsiRozkladBtn" class="next-btn hidden" onclick="dalsiOtazkaRozklad()">
+                        Další otázka →
+                    </button>
+                </div>
+            </div>
+
+            <div id="stromRezim" class="exercise-area hidden">
+                <div class="question">
+                    <span class="question-number" id="cisloOtazkyStrom">Otázka 1</span>
+                    Rozlož číslo pomocí stromu
+                </div>
+                <div style="max-width: 600px; margin: 0 auto;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 1.1em; color: var(--text-light); margin-bottom: 10px;">
+                            💡 Klikni na číslo a zadej jeho dva činitele
+                        </div>
+                    </div>
+                    <div id="stromKontejner" style="padding: 20px;"></div>
+                    <div id="stromZpetnaVazba" class="feedback hidden"></div>
+                    <button id="zkontrolujStromBtn" class="next-btn" onclick="zkontrolujStrom()" style="background: var(--success);">
+                        ✓ Zkontrolovat rozklad
+                    </button>
+                    <button id="dalsiStromBtn" class="next-btn hidden" onclick="dalsiOtazkaStrom()">
+                        Další číslo →
+                    </button>
+                </div>
+            </div>
+
+            <div class="theory-section">
+                <button class="toggle-theory" onclick="prepniTeorii()">
+                    <span id="teorieToggle">📖 Co jsou prvočísla?</span>
+                </button>
+                <div id="teorieObsah" class="theory-content hidden">
+                    <h3>Definice prvočísla</h3>
+                    <p>
+                        <strong>Prvočíslo</strong> je přirozené číslo větší než 1, které je dělitelné pouze jedničkou a samo sebou.
+                    </p>
+                    
+                    <h3>Prvních 20 prvočísel:</h3>
+                    <div class="prime-list">
+                        2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71
+                    </div>
+
+                    <h3>Důležité vlastnosti:</h3>
+                    <p>
+                        • <strong>2</strong> je jediné sudé prvočíslo<br>
+                        • <strong>1</strong> není prvočíslo (má pouze jeden dělitel)<br>
+                        • Každé složené číslo lze rozložit na prvočinitele
+                    </p>
+
+                    <h3>Rozklad na prvočinitele:</h3>
+                    <p>
+                        Každé číslo můžeme rozložit na součin prvočísel. Například:<br>
+                        • 12 = 2 × 2 × 3<br>
+                        • 30 = 2 × 3 × 5<br>
+                        • 60 = 2 × 2 × 3 × 5
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let statistiky = {
+            spravne: 0,
+            chybne: 0,
+            celkem: 0,
+            aktualni: 1
+        };
+
+        let aktualniRezim = 'rozpoznavani';
+        let aktualnoCislo = 0;
+        let aktualniCinitele = [];
+
+        const prvocisla = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+
+        function jePrvocislo(n) {
+            if (n < 2) return false;
+            if (n === 2) return true;
+            if (n % 2 === 0) return false;
+            for (let i = 3; i <= Math.sqrt(n); i += 2) {
+                if (n % i === 0) return false;
+            }
+            return true;
+        }
+
+        function rozlozNaCinitele(n) {
+            const cinitele = [];
+            let cislo = n;
+            
+            for (let i = 2; i <= cislo; i++) {
+                while (cislo % i === 0) {
+                    cinitele.push(i);
+                    cislo = cislo / i;
+                }
+            }
+            
+            return cinitele;
+        }
+
+        function vygenerujOtazku() {
+            const pouzitPrvocislo = Math.random() > 0.5;
+            
+            if (pouzitPrvocislo) {
+                aktualnoCislo = prvocisla[Math.floor(Math.random() * prvocisla.length)];
+            } else {
+                do {
+                    aktualnoCislo = Math.floor(Math.random() * 100) + 2;
+                } while (jePrvocislo(aktualnoCislo));
+            }
+
+            document.getElementById('cisloOtazky').textContent = `Otázka ${statistiky.aktualni}`;
+            document.getElementById('zobrazeniCisla').textContent = aktualnoCislo;
+            
+            document.querySelectorAll('#rozpoznavaciRezim .option-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('correct', 'incorrect');
+            });
+
+            document.getElementById('zpetnaVazba').classList.add('hidden');
+            document.getElementById('dalsiBtn').classList.add('hidden');
+        }
+
+        function vygenerujOtazkuRozklad() {
+            const zaklad = Math.floor(Math.random() * 40) + 10;
+            aktualnoCislo = zaklad;
+            aktualniCinitele = rozlozNaCinitele(aktualnoCislo);
+
+            document.getElementById('cisloOtazkyRozklad').textContent = `Otázka ${statistiky.aktualni}`;
+            document.getElementById('rozkladCislo').textContent = aktualnoCislo;
+            document.getElementById('rozkladVstup').value = '';
+            document.getElementById('rozkladZpetnaVazba').classList.add('hidden');
+            document.getElementById('rozkladVysledek').classList.add('hidden');
+            document.getElementById('dalsiRozkladBtn').classList.add('hidden');
+            document.getElementById('rozkladVstup').disabled = false;
+        }
+
+        function zkontrolujPrvocislo(odpoved) {
+            const jeSpravne = odpoved === jePrvocislo(aktualnoCislo);
+            
+            statistiky.celkem++;
+            if (jeSpravne) {
+                statistiky.spravne++;
+            } else {
+                statistiky.chybne++;
+            }
+
+            aktualizujStatistiky();
+
+            const tlacitka = document.querySelectorAll('#rozpoznavaciRezim .option-btn');
+            tlacitka.forEach(btn => btn.disabled = true);
+
+            const kliknuteTlacitko = odpoved ? tlacitka[0] : tlacitka[1];
+            kliknuteTlacitko.classList.add(jeSpravne ? 'correct' : 'incorrect');
+
+            const zpetnaVazba = document.getElementById('zpetnaVazba');
+            zpetnaVazba.classList.remove('hidden', 'correct', 'incorrect');
+            zpetnaVazba.classList.add(jeSpravne ? 'correct' : 'incorrect');
+            
+            if (jeSpravne) {
+                const zpravy = [
+                    '🎉 Výborně! To je správně!',
+                    '✨ Skvělá práce!',
+                    '🌟 Perfektní!',
+                    '👏 Skvěle!',
+                    '🎯 Výtečně!'
+                ];
+                zpetnaVazba.textContent = zpravy[Math.floor(Math.random() * zpravy.length)];
+            } else {
+                const spravnaOdpoved = jePrvocislo(aktualnoCislo) ? 'prvočíslo' : 'složené číslo';
+                zpetnaVazba.textContent = `❌ Bohužel ne. Číslo ${aktualnoCislo} je ${spravnaOdpoved}.`;
+            }
+
+            document.getElementById('dalsiBtn').classList.remove('hidden');
+        }
+
+        function zkontrolujRozklad() {
+            const vstup = document.getElementById('rozkladVstup').value.trim();
+            const uzivatelskeCinitele = vstup.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n)).sort((a, b) => a - b);
+            const spravneCinitele = [...aktualniCinitele].sort((a, b) => a - b);
+
+            const jeSpravne = JSON.stringify(uzivatelskeCinitele) === JSON.stringify(spravneCinitele);
+
+            statistiky.celkem++;
+            if (jeSpravne) {
+                statistiky.spravne++;
+            } else {
+                statistiky.chybne++;
+            }
+
+            aktualizujStatistiky();
+
+            document.getElementById('rozkladVstup').disabled = true;
+
+            const zpetnaVazba = document.getElementById('rozkladZpetnaVazba');
+            zpetnaVazba.classList.remove('hidden', 'correct', 'incorrect');
+            zpetnaVazba.classList.add(jeSpravne ? 'correct' : 'incorrect');
+
+            if (jeSpravne) {
+                zpetnaVazba.textContent = '🎉 Výborně! Správný rozklad!';
+            } else {
+                zpetnaVazba.textContent = '❌ Zkus to znovu příště!';
+                document.getElementById('rozkladVysledek').classList.remove('hidden');
+                document.getElementById('spravneCinitele').textContent = spravneCinitele.join(' × ');
+            }
+
+            document.getElementById('dalsiRozkladBtn').classList.remove('hidden');
+        }
+
+        let stromData = {};
+        let spravnyStrom = {};
+
+        function vygenerujOtazkuStrom() {
+            aktualnoCislo = Math.floor(Math.random() * 50) + 10;
+            aktualniCinitele = rozlozNaCinitele(aktualnoCislo);
+
+            document.getElementById('cisloOtazkyStrom').textContent = `Otázka ${statistiky.aktualni}`;
+            document.getElementById('stromZpetnaVazba').classList.add('hidden');
+            document.getElementById('zkontrolujStromBtn').classList.remove('hidden');
+            document.getElementById('dalsiStromBtn').classList.add('hidden');
+
+            // Inicializace stromu
+            stromData = {
+                hodnota: aktualnoCislo,
+                jePrvocislo: jePrvocislo(aktualnoCislo),
+                rozbalen: false
+            };
+
+            // Vytvoříme správný strom pro kontrolu
+            spravnyStrom = vytvorStrukturuStromu(aktualnoCislo);
+
+            vykreslitStrom();
+        }
+
+        function vykreslitStrom() {
+            const kontejner = document.getElementById('stromKontejner');
+            kontejner.innerHTML = '<div class="tree-container" style="padding: 40px 20px; background: white; border-radius: 15px;">' +
+                vykreslitUzel(stromData, 'root') +
+                '</div>';
+            
+            // Přidáme event listenery
+            const uzly = kontejner.querySelectorAll('.tree-node');
+            uzly.forEach(uzel => {
+                const cesta = uzel.dataset.cesta;
+                if (uzel.classList.contains('klikaci')) {
+                    uzel.onclick = function() {
+                        otevritModal(cesta);
+                    };
+                }
+            });
+        }
+
+        function vykreslitInteraktivniStrom() {
+            let html = '<div class="tree-container" style="padding: 40px 20px; background: white; border-radius: 15px;">';
+            html += vykreslitUzel(stromData, 'root');
+            html += '</div>';
+            
+            // Přidáme event listenery po vykreslení
+            setTimeout(() => {
+                document.querySelectorAll('.tree-node.klikaci').forEach(node => {
+                    node.addEventListener('click', function() {
+                        const cesta = this.getAttribute('data-cesta');
+                        otevritModal(cesta);
+                    });
+                });
+            }, 0);
+            
+            return html;
+        }
+
+        function vykreslitUzel(uzel, cesta) {
+            if (!uzel) return '';
+            
+            const jePrvo = uzel.jePrvocislo ? 'prime' : '';
+            const rozbalen = uzel.rozbalen ? 'expanded' : '';
+            const klikaci = !uzel.jePrvocislo && !uzel.rozbalen ? 'klikaci' : '';
+            
+            let html = `<div style="margin: 20px 0; text-align: center;">`;
+            html += `<div class="tree-node ${jePrvo} ${rozbalen} ${klikaci}" data-cesta="${cesta}">${uzel.hodnota}</div>`;
+            
+            if (uzel.levy && uzel.pravy) {
+                html += `<div style="position: relative; margin-top: 40px;">
+                    <svg style="position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 200px; height: 40px; overflow: visible;">
+                        <line x1="100" y1="0" x2="50" y2="40" stroke="var(--primary)" stroke-width="3"/>
+                        <line x1="100" y1="0" x2="150" y2="40" stroke="var(--primary)" stroke-width="3"/>
+                    </svg>
+                    <div style="display: flex; justify-content: center; gap: 100px;">
+                        <div>${vykreslitPodUzel(uzel.levy, cesta + '-l')}</div>
+                        <div>${vykreslitPodUzel(uzel.pravy, cesta + '-p')}</div>
+                    </div>
+                </div>`;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
+        function vykreslitPodUzel(uzel, cesta) {
+            if (!uzel) return '';
+            
+            const jePrvo = uzel.jePrvocislo ? 'prime' : '';
+            const rozbalen = uzel.rozbalen ? 'expanded' : '';
+            const klikaci = !uzel.jePrvocislo && !uzel.rozbalen ? 'klikaci' : '';
+            
+            let html = `<div style="text-align: center;">
+                <div class="tree-node ${jePrvo} ${rozbalen} ${klikaci}" data-cesta="${cesta}">${uzel.hodnota}</div>`;
+            
+            if (uzel.levy && uzel.pravy) {
+                html += `<div style="position: relative; margin-top: 40px;">
+                    <svg style="position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 120px; height: 40px; overflow: visible;">
+                        <line x1="60" y1="0" x2="30" y2="40" stroke="var(--primary)" stroke-width="3"/>
+                        <line x1="60" y1="0" x2="90" y2="40" stroke="var(--primary)" stroke-width="3"/>
+                    </svg>
+                    <div style="display: flex; justify-content: center; gap: 50px;">
+                        <div>${vykreslitMiniUzel(uzel.levy, cesta + '-l')}</div>
+                        <div>${vykreslitMiniUzel(uzel.pravy, cesta + '-p')}</div>
+                    </div>
+                </div>`;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
+        function vykreslitMiniUzel(uzel, cesta) {
+            if (!uzel) return '';
+            const jePrvo = uzel.jePrvocislo ? 'prime' : '';
+            const rozbalen = uzel.rozbalen ? 'expanded' : '';
+            const klikaci = !uzel.jePrvocislo && !uzel.rozbalen ? 'klikaci' : '';
+            return `<div class="tree-node ${jePrvo} ${rozbalen} ${klikaci}" data-cesta="${cesta}">${uzel.hodnota}</div>`;
+        }
+
+        function otevritModal(cesta) {
+            const uzel = najitUzel(stromData, cesta);
+            if (!uzel || uzel.jePrvocislo || uzel.rozbalen) return;
+
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div class="modal-overlay" onclick="zavritModal()"></div>
+                <div class="tree-input-modal">
+                    <h3 style="color: var(--primary); margin-bottom: 20px;">Rozlož číslo ${uzel.hodnota}</h3>
+                    <div class="factor-inputs">
+                        <input type="number" id="cinitel1" placeholder="?" min="2">
+                        <span style="font-size: 1.5em; color: var(--text-light);">×</span>
+                        <input type="number" id="cinitel2" placeholder="?" min="2">
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="modal-btn confirm" onclick="potvditRozklad('${cesta}')">✓ Potvrdit</button>
+                        <button class="modal-btn cancel" onclick="zavritModal()">✗ Zrušit</button>
+                    </div>
+                </div>
+            `;
+            modal.id = 'modal-container';
+            document.body.appendChild(modal);
+            document.getElementById('cinitel1').focus();
+
+            // Enter key support
+            document.getElementById('cinitel1').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') document.getElementById('cinitel2').focus();
+            });
+            document.getElementById('cinitel2').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') potvditRozklad(cesta);
+            });
+        }
+
+        function zavritModal() {
+            const modal = document.getElementById('modal-container');
+            if (modal) modal.remove();
+        }
+
+        function potvditRozklad(cesta) {
+            const c1 = parseInt(document.getElementById('cinitel1').value);
+            const c2 = parseInt(document.getElementById('cinitel2').value);
+            
+            const uzel = najitUzel(stromData, cesta);
+            
+            if (isNaN(c1) || isNaN(c2) || c1 < 2 || c2 < 2) {
+                alert('Zadej platná čísla větší než 1!');
+                return;
+            }
+            
+            if (c1 * c2 !== uzel.hodnota) {
+                alert(`Chyba! ${c1} × ${c2} = ${c1 * c2}, ale potřebujeme ${uzel.hodnota}`);
+                return;
+            }
+            
+            uzel.rozbalen = true;
+            uzel.levy = {
+                hodnota: c1,
+                jePrvocislo: jePrvocislo(c1),
+                rozbalen: false
+            };
+            uzel.pravy = {
+                hodnota: c2,
+                jePrvocislo: jePrvocislo(c2),
+                rozbalen: false
+            };
+            
+            zavritModal();
+            
+            // Překreslíme strom a znovu přidáme event listenery
+            const kontejner = document.getElementById('stromKontejner');
+            kontejner.innerHTML = vykreslitInteraktivniStrom();
+        }
+
+        function najitUzel(strom, cesta) {
+            if (cesta === 'root') return strom;
+            
+            const kroky = cesta.substring(5).split('-').filter(k => k);
+            let aktualni = strom;
+            
+            for (let krok of kroky) {
+                if (krok === 'l') aktualni = aktualni.levy;
+                else if (krok === 'p') aktualni = aktualni.pravy;
+            }
+            
+            return aktualni;
+        }
+
+        function zkontrolujStrom() {
+            // Zkontrolujeme, zda jsou všechna čísla rozložena nebo prvočísla
+            const dokonceno = zkontrolujDokonceni(stromData);
+            
+            if (!dokonceno) {
+                alert('⚠️ Ještě nejsi hotov! Některá složená čísla nejsou rozložena.');
+                return;
+            }
+
+            // Sesbíráme prvočinitele ze stromu
+            const uzivatelskeCinitele = sesbejPrvocisla(stromData).sort((a, b) => a - b);
+            const spravneCinitele = [...aktualniCinitele].sort((a, b) => a - b);
+
+            const jeSpravne = JSON.stringify(uzivatelskeCinitele) === JSON.stringify(spravneCinitele);
+
+            statistiky.celkem++;
+            if (jeSpravne) {
+                statistiky.spravne++;
+            } else {
+                statistiky.chybne++;
+            }
+
+            aktualizujStatistiky();
+
+            const zpetnaVazba = document.getElementById('stromZpetnaVazba');
+            zpetnaVazba.classList.remove('hidden', 'correct', 'incorrect');
+            zpetnaVazba.classList.add(jeSpravne ? 'correct' : 'incorrect');
+
+            if (jeSpravne) {
+                zpetnaVazba.textContent = '🎉 Výborně! Správný rozklad!';
+            } else {
+                zpetnaVazba.textContent = `❌ Bohužel ne. Správný rozklad: ${spravneCinitele.join(' × ')}`;
+            }
+
+            document.getElementById('zkontrolujStromBtn').classList.add('hidden');
+            document.getElementById('dalsiStromBtn').classList.remove('hidden');
+        }
+
+        function zkontrolujDokonceni(uzel) {
+            if (!uzel) return true;
+            if (uzel.jePrvocislo) return true;
+            if (!uzel.rozbalen) return false;
+            return zkontrolujDokonceni(uzel.levy) && zkontrolujDokonceni(uzel.pravy);
+        }
+
+        function sesbejPrvocisla(uzel) {
+            if (!uzel) return [];
+            if (uzel.jePrvocislo) return [uzel.hodnota];
+            if (!uzel.rozbalen) return [];
+            return [...sesbejPrvocisla(uzel.levy), ...sesbejPrvocisla(uzel.pravy)];
+        }
+
+        function vytvorStrukturuStromu(n) {
+            if (jePrvocislo(n) || n === 1) {
+                return { hodnota: n, jePrvocislo: true };
+            }
+            
+            // Najdeme první dělitel
+            for (let i = 2; i <= n; i++) {
+                if (n % i === 0) {
+                    return {
+                        hodnota: n,
+                        jePrvocislo: false,
+                        levy: vytvorStrukturuStromu(i),
+                        pravy: vytvorStrukturuStromu(n / i)
+                    };
+                }
+            }
+            
+            return { hodnota: n, jePrvocislo: true };
+        }
+
+        function dalsiOtazka() {
+            statistiky.aktualni++;
+            vygenerujOtazku();
+        }
+
+        function dalsiOtazkaRozklad() {
+            statistiky.aktualni++;
+            vygenerujOtazkuRozklad();
+        }
+
+        function dalsiOtazkaStrom() {
+            statistiky.aktualni++;
+            vygenerujOtazkuStrom();
+        }
+
+        function zmenRezim(rezim, tlacitko) {
+            aktualniRezim = rezim;
+            
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            tlacitko.classList.add('active');
+
+            document.getElementById('rozpoznavaciRezim').classList.add('hidden');
+            document.getElementById('rozkladRezim').classList.add('hidden');
+            document.getElementById('stromRezim').classList.add('hidden');
+
+            statistiky.aktualni = 1;
+
+            if (rezim === 'rozpoznavani') {
+                document.getElementById('rozpoznavaciRezim').classList.remove('hidden');
+                vygenerujOtazku();
+            } else if (rezim === 'rozklad') {
+                document.getElementById('rozkladRezim').classList.remove('hidden');
+                vygenerujOtazkuRozklad();
+            } else if (rezim === 'strom') {
+                document.getElementById('stromRezim').classList.remove('hidden');
+                vygenerujOtazkuStrom();
+            }
+        }
+
+        function aktualizujStatistiky() {
+            document.getElementById('spravne').textContent = statistiky.spravne;
+            document.getElementById('chybne').textContent = statistiky.chybne;
+            const procento = statistiky.celkem > 0 ? Math.round((statistiky.spravne / statistiky.celkem) * 100) : 0;
+            document.getElementById('uspesnost').textContent = procento + '%';
+        }
+
+        function prepniTeorii() {
+            const obsah = document.getElementById('teorieObsah');
+            const prepinac = document.getElementById('teorieToggle');
+            
+            if (obsah.classList.contains('hidden')) {
+                obsah.classList.remove('hidden');
+                prepinac.textContent = '📕 Skrýt teorii';
+            } else {
+                obsah.classList.add('hidden');
+                prepinac.textContent = '📖 Co jsou prvočísla?';
+            }
+        }
+
+        // Inicializace aplikace
+        vygenerujOtazku();
+    </script>
+</body>
+</html>
