@@ -545,7 +545,14 @@
             <div id="learnMode" class="exercise-area hidden">
                 <div style="margin-bottom: 20px;">
                     <h3 style="font-size: 1.2em; font-weight: 600; margin-bottom: 15px; text-align: center;">
-                        Vyber dělitele:
+                        Zadej číslo:
+                    </h3>
+                    <input type="number" id="learnInput" class="learn-input" placeholder="např. 1234">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-size: 1.2em; font-weight: 600; margin-bottom: 15px; text-align: center;">
+                        Vyber dělitele pro ověření:
                     </h3>
                     <div class="divisor-selector" id="learnDivisors">
                         <button class="divisor-btn active" data-divisor="2">2</button>
@@ -562,13 +569,6 @@
                 <div class="rule-box">
                     <div class="rule-title" id="ruleTitle">Pravidlo dělitelnosti číslem 2:</div>
                     <div id="ruleText">Číslo je dělitelné 2, pokud je poslední cifra sudá (0, 2, 4, 6, 8).</div>
-                </div>
-
-                <div style="margin-bottom: 20px;">
-                    <h3 style="font-size: 1.2em; font-weight: 600; margin-bottom: 15px; text-align: center;">
-                        Zadej číslo a ověř dělitelnost:
-                    </h3>
-                    <input type="number" id="learnInput" class="learn-input" placeholder="např. 1234">
                 </div>
 
                 <div id="learnResult"></div>
@@ -811,6 +811,7 @@
         function updateLearnRule() {
             document.getElementById('ruleTitle').textContent = `Pravidlo dělitelnosti číslem ${learnDivisor}:`;
             document.getElementById('ruleText').textContent = divisibilityRules[learnDivisor];
+            checkLearnNumber();
         }
 
         function checkLearnNumber() {
@@ -895,7 +896,7 @@
                 });
             });
 
-            // Výběr dělitele v learn režimu
+            // Výběr dělitele v learn režimu - KLÍČOVÁ ZMĚNA
             document.querySelectorAll('#learnDivisors .divisor-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('#learnDivisors .divisor-btn').forEach(b => {
@@ -904,8 +905,7 @@
                     this.classList.add('active');
                     learnDivisor = parseInt(this.getAttribute('data-divisor'));
                     updateLearnRule();
-                    document.getElementById('learnInput').value = '';
-                    document.getElementById('learnResult').innerHTML = '';
+                    // Nyní NEMAZEME hodnotu inputu, jen aktualizujeme pravidlo a výsledek
                 });
             });
 
