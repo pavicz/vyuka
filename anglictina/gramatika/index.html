@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gramatika - Témata</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF5722;
+            --primary-dark: #E64A19;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--white);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .topic-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: var(--text-dark);
+            border-left: 5px solid var(--primary);
+            position: relative;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-left-width: 8px;
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .topic-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+
+        .topic-card h2 {
+            font-size: 1.5em;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .difficulty {
+            display: inline-block;
+            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .difficulty.easy {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .difficulty.medium {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .difficulty.hard {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .topic-description {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .topic-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: var(--white);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .status-badge.coming-soon {
+            background: var(--text-light);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: var(--white);
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="../index.html">Angličtina</a>
+            <span>›</span>
+            <strong>Gramatika</strong>
+        </div>
+
+        <header>
+            <h1>📖 Anglická gramatika</h1>
+            <p class="subtitle">Vyber si téma a procvič gramatická pravidla</p>
+        </header>
+
+        <main>
+            <div class="topics-grid">
+                <a href="some-any.html" class="topic-card">
+                    <span class="status-badge">Aktivní</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">📝</span>
+                        <div>
+                            <h2>Some, Any, A/An</h2>
+                            <span class="difficulty easy">Snadné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Nauč se používat neurčité členy a zájmena správně v různých typech vět.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 10-15 min</span>
+                        <span class="stat">🎯 3 úrovně</span>
+                    </div>
+                </a>
+
+                <a href="predlozky.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🔗</span>
+                        <div>
+                            <h2>Předložky</h2>
+                            <span class="difficulty medium">Střední</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Procvič si použití předložek místa, času a směru (in, on, at, to, from...).
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 15 min</span>
+                        <span class="stat">📍 Místo & čas</span>
+                    </div>
+                </a>
+
+                <a href="slovosled.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🔢</span>
+                        <div>
+                            <h2>Slovosled ve větě</h2>
+                            <span class="difficulty medium">Střední</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Nauč se správné pořadí slov v anglické větě - podmět, přísudek, předmět.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 12 min</span>
+                        <span class="stat">📊 Struktura vět</span>
+                    </div>
+                </a>
+
+                <a href="otazky.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">❓</span>
+                        <div>
+                            <h2>Tvoření otázek</h2>
+                            <span class="difficulty medium">Střední</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Procvič si tvoření otázek s pomocnými slovesy (do, does, did, will...).
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 15 min</span>
+                        <span class="stat">❔ Yes/No & WH</span>
+                    </div>
+                </a>
+
+                <a href="modal-verbs.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🎭</span>
+                        <div>
+                            <h2>Modální slovesa</h2>
+                            <span class="difficulty hard">Náročné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Nauč se používat can, could, must, should, may, might a další modální slovesa.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 20 min</span>
+                        <span class="stat">💪 10+ sloves</span>
+                    </div>
+                </a>
+
+                <a href="prislovce.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">⚡</span>
+                        <div>
+                            <h2>Příslovce</h2>
+                            <span class="difficulty medium">Střední</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Procvič si tvoření a použití příslovcí způsobu, místa, času a četnosti.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 12 min</span>
+                        <span class="stat">🔄 -ly koncovka</span>
+                    </div>
+                </a>
+
+                <a href="podminky.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🔀</span>
+                        <div>
+                            <h2>Podmínkové věty</h2>
+                            <span class="difficulty hard">Náročné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Nauč se všechny typy podmínkových vět (0, 1st, 2nd, 3rd conditional).
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 25 min</span>
+                        <span class="stat">🎯 4 typy</span>
+                    </div>
+                </a>
+
+                <a href="trpny-rod.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">🔄</span>
+                        <div>
+                            <h2>Trpný rod</h2>
+                            <span class="difficulty hard">Náročné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Procvič si tvoření a použití trpného rodu (Passive Voice) ve všech časech.
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 20 min</span>
+                        <span class="stat">📝 be + past part.</span>
+                    </div>
+                </a>
+
+                <a href="neprime-reci.html" class="topic-card">
+                    <span class="status-badge coming-soon">Brzy</span>
+                    <div class="topic-header">
+                        <span class="topic-icon">💬</span>
+                        <div>
+                            <h2>Nepřímá řeč</h2>
+                            <span class="difficulty hard">Náročné</span>
+                        </div>
+                    </div>
+                    <p class="topic-description">
+                        Nauč se převádět přímou řeč na nepřímou (Reported Speech).
+                    </p>
+                    <div class="topic-stats">
+                        <span class="stat">⏱️ 18 min</span>
+                        <span class="stat">🗣️ He said that...</span>
+                    </div>
+                </a>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Vzdělávací platforma</p>
+        </footer>
+    </div>
+</body>
+</html>
