@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Some, Any, A/An - Procvičování</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF5722;
+            --primary-dark: #E64A19;
+            --success: #4CAF50;
+            --error: #f44336;
+            --bg-light: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 10px;
+        }
+
+        .main-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .mode-btn {
+            padding: 20px;
+            background: var(--bg-light);
+            border: 3px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .mode-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .mode-icon {
+            font-size: 2em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .exercise-area {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .question-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .sentence {
+            font-size: 1.5em;
+            color: var(--text-dark);
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 120px;
+            padding: 5px 15px;
+            border-bottom: 3px solid var(--primary);
+            margin: 0 5px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .answer-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .option-btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: 600;
+            background: var(--white);
+            color: var(--text-dark);
+            border: 3px solid var(--primary);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .option-btn.correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: var(--white);
+        }
+
+        .option-btn.incorrect {
+            background: var(--error);
+            border-color: var(--error);
+            color: var(--white);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .check-btn {
+            display: block;
+            width: 200px;
+            margin: 25px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .check-btn:disabled {
+            background: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--white);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            text-align: left;
+        }
+
+        .explanation strong {
+            color: var(--primary);
+        }
+
+        .next-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .rules-section {
+            background: #fff3e0;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .rules-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        .rule-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .rule-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .rule-card p {
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .example {
+            background: var(--bg-light);
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+            font-style: italic;
+        }
+
+        .example strong {
+            color: var(--primary);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .sentence {
+                font-size: 1.2em;
+            }
+
+            .option-btn {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../../index.html">🏠 Domů</a>
+            <span>›</span>
+            <a href="../index.html">Angličtina</a>
+            <span>›</span>
+            <a href="index.html">Gramatika</a>
+            <span>›</span>
+            <strong>Some, Any, A/An</strong>
+        </div>
+
+        <div class="main-card">
+            <header>
+                <h1>📝 Some, Any, A/An</h1>
+                <p class="subtitle">Nauč se správně používat neurčité členy a zájmena</p>
+            </header>
+
+            <div class="mode-selector" style="margin-bottom: 15px;">
+                <button class="mode-btn active" onclick="changeLevel('easy')">
+                    <span class="mode-icon">⭐</span>
+                    Lehké (A/An)
+                </button>
+                <button class="mode-btn" onclick="changeLevel('medium')">
+                    <span class="mode-icon">⭐⭐</span>
+                    Střední (Some/Any)
+                </button>
+                <button class="mode-btn" onclick="changeLevel('hard')">
+                    <span class="mode-icon">⭐⭐⭐</span>
+                    Těžké (Všechny)
+                </button>
+            </div>
+
+            <div class="mode-selector">
+                <button class="mode-btn active" onclick="changeMode('practice')">
+                    <span class="mode-icon">✏️</span>
+                    Procvičování
+                </button>
+                <button class="mode-btn" onclick="changeMode('rules')">
+                    <span class="mode-icon">📚</span>
+                    Pravidla
+                </button>
+            </div>
+
+            <div class="stats-bar" id="statsBar">
+                <div class="stat-box">
+                    <div class="stat-value" id="correct">0</div>
+                    <div class="stat-label">✓ Správně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="incorrect">0</div>
+                    <div class="stat-label">✗ Chybně</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="percentage">0%</div>
+                    <div class="stat-label">📊 Úspěšnost</div>
+                </div>
+            </div>
+
+            <div id="practiceMode" class="exercise-area">
+                <div class="question-header">
+                    <div class="question-number" id="questionNum">Otázka 1</div>
+                    <div class="sentence" id="sentence"></div>
+                </div>
+
+                <div class="answer-options" id="options"></div>
+
+                <button class="check-btn" id="checkBtn" onclick="checkAnswer()" disabled>Zkontrolovat</button>
+                <div id="feedback" class="feedback hidden"></div>
+                <div id="explanation" class="explanation hidden"></div>
+                <button id="nextBtn" class="next-btn hidden" onclick="nextQuestion()">
+                    Další otázka →
+                </button>
+            </div>
+
+            <div id="rulesMode" class="rules-section hidden">
+                <h3>📚 Pravidla použití</h3>
+                
+                <div class="rule-card">
+                    <h4>A / AN - neurčitý člen</h4>
+                    <p><strong>A</strong> - používáme před souhláskami (consonants)</p>
+                    <div class="example">✓ <strong>a</strong> book, <strong>a</strong> car, <strong>a</strong> university (vyslovuje se jako "ju")</div>
+                    <p><strong>AN</strong> - používáme před samohláskami (vowels: a, e, i, o, u)</p>
+                    <div class="example">✓ <strong>an</strong> apple, <strong>an</strong> hour (h je němé), <strong>an</strong> umbrella</div>
+                    <p>⚠️ Pozor: Záleží na výslovnosti, ne jen na písmenu!</p>
+                    <div class="example">✓ <strong>a</strong> university (vyslovuje se "ju-") vs. <strong>an</strong> umbrella</div>
+                </div>
+
+                <div class="rule-card">
+                    <h4>SOME - nějaký, trochu, několik</h4>
+                    <p>✓ Používáme v <strong>kladných větách</strong></p>
+                    <div class="example">I have <strong>some</strong> money. (Mám nějaké peníze.)</div>
+                    <div class="example">There are <strong>some</strong> apples. (Jsou tam nějaká jablka.)</div>
+                    <p>✓ Používáme v <strong>nabídkách a žádostech</strong></p>
+                    <div class="example">Would you like <strong>some</strong> tea? (Dáte si čaj?)</div>
+                    <div class="example">Can I have <strong>some</strong> water? (Můžu dostat vodu?)</div>
+                </div>
+
+                <div class="rule-card">
+                    <h4>ANY - nějaký, žádný</h4>
+                    <p>✓ Používáme v <strong>záporných větách</strong></p>
+                    <div class="example">I don't have <strong>any</strong> money. (Nemám žádné peníze.)</div>
+                    <div class="example">There aren't <strong>any</strong> apples. (Nejsou tam žádná jablka.)</div>
+                    <p>✓ Používáme v <strong>otázkách</strong></p>
+                    <div class="example">Do you have <strong>any</strong> questions? (Máte nějaké otázky?)</div>
+                    <div class="example">Is there <strong>any</strong> milk? (Je tam nějaké mléko?)</div>
+                </div>
+
+                <div class="rule-card">
+                    <h4>🎯 Rychlá pomůcka</h4>
+                    <p>✓ <strong>A/AN</strong> = jednotné číslo, počitatelné</p>
+                    <p>✓ <strong>SOME</strong> = kladné věty, nabídky</p>
+                    <p>✓ <strong>ANY</strong> = záporné věty, otázky</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionsEasy = [
+            {sentence: "I have ___ apple.", options: ["a", "an"], correct: "an", explanation: "Používáme AN před samohláskou 'a' v slově apple."},
+            {sentence: "This is ___ book.", options: ["a", "an"], correct: "a", explanation: "Používáme A před souhláskou 'b' v slově book."},
+            {sentence: "She is ___ teacher.", options: ["a", "an"], correct: "a", explanation: "Používáme A před souhláskou 't' v slově teacher."},
+            {sentence: "I need ___ umbrella.", options: ["a", "an"], correct: "an", explanation: "Používáme AN před samohláskou 'u' v slově umbrella."},
+            {sentence: "He has ___ dog.", options: ["a", "an"], correct: "a", explanation: "Používáme A před souhláskou 'd' v slově dog."},
+            {sentence: "There is ___ orange on the table.", options: ["a", "an"], correct: "an", explanation: "Používáme AN před samohláskou 'o' v slově orange."},
+            {sentence: "I saw ___ elephant.", options: ["a", "an"], correct: "an", explanation: "Používáme AN před samohláskou 'e' v slově elephant."},
+            {sentence: "She wants ___ cat.", options: ["a", "an"], correct: "a", explanation: "Používáme A před souhláskou 'c' v slově cat."},
+            {sentence: "This is ___ egg.", options: ["a", "an"], correct: "an", explanation: "Používáme AN před samohláskou 'e' v slově egg."},
+            {sentence: "I have ___ car.", options: ["a", "an"], correct: "a", explanation: "Používáme A před souhláskou 'c' v slově car."},
+            {sentence: "He is ___ engineer.", options: ["a", "an"], correct: "an", explanation: "Používáme AN před samohláskou 'e' v slově engineer."},
+            {sentence: "I need ___ pen.", options: ["a", "an"], correct: "a", explanation: "Používáme A před souhláskou 'p' v slově pen."},
+            {sentence: "There is ___ island.", options: ["a", "an"], correct: "an", explanation: "Používáme AN před samohláskou 'i' v slově island."},
+            {sentence: "She has ___ bicycle.", options: ["a", "an"], correct: "a", explanation: "Používáme A před souhláskou 'b' v slově bicycle."},
+            {sentence: "I want ___ ice cream.", options: ["a", "an"], correct: "an", explanation: "Používáme AN před samohláskou 'i' v slově ice."}
+        ];
+
+        const questionsMedium = [
+            {sentence: "I have ___ money.", options: ["some", "any"], correct: "some", explanation: "V kladné větě používáme SOME."},
+            {sentence: "I don't have ___ money.", options: ["some", "any"], correct: "any", explanation: "V záporné větě používáme ANY."},
+            {sentence: "Do you have ___ questions?", options: ["some", "any"], correct: "any", explanation: "V otázce používáme ANY."},
+            {sentence: "There are ___ apples in the basket.", options: ["some", "any"], correct: "some", explanation: "V kladné větě používáme SOME."},
+            {sentence: "There aren't ___ cookies left.", options: ["some", "any"], correct: "any", explanation: "V záporné větě používáme ANY."},
+            {sentence: "Would you like ___ tea?", options: ["some", "any"], correct: "some", explanation: "V nabídce používáme SOME."},
+            {sentence: "Can I have ___ water?", options: ["some", "any"], correct: "some", explanation: "V žádosti používáme SOME."},
+            {sentence: "I need ___ help.", options: ["some", "any"], correct: "some", explanation: "V kladné větě používáme SOME."},
+            {sentence: "We don't need ___ help.", options: ["some", "any"], correct: "any", explanation: "V záporné větě používáme ANY."},
+            {sentence: "Is there ___ milk in the fridge?", options: ["some", "any"], correct: "any", explanation: "V otázce používáme ANY."},
+            {sentence: "She has ___ friends.", options: ["some", "any"], correct: "some", explanation: "V kladné větě používáme SOME."},
+            {sentence: "He doesn't have ___ time.", options: ["some", "any"], correct: "any", explanation: "V záporné větě používáme ANY."},
+            {sentence: "Are there ___ people here?", options: ["some", "any"], correct: "any", explanation: "V otázce používáme ANY."},
+            {sentence: "I bought ___ vegetables.", options: ["some", "any"], correct: "some", explanation: "V kladné větě používáme SOME."},
+            {sentence: "Would you like ___ more coffee?", options: ["some", "any"], correct: "some", explanation: "V nabídce používáme SOME."}
+        ];
+
+        const questionsHard = [
+            {sentence: "I need ___ pen.", options: ["a", "an", "some", "any"], correct: "a", explanation: "Jednotné číslo počitatelného podstatného jména - používáme A před souhláskou."},
+            {sentence: "I have ___ books.", options: ["a", "an", "some", "any"], correct: "some", explanation: "Množné číslo v kladné větě - používáme SOME."},
+            {sentence: "This is ___ umbrella.", options: ["a", "an", "some", "any"], correct: "an", explanation: "Jednotné číslo počitatelného podstatného jména - používáme AN před samohláskou."},
+            {sentence: "Do you have ___ water?", options: ["a", "an", "some", "any"], correct: "any", explanation: "Otázka s nepočitatelným podstatným jménem - používáme ANY."},
+            {sentence: "I don't have ___ pencils.", options: ["a", "an", "some", "any"], correct: "any", explanation: "Záporná věta s množným číslem - používáme ANY."},
+            {sentence: "She is ___ doctor.", options: ["a", "an", "some", "any"], correct: "a", explanation: "Jednotné číslo počitatelného podstatného jména - používáme A před souhláskou."},
+            {sentence: "Would you like ___ cookies?", options: ["a", "an", "some", "any"], correct: "some", explanation: "Nabídka s množným číslem - používáme SOME."},
+            {sentence: "I saw ___ elephant.", options: ["a", "an", "some", "any"], correct: "an", explanation: "Jednotné číslo počitatelného podstatného jména - používáme AN před samohláskou."},
+            {sentence: "There isn't ___ sugar.", options: ["a", "an", "some", "any"], correct: "any", explanation: "Záporná věta s nepočitatelným podstatným jménem - používáme ANY."},
+            {sentence: "I have ___ idea.", options: ["a", "an", "some", "any"], correct: "an", explanation: "Jednotné číslo počitatelného podstatného jména - používáme AN před samohláskou."},
+            {sentence: "Can I have ___ more time?", options: ["a", "an", "some", "any"], correct: "some", explanation: "Žádost s nepočitatelným podstatným jménem - používáme SOME."},
+            {sentence: "Are there ___ children in the park?", options: ["a", "an", "some", "any"], correct: "any", explanation: "Otázka s množným číslem - používáme ANY."},
+            {sentence: "He is ___ honest man.", options: ["a", "an", "some", "any"], correct: "an", explanation: "Jednotné číslo - AN před h, které se nevyslovuje (honest)."},
+            {sentence: "There are ___ apples in the bowl.", options: ["a", "an", "some", "any"], correct: "some", explanation: "Kladná věta s množným číslem - používáme SOME."},
+            {sentence: "I don't want ___ coffee.", options: ["a", "an", "some", "any"], correct: "any", explanation: "Záporná věta s nepočitatelným podstatným jménem - používáme ANY."}
+        ];
+
+        let currentLevel = 'easy';
+        let questions = questionsEasy;
+        let stats = {correct: 0, incorrect: 0, total: 0, current: 1};
+        let currentMode = 'practice';
+        let currentQuestion = {};
+        let selectedAnswer = null;
+
+        function changeLevel(level) {
+            currentLevel = level;
+            
+            event.target.closest('.mode-selector').querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.mode-btn').classList.add('active');
+            
+            if (level === 'easy') {
+                questions = questionsEasy;
+            } else if (level === 'medium') {
+                questions = questionsMedium;
+            } else {
+                questions = questionsHard;
+            }
+            
+            stats.current = 1;
+            if (currentMode === 'practice') {
+                generateQuestion();
+            }
+        }
+
+        function changeMode(mode) {
+            currentMode = mode;
+            stats.current = 1;
+            
+            document.querySelectorAll('.mode-selector')[1].querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.mode-btn').classList.add('active');
+            
+            if (mode === 'practice') {
+                document.getElementById('statsBar').classList.remove('hidden');
+                document.getElementById('practiceMode').classList.remove('hidden');
+                document.getElementById('rulesMode').classList.add('hidden');
+                generateQuestion();
+            } else {
+                document.getElementById('statsBar').classList.add('hidden');
+                document.getElementById('practiceMode').classList.add('hidden');
+                document.getElementById('rulesMode').classList.remove('hidden');
+            }
+        }
+
+        function generateQuestion() {
+            currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+            selectedAnswer = null;
+            
+            document.getElementById('questionNum').textContent = `Otázka ${stats.current}`;
+            document.getElementById('sentence').innerHTML = currentQuestion.sentence.replace('___', '<span class="blank">?</span>');
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            currentQuestion.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectOption(option, btn);
+                optionsContainer.appendChild(btn);
+            });
+            
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('explanation').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+        }
+
+        function selectOption(option, btn) {
+            if (document.getElementById('checkBtn').disabled === false && selectedAnswer !== null) return;
+            
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedAnswer = option;
+            document.getElementById('checkBtn').disabled = false;
+        }
+
+        function checkAnswer() {
+            if (!selectedAnswer) return;
+            
+            const isCorrect = selectedAnswer === currentQuestion.correct;
+            stats.total++;
+            isCorrect ? stats.correct++ : stats.incorrect++;
+            updateStats();
+            
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === currentQuestion.correct) {
+                    btn.classList.add('correct');
+                } else if (btn.textContent === selectedAnswer && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden', 'correct', 'incorrect');
+            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+            feedback.textContent = isCorrect ? '🎉 Výborně! To je správně!' : '❌ Bohužel ne.';
+            
+            const explanation = document.getElementById('explanation');
+            explanation.classList.remove('hidden');
+            explanation.innerHTML = `<strong>Vysvětlení:</strong> ${currentQuestion.explanation}<br><br>Správná věta: ${currentQuestion.sentence.replace('___', '<strong>' + currentQuestion.correct + '</strong>')}`;
+            
+            document.getElementById('checkBtn').style.display = 'none';
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            stats.current++;
+            document.getElementById('checkBtn').style.display = 'block';
+            generateQuestion();
+        }
+
+        function updateStats() {
+            document.getElementById('correct').textContent = stats.correct;
+            document.getElementById('incorrect').textContent = stats.incorrect;
+            const percentage = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+            document.getElementById('percentage').textContent = percentage + '%';
+        }
+
+        generateQuestion();
+    </script>
+</body>
+</html>
