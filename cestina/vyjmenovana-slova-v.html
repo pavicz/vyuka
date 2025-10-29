@@ -231,10 +231,11 @@
         .feedback {
             text-align: center;
             margin-top: 20px;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
             font-weight: 600;
             font-size: 1.1em;
+            line-height: 1.6;
         }
 
         .feedback.correct {
@@ -245,6 +246,13 @@
         .feedback.incorrect {
             background: #ffebee;
             color: #c62828;
+        }
+
+        .explanation {
+            margin-top: 10px;
+            font-size: 0.95em;
+            font-style: italic;
+            color: #555;
         }
 
         .next-btn {
@@ -310,16 +318,6 @@
 
         .word-list li:last-child {
             border-bottom: none;
-        }
-
-        .word-y {
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        .word-i {
-            color: #2196F3;
-            font-weight: bold;
         }
 
         .hidden {
@@ -490,97 +488,96 @@
                 <h3>📚 Přehled vyjmenovaných slov po V</h3>
                 <div class="word-columns">
                     <div class="word-column">
-                        <h4>Slova s <span class="word-y">Y + slova s předponou VY</span></h4>
+                        <h4>Slova s Y</h4>
                         <ul class="word-list" id="wordsWithY"></ul>
                     </div>
-                    
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ZÁKLADNÍ SLOVA
+        // ZÁKLADNÍ SLOVA S VYSVĚTLENÍM
         const wordsMBasicY = [
-            {word: 'vy', gap: 'v_'},
-            {word: 'vykat', gap: 'v_kat'},
-            {word: 'vysoký', gap: 'v_soký'},
-            {word: 'výt (zvuk)', gap: 'v_t (zvuk)'},
-            {word: 'výskat (zvuk)', gap: 'v_skat (zvuk)'},
-            {word: 'zvykat', gap: 'zv_kat'},
-            {word: 'žvýkat', gap: 'žv_kat'},
-            {word: 'vydra', gap: 'v_dra'},
-            {word: 'výr (sova)', gap: 'v_r (sova)'},
-            {word: 'vyžle', gap: 'v_žle'},
-            {word: 'povyk', gap: 'pov_k'},
-            {word: 'výheň', gap: 'v_heň'},
+            {word: 'vy', gap: 'v_', explanation: 'Vyjmenované slovo: VY'},
+            {word: 'vykat', gap: 'v_kat', explanation: 'Vyjmenované slovo: VYKAT'},
+            {word: 'vysoký', gap: 'v_soký', explanation: 'Vyjmenované slovo: VYSOKÝ'},
+            {word: 'výt (zvuk)', gap: 'v_t (zvuk)', explanation: 'Vyjmenované slovo - VÝT'},
+            {word: 'výskat (zvuk)', gap: 'v_skat (zvuk)', explanation: 'Vyjmenované slovo: VÝSKAT'},
+            {word: 'zvykat', gap: 'zv_kat', explanation: 'Vyjmenované slovo: ZVYKAT'},
+            {word: 'žvýkat', gap: 'žv_kat', explanation: 'Vyjmenované slovo: ŽVÝKAT'},
+            {word: 'vydra', gap: 'v_dra', explanation: 'Vyjmenované slovo: VYDRRA'},
+            {word: 'výr (sova)', gap: 'v_r (sova)', explanation: 'Vyjmenované slovo: VÝR'},
+            {word: 'vyžle', gap: 'v_žle', explanation: 'Vyjmenované slovo: VYŽLE'},
+            {word: 'povyk', gap: 'pov_k', explanation: 'Vyjmenované slovo: POVYK'},
+            {word: 'výheň', gap: 'v_heň', explanation: 'Vyjmenované slovo: VÝHEŇ'},
         ];
 
         const wordsMBasicI = [
-            {word: 'vidět', gap: 'v_dět'},
-            {word: 'vířit (vodu)', gap: 'v_řit (vodu)'},
-            {word: 'viset (na háčku)', gap: 'v_set (na háčku)'},
-            {word: 'viklat (zub)', gap: 'v_klat (zub)'},
-            {word: 'vinice', gap: 'v_nice'},
-            {word: 'vískat (ve vlasech)', gap: 'v_skat (vlasech)'},
-            {word: 'vít (splétat)', gap: 'v_t (splétat)'},
-            {word: 'vír (vodní)', gap: 'v_r (vodní)'},
-            {word: 'vikýř (na půdě)', gap: 'v_kýř (na půdě)'},
-            {word: 'vítat', gap: 'v_tat'},
-            {word: 'navinout', gap: 'nav_nout'},
-            {word: 'vidle', gap: 'v_dle'},
-            {word: 'víkend', gap: 'v_kend'}
+            {word: 'vidět', gap: 'v_dět', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'vířit (vodu)', gap: 'v_řit (vodu)', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'viset (na háčku)', gap: 'v_set (na háčku)', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'viklat (zub)', gap: 'v_klat (zub)', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'vinice', gap: 'v_nice', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'vískat (ve vlasech)', gap: 'v_skat (vlasech)', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'vít (splétat)', gap: 'v_t (splétat)', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'vír (vodní)', gap: 'v_r (vodní)', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'vikýř (na půdě)', gap: 'v_kýř (na půdě)', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'vítat', gap: 'v_tat', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'navinout', gap: 'nav_nout', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'vidle', gap: 'v_dle', explanation: 'Není vyjmenované slovo ani příbuzné'},
+            {word: 'víkend', gap: 'v_kend', explanation: 'Není vyjmenované slovo ani příbuzné'}
         ];
 
         // PŘÍBUZNÁ SLOVA
         const wordsMRelatedY = [
-          {word: 'vykání', gap: 'v_kání'},
-          {word: 'vysoko', gap: 'v_soko'},
-          {word: 'vysočina', gap: 'v_sočina'},
-          {word: 'výška', gap: 'v_ška'},
-          {word: 'zavýt (zvuk)', gap: 'zav_t (zvuk)'},
-          {word: 'zavýskat (zvuk)', gap: 'zav_skat (zvuk)'},
-          {word: 'zvyk', gap: 'zv_k'},
-          {word: 'žvýkačka', gap: 'žv_kačka'},
-          {word: 'vydrýsek', gap: 'v_drýsek'},
-          {word: 'výří (velké sovy)', gap: 'v_ří (velké sovy)'},
-          {word: 'vyzáblý', gap: 'v_záblý'},
-          {word: 'výhně', gap: 'v_hně'},
-          {word: 'výborný', gap: 'v_borný'},
-          {word: 'vyčistit', gap: 'v_čistit'},
-          {word: 'vykročit', gap: 'v_kročit'},
-          {word: 'vylézt', gap: 'v_lézt'},
-          {word: 'vymyslet', gap: 'v_myslet'},
-          {word: 'vyplnit', gap: 'v_plnit'},
-          {word: 'vypsat', gap: 'v_psat'},
-          {word: 'vypnout', gap: 'v_pnout'},
-          {word: 'vyprosit', gap: 'v_prosit'},
-          {word: 'vypravit', gap: 'v_pravit'},
-          {word: 'vyrobit', gap: 'v_robit'},
-          {word: 'vystoupit', gap: 'v_stoupit'},
-          {word: 'vysvětlit', gap: 'v_světlit'},
-          {word: 'vytvořit', gap: 'v_tvořit'},
-          {word: 'využít', gap: 'v_užít'},
+          {word: 'vykání', gap: 'v_kání', explanation: 'Příbuzné ke slovu "vy"'},
+          {word: 'vysoko', gap: 'v_soko', explanation: 'Příbuzné ke slovu "vysoký"'},
+          {word: 'vysočina', gap: 'v_sočina', explanation: 'Příbuzné ke slovu "vysoký"'},
+          {word: 'výška', gap: 'v_ška', explanation: 'Příbuzné ke slovu "vysoký"'},
+          {word: 'zavýt (zvuk)', gap: 'zav_t (zvuk)', explanation: 'Příbuzné ke slovu "výt"'},
+          {word: 'zavýskat (zvuk)', gap: 'zav_skat (zvuk)', explanation: 'Příbuzné ke slovu "výskat"'},
+          {word: 'zvyk', gap: 'zv_k', explanation: 'Příbuzné ke slovu "zvykat"'},
+          {word: 'žvýkačka', gap: 'žv_kačka', explanation: 'Příbuzné ke slovu "žvýkat"'},
+          {word: 'vydrýsek', gap: 'v_drýsek', explanation: 'Příbuzné ke slovu "vydra"'},
+          {word: 'výří (velké sovy)', gap: 'v_ří (velké sovy)', explanation: 'Příbuzné ke slovu "výr"'},
+          {word: 'vyzáblý', gap: 'v_záblý', explanation: 'Předpona VY-'},
+          {word: 'výhně', gap: 'v_hně', explanation: 'Příbuzné ke slovu "výheň"'},
+          {word: 'výborný', gap: 'v_borný', explanation: 'Předpona VY-'},
+          {word: 'vyčistit', gap: 'v_čistit', explanation: 'Předpona VY-'},
+          {word: 'vykročit', gap: 'v_kročit', explanation: 'Předpona VY-'},
+          {word: 'vylézt', gap: 'v_lézt', explanation: 'Předpona VY-'},
+          {word: 'vymyslet', gap: 'v_myslet', explanation: 'Předpona VY-'},
+          {word: 'vyplnit', gap: 'v_plnit', explanation: 'Předpona VY-'},
+          {word: 'vypsat', gap: 'v_psat', explanation: 'Předpona VY-'},
+          {word: 'vypnout', gap: 'v_pnout', explanation: 'Předpona VY-'},
+          {word: 'vyprosit', gap: 'v_prosit', explanation: 'Předpona VY-'},
+          {word: 'vypravit', gap: 'v_pravit', explanation: 'Předpona VY-'},
+          {word: 'vyrobit', gap: 'v_robit', explanation: 'Předpona VY-'},
+          {word: 'vystoupit', gap: 'v_stoupit', explanation: 'Předpona VY-'},
+          {word: 'vysvětlit', gap: 'v_světlit', explanation: 'Předpona VY-'},
+          {word: 'vytvořit', gap: 'v_tvořit', explanation: 'Předpona VY-'},
+          {word: 'využít', gap: 'v_užít', explanation: 'Předpona VY-'},
         ];
 
         const wordsMRelatedI = [
-          {word: 'vizitka', gap: 'v_zitka'},
-          {word: 'vítěz', gap: 'v_těz'},
-          {word: 'víra (náboženství)', gap: 'v_ra (náboženství)'},
-          {word: 'víčka', gap: 'v_čka'},
-          {word: 'civilizace', gap: 'civ_lizace'},
-          {word: 'viník', gap: 'v_ník'},
-          {word: 'divize', gap: 'div_ze'},
-          {word: 'víno', gap: 'v_no'},
-          {word: 'vinutí (el. motoru)', gap: 'v_nutí (el. motoru)'},
-          {word: 'slavit', gap: 'slav_t'},
-          {word: 'chvíle', gap: 'chv_le'},
-          {word: 'vitamín', gap: 'v_tamín'},
-          {word: 'vitalita', gap: 'v_talita'},
-          {word: 'visutý (most)', gap: 'v_sutý (most)'},
-          {word: 'novina', gap: 'nov_na'},
-          {word: 'pravidelný', gap: 'prav_delný'},
-          {word: 'vídat', gap: 'v_dat'}
+          {word: 'vizitka', gap: 'v_zitka', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'vítěz', gap: 'v_těz', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'víra (náboženství)', gap: 'v_ra (náboženství)', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'víčka', gap: 'v_čka', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'civilizace', gap: 'civ_lizace', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'viník', gap: 'v_ník', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'divize', gap: 'div_ze', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'víno', gap: 'v_no', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'vinutí (el. motoru)', gap: 'v_nutí (el. motoru)', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'slavit', gap: 'slav_t', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'chvíle', gap: 'chv_le', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'vitamín', gap: 'v_tamín', explanation: 'Cizí slovo'},
+          {word: 'vitalita', gap: 'v_talita', explanation: 'Cizí slovo'},
+          {word: 'visutý (most)', gap: 'v_sutý (most)', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'novina', gap: 'nov_na', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'pravidelný', gap: 'prav_delný', explanation: 'Není vyjmenované slovo ani příbuzné'},
+          {word: 'vídat', gap: 'v_dat', explanation: 'Není vyjmenované slovo ani příbuzné'}
         ];
 
         // SLOŽENÍ VŠECH SLOV
@@ -605,32 +602,32 @@
         let usedWords = [];
 
         // FUNKCE PRO VÝBĚR ÚROVNĚ
-       function changeLevel(level) {
-    currentLevel = level;
-    
-    const levelBtns = document.querySelectorAll('.mode-selector')[0].querySelectorAll('.mode-btn');
-    levelBtns.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-    
-    if (level === 'basic') {
-        allWords = allWordsBasic;
-    } else if (level === 'related') {
-        allWords = [...allWordsBasic, ...allWordsRelated];
-    } else if (level === 'all') {
-        allWords = allWordsAll;
-    }
-    
-    stats = {correct: 0, incorrect: 0, total: 0, current: 1};
-    updateStats();
-    
-    usedWords = []; // Reset použitých slov při změně úrovně
-    
-    if (currentMode === 'fillGap') {
-        generateFillGapQuestion();
-    } else if (currentMode === 'chooseVariant') {
-        generateVariantQuestion();
-    }
-}
+        function changeLevel(level) {
+            currentLevel = level;
+            
+            const levelBtns = document.querySelectorAll('.mode-selector')[0].querySelectorAll('.mode-btn');
+            levelBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (level === 'basic') {
+                allWords = allWordsBasic;
+            } else if (level === 'related') {
+                allWords = [...allWordsBasic, ...allWordsRelated];
+            } else if (level === 'all') {
+                allWords = allWordsAll;
+            }
+            
+            stats = {correct: 0, incorrect: 0, total: 0, current: 1};
+            updateStats();
+            
+            usedWords = [];
+            
+            if (currentMode === 'fillGap') {
+                generateFillGapQuestion();
+            } else if (currentMode === 'chooseVariant') {
+                generateVariantQuestion();
+            }
+        }
 
         // FUNKCE PRO VÝBĚR REŽIMU
         function changeMode(mode) {
@@ -664,27 +661,25 @@
 
         // GENEROVÁNÍ OTÁZKY - DOPLŇ Y/I
         function generateFillGapQuestion() {
-    // Pokud byly použity všechny, resetuj
-    if (usedWords.length >= allWords.length) {
-        usedWords = [];
-    }
-    
-    // Najdi slovo, které ještě nebylo použito
-    let availableWords = allWords.filter(w => !usedWords.includes(w));
-    currentWord = availableWords[Math.floor(Math.random() * availableWords.length)];
-    usedWords.push(currentWord);
-    
-    document.getElementById('questionNum').textContent = `Otázka ${stats.current}`;
-    document.getElementById('wordDisplay').textContent = currentWord.gap;
-    
-    document.querySelectorAll('#fillGapMode .option-btn').forEach(btn => {
-        btn.disabled = false;
-        btn.classList.remove('correct', 'incorrect');
-    });
+            if (usedWords.length >= allWords.length) {
+                usedWords = [];
+            }
+            
+            let availableWords = allWords.filter(w => !usedWords.includes(w));
+            currentWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+            usedWords.push(currentWord);
+            
+            document.getElementById('questionNum').textContent = `Otázka ${stats.current}`;
+            document.getElementById('wordDisplay').textContent = currentWord.gap;
+            
+            document.querySelectorAll('#fillGapMode .option-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('correct', 'incorrect');
+            });
 
-    document.getElementById('feedback').classList.add('hidden');
-    document.getElementById('nextBtn').classList.add('hidden');
-}
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+        }
 
         // KONTROLA ODPOVĚDI - DOPLŇ Y/I
         function checkAnswer(answer) {
@@ -704,11 +699,14 @@
             feedback.classList.remove('hidden', 'correct', 'incorrect');
             feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
             
-           if (isCorrect) {
-    const messages = ['🎉 Výborně!', '✨ Skvělá práce!', '🌟 Perfektní!', '👏 Správně!'];
-    feedback.textContent = messages[Math.floor(Math.random() * messages.length)] + ` Slovo: ${currentWord.word}`;
-}else {
-                feedback.textContent = `❌ Správná odpověď: ${currentWord.word}`;
+            if (isCorrect) {
+                const messages = ['🎉 Výborně!', '✨ Skvělá práce!', '🌟 Perfektní!', '👏 Správně!'];
+                feedback.innerHTML = messages[Math.floor(Math.random() * messages.length)] + 
+                    `<br>Slovo: <strong>${currentWord.word}</strong>` +
+                    `<div class="explanation">💡 Vysvětlení: ${currentWord.explanation}</div>`;
+            } else {
+                feedback.innerHTML = `❌ Správná odpověď: <strong>${currentWord.word}</strong>` +
+                    `<div class="explanation">💡 Vysvětlení: ${currentWord.explanation}</div>`;
             }
 
             document.getElementById('nextBtn').classList.remove('hidden');
@@ -722,57 +720,55 @@
 
         // GENEROVÁNÍ OTÁZKY - VYBER SPRÁVNÝ TVAR
         function generateVariantQuestion() {
-    // Pokud byly použity všechny, resetuj
-    if (usedWords.length >= allWords.length) {
-        usedWords = [];
-    }
-    
-    // Najdi slovo, které ještě nebylo použito
-    let availableWords = allWords.filter(w => !usedWords.includes(w));
-    currentWord = availableWords[Math.floor(Math.random() * availableWords.length)];
-    usedWords.push(currentWord);
-    
-    let wrongVariant;
-    if (currentWord.correct === 'y') {
-        wrongVariant = currentWord.word.replace(/[yýYÝ]/, match => {
-            if (match === 'y') return 'i';
-            if (match === 'ý') return 'í';
-            if (match === 'Y') return 'I';
-            if (match === 'Ý') return 'Í';
-        });
-    } else {
-        wrongVariant = currentWord.word.replace(/[iíIÍ]/, match => {
-            if (match === 'i') return 'y';
-            if (match === 'í') return 'ý';
-            if (match === 'I') return 'Y';
-            if (match === 'Í') return 'Ý';
-        });
-    }
-    
-    if (wrongVariant === currentWord.word) {
-        generateVariantQuestion();
-        return;
-    }
-    
-    const variants = [currentWord.word, wrongVariant];
-    variants.sort(() => Math.random() - 0.5);
-    
-    document.getElementById('variantQuestionNum').textContent = `Otázka ${stats.current}`;
-    
-    const container = document.getElementById('variantOptions');
-    container.innerHTML = '';
-    
-    variants.forEach(variant => {
-        const btn = document.createElement('button');
-        btn.className = 'variant-btn';
-        btn.textContent = variant;
-        btn.onclick = () => checkVariant(variant);
-        container.appendChild(btn);
-    });
-    
-    document.getElementById('variantFeedback').classList.add('hidden');
-    document.getElementById('nextVariantBtn').classList.add('hidden');
-}
+            if (usedWords.length >= allWords.length) {
+                usedWords = [];
+            }
+            
+            let availableWords = allWords.filter(w => !usedWords.includes(w));
+            currentWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+            usedWords.push(currentWord);
+            
+            let wrongVariant;
+            if (currentWord.correct === 'y') {
+                wrongVariant = currentWord.word.replace(/[yýYÝ]/, match => {
+                    if (match === 'y') return 'i';
+                    if (match === 'ý') return 'í';
+                    if (match === 'Y') return 'I';
+                    if (match === 'Ý') return 'Í';
+                });
+            } else {
+                wrongVariant = currentWord.word.replace(/[iíIÍ]/, match => {
+                    if (match === 'i') return 'y';
+                    if (match === 'í') return 'ý';
+                    if (match === 'I') return 'Y';
+                    if (match === 'Í') return 'Ý';
+                });
+            }
+            
+            if (wrongVariant === currentWord.word) {
+                generateVariantQuestion();
+                return;
+            }
+            
+            const variants = [currentWord.word, wrongVariant];
+            variants.sort(() => Math.random() - 0.5);
+            
+            document.getElementById('variantQuestionNum').textContent = `Otázka ${stats.current}`;
+            
+            const container = document.getElementById('variantOptions');
+            container.innerHTML = '';
+            
+            variants.forEach(variant => {
+                const btn = document.createElement('button');
+                btn.className = 'variant-btn';
+                btn.textContent = variant;
+                btn.onclick = () => checkVariant(variant);
+                container.appendChild(btn);
+            });
+            
+            document.getElementById('variantFeedback').classList.add('hidden');
+            document.getElementById('nextVariantBtn').classList.add('hidden');
+        }
 
         // KONTROLA ODPOVĚDI - VYBER SPRÁVNÝ TVAR
         function checkVariant(selected) {
@@ -795,7 +791,14 @@
             const feedback = document.getElementById('variantFeedback');
             feedback.classList.remove('hidden', 'correct', 'incorrect');
             feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
-            feedback.textContent = isCorrect ? '🎉 Správně!' : `❌ Správná odpověď: ${currentWord.word}`;
+            
+            if (isCorrect) {
+                feedback.innerHTML = '🎉 Správně!<br>Slovo: <strong>' + currentWord.word + '</strong>' +
+                    '<div class="explanation">💡 Vysvětlení: ' + currentWord.explanation + '</div>';
+            } else {
+                feedback.innerHTML = '❌ Správná odpověď: <strong>' + currentWord.word + '</strong>' +
+                    '<div class="explanation">💡 Vysvětlení: ' + currentWord.explanation + '</div>';
+            }
 
             document.getElementById('nextVariantBtn').classList.remove('hidden');
         }
@@ -816,24 +819,22 @@
 
         // GENEROVÁNÍ TEORIE
         function generateTheory() {
-    const yList = document.getElementById('wordsWithY');
-    
-    yList.innerHTML = '';
-    
-    // Zobraz jen slova s Y podle aktuální úrovně
-    let wordsToShowY = wordsMBasicY;
-    
-    if (currentLevel === 'related' || currentLevel === 'all') {
-        wordsToShowY = [...wordsMBasicY, ...wordsMRelatedY];
-    }
-    
-    wordsToShowY.forEach(w => {
-        const li = document.createElement('li');
-        li.textContent = w.word;
-        yList.appendChild(li);
-    });
-}
-
+            const yList = document.getElementById('wordsWithY');
+            
+            yList.innerHTML = '';
+            
+            let wordsToShowY = wordsMBasicY;
+            
+            if (currentLevel === 'related' || currentLevel === 'all') {
+                wordsToShowY = [...wordsMBasicY, ...wordsMRelatedY];
+            }
+            
+            wordsToShowY.forEach(w => {
+                const li = document.createElement('li');
+                li.textContent = w.word;
+                yList.appendChild(li);
+            });
+        }
 
         // INICIALIZACE
         generateFillGapQuestion();
